@@ -6,6 +6,7 @@
 # Node.js client (React)
 client/node_modules/
 client/build/
+
 client/.env
 client/.env.local
 client/.env.*.local
@@ -14,6 +15,7 @@ client/yarn.lock
 
 # Node.js server
 server/node_modules/
+server/uploads/
 server/dist/
 server/.env
 server/package-lock.json
@@ -31,6 +33,8 @@ ai-service/*.pyd
 ai-service/.pytest_cache/
 ai-service/*.sqlite3
 ai-service/*.db
+ai-service/faiss_index/
+ai-service/0.6.18
 
 # IDE / editor folders (applies to all)
 .vscode/

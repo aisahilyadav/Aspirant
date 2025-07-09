@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import UploadPdf from './pages/Upload';
+import ChatWithPdf from './pages/ChatWithPdf';
 import { AuthProvider } from './store/auth';
 import './App.css';
 import Navbar from './components/Navbar';
@@ -21,6 +22,8 @@ const App = () => {
                     <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
                     <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                     <Route path="/upload" element={<PublicRoute><UploadPdf /></PublicRoute>} />
+                    <Route path="/chat" element={<PublicRoute><ChatWithPdf /></PublicRoute>} />
+                    <Route path="*" element={<h1>404 Not Found</h1>} />
                 </Routes>
             </Router>
         </AuthProvider>

@@ -5,6 +5,7 @@ import cors from 'cors';
 import connectDB from './src/db/connectionDb.js';
 import authRoute from './src/routes/auth.route.js';
 import quizRoutes from './src/routes/quiz.route.js';
+import chatRoutes from './src/routes/chat.route.js';
 
 
 
@@ -26,9 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 //routes
 app.use("/api/auth", authRoute);
 app.use('/api/quiz', quizRoutes);
-
-
-
+app.use('/api', chatRoutes);
 
 // Connect to MongoDB
 
