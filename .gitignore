@@ -1,0 +1,46 @@
+# Root-level ignores
+.DS_Store
+.env
+*.log
+
+# Node.js client (React)
+client/node_modules/
+client/build/
+client/.env
+client/.env.local
+client/.env.*.local
+client/package-lock.json
+client/yarn.lock
+
+# Node.js server
+server/node_modules/
+server/dist/
+server/.env
+server/package-lock.json
+server/yarn.lock
+
+# FastAPI AI service
+ai-service/__pycache__/
+ai-service/venv/
+ai-service/.venv/
+ai-service/env/
+ai-service/.env
+ai-service/*.pyc
+ai-service/*.pyo
+ai-service/*.pyd
+ai-service/.pytest_cache/
+ai-service/*.sqlite3
+ai-service/*.db
+
+# IDE / editor folders (applies to all)
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Coverage reports
+coverage/
+htmlcov/
+*.cover
+.coverage
+.pytest_cache/

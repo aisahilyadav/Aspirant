@@ -1,0 +1,45 @@
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
+import cors from 'cors';
+import connectDB from './src/db/connectionDb.js';
+import authRoute from './src/routes/auth.route.js';
+import quizRoutes from './src/routes/quiz.route.js';
+
+
+
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+//lets tackle cors
+const corsOptions = {
+    origin: "http://localhost:3000",
+    methods: "GET, PUT, POST, DELETE, PATCH, HEAD",
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//routes
+app.use("/api/auth", authRoute);
+app.use('/api/quiz', quizRoutes);
+
+
+
+
+// Connect to MongoDB
+
+connectDB().then(() =>{
+
+    app.listen(PORT, () => {
+        console.log(`server running at PORT ${PORT}`);
+        
+    })
+}).catch((error) => {
+    console.error('Failed to connect to the database:', error);
+    process.exit(1);
+});
+
