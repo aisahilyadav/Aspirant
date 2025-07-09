@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
+from pymongo import MongoClient
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
@@ -10,8 +11,12 @@ from langchain.prompts import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
 
 load_dotenv()
+client = MongoClient(os.getenv("MONGO_URI"))
 print("[Init] Loaded GOOGLE_API_KEY:", os.getenv("GOOGLE_API_KEY"))
 
+# Choose your database and collection
+db = client["self-learning-platform"]
+pdfs = db["pdfs"]
 
 
 app = FastAPI()
@@ -27,39 +32,85 @@ async def root():
 async def health():
     return {"status": "ok"}
 
+class ProcessRequest(BaseModel):
+    file_hash: str
+    signed_url: str
+
 @app.post("/process_pdf")
-async def process_pdf(pdf_path: str = Form(...)):
-    print(f"[process_pdf] Received path: {pdf_path}")
+async def process_pdf(req: ProcessRequest):
+    file_hash = req.file_hash
+    signed_url = req.signed_url
+    print(f"[process_pdf] Received file_hash: {file_hash}")
+    print(f"[process_pdf] Received signed_url: {signed_url}")
 
-    exists = os.path.exists(pdf_path)
-    print(f"[process_pdf] File exists? {exists}")
-    if not exists:
-        return {"message": "File does not exist", "file_exists": False}
+    # Debug: Check what's in the database
+    print("[DEBUG] Checking database contents...")
+    all_docs = list(pdfs.find({}))
+    print(f"[DEBUG] Found {len(all_docs)} documents in pdfs collection")
+    for doc in all_docs[:3]:  # Show first 3 docs
+        print(f"[DEBUG] Doc: {doc}")
 
-    try:
-        print("[process_pdf] Extracting text...")
-        text = extract_text_from_pdf(pdf_path)
 
-        print("[process_pdf] Splitting text into chunks...")
-        chunks = split_text(text)
+    # Lookup Cloudinary URL from MongoDB
+    # Get the LATEST document (most recent upload)
+    doc = pdfs.find_one({"fileHash": file_hash}, sort=[("createdAt", -1)])
+    if not doc:
+        return {"message": "File not found in DB", "file_exists": False}
 
-        print("[process_pdf] Saving vector store...")
-        save_vector_store(chunks)
+    cloud_url = signed_url
+    print(f"[process_pdf] Downloading PDF from: {cloud_url}")
 
-        print("[process_pdf] Done!")
-        return {"message": " PDF processed successfully! You can start chatting now."}
-    except Exception as e:
-        print("[process_pdf] Error:", e)
-        return {"message": " Failed to process PDF", "error": str(e)}
+    uploads_dir = "uploads"
+    os.makedirs(uploads_dir, exist_ok=True)
+    local_pdf_path = os.path.join(uploads_dir, f"{file_hash}.pdf")
+
+
+    # Check if vector store already exists
+    index_dir = f"faiss_indexes/{file_hash}"
+    if os.path.exists(index_dir):
+        print("[process_pdf] PDF already processed. Vector store exists.")
+        return {"message": "PDF already processed! You can start chatting now."}
+
+    # Download PDF if not cached locally
+    if not os.path.exists(local_pdf_path):
+        print(f"[process_pdf] Downloading PDF from Cloudinary: {cloud_url}")
+        import requests
+        response = requests.get(cloud_url)
+        response.raise_for_status()
+        with open(local_pdf_path, "wb") as f:
+            f.write(response.content)
+    else:
+        print("[process_pdf] PDF already cached locally.")
+
+         # Process the PDF (this was indented incorrectly before)
+    print("[process_pdf] Extracting text...")
+    text = extract_text_from_pdf(local_pdf_path)
+    
+    if not text.strip():
+        print("[process_pdf] No text extracted from PDF!")
+        return {"message": "Failed to extract text from PDF", "file_exists": True}
+
+    print(f"[process_pdf] Extracted {len(text)} characters of text")
+    print("[process_pdf] Splitting text...")
+    chunks = split_text(text)
+    print(f"[process_pdf] Created {len(chunks)} text chunks")
+
+    print("[process_pdf] Saving vector store...")
+    save_vector_store(chunks, file_hash)
+
+    print("[process_pdf] Done!")
+    return {"message": "PDF processed successfully! You can start chatting now."}
 
 class QuestionRequest(BaseModel):
     question: str
+    file_hash: str
 
 @app.post("/chat")
 async def chat(req: QuestionRequest):
     print(f"[chat] Received question: {req.question}")
     try:
-        answer = answer_question(req.question)
+        answer = answer_question(req.question, req.file_hash)
+
         print("[chat] Answer generated")
         return {"answer": answer}
     except Exception as e:
@@ -83,14 +134,22 @@ def split_text(text):
     splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
     return splitter.split_text(text)
 
-def save_vector_store(chunks):
+def save_vector_store(chunks, file_hash):
+    index_dir = f"faiss_indexes/{file_hash}"
+    os.makedirs(index_dir, exist_ok=True)
     store = FAISS.from_texts(chunks, embedding=embeddings)
-    store.save_local("faiss_index")
-    print("[save_vector_store] Vector store saved to faiss_index")
+    store.save_local(index_dir)
+    print(f"[save_vector_store] Vector store saved to {index_dir}")
 
-def answer_question(question):
-    print("[answer_question] Loading vector store...")
-    db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+
+def answer_question(question, file_hash):
+    index_dir = f"faiss_indexes/{file_hash}"
+    print(f"[answer_question] Loading vector store from {index_dir}...")
+    if not os.path.exists(index_dir):
+        print("[answer_question] Index not found!")
+        return "PDF is still processing. Try again later."
+    db = FAISS.load_local(index_dir, embeddings, allow_dangerous_deserialization=True)
+
     docs = db.similarity_search(question)
 
     print("[answer_question] Initializing LLM...")
@@ -116,3 +175,8 @@ def answer_question(question):
     result = chain({"input_documents": docs, "question": question}, return_only_outputs=True)
 
     return result['output_text']
+
+@app.get("/debug/pdfs")
+async def debug_pdfs():
+    docs = list(pdfs.find({}).limit(10))
+    return {"count": len(docs), "docs": docs}

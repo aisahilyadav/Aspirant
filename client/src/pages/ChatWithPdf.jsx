@@ -3,6 +3,7 @@ import { useState } from 'react';
 function ChatWithPdf() {
   const [file, setFile] = useState(null);
   const [uploadResult, setUploadResult] = useState('');
+  const [pdfData, setPdfData] = useState(null); // ADD THIS LINE
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,8 +24,11 @@ function ChatWithPdf() {
       const data = await res.json();
       if (res.ok) {
         setUploadResult(' PDF uploaded & processed successfully!');
+        setPdfData(data);
+        console.log('Upload successful:', data);
       } else {
         setUploadResult(` Upload failed: ${data.message}`);
+        console.error('Upload failed:', data);
       }
     } catch (err) {
       console.error(err);
@@ -35,6 +39,10 @@ function ChatWithPdf() {
   // Ask question handler
   const handleAsk = async () => {
     if (!question) return alert('Type a question!');
+    if (!pdfData || !pdfData.pdfId) {
+      alert('Please upload a PDF first!');
+      return;
+    }
     setLoading(true);
     setAnswer('');
 
@@ -42,7 +50,10 @@ function ChatWithPdf() {
       const res = await fetch('http://localhost:8001/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question })
+        body: JSON.stringify({ 
+          question: question.trim(),
+          pdfId: pdfData.pdfId // Include pdfId
+        })
       });
       const data = await res.json();
       if (res.ok) {
@@ -66,6 +77,9 @@ function ChatWithPdf() {
         <input type="file" accept="application/pdf" onChange={e => setFile(e.target.files[0])} />
         <button onClick={handleUpload}>Upload PDF</button>
         <p>{uploadResult}</p>
+        {pdfData && (
+          <p>✅ PDF ID: {pdfData.pdfId}</p>
+        )}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -76,17 +90,15 @@ function ChatWithPdf() {
           onChange={e => setQuestion(e.target.value)}
           style={{ width: '80%' }}
         />
-        <button onClick={handleAsk} disabled={loading || !uploadResult.includes('success')}>
+        <button onClick={handleAsk} disabled={loading || !pdfData}>
           {loading ? 'Thinking...' : 'Ask'}
         </button>
       </div>
-
-      <div>
-        <h4> Answer:</h4>
+<div>
+        <h4>🤖 Answer:</h4>
         <p>{answer}</p>
       </div>
     </div>
   );
 }
-
 export default ChatWithPdf;
