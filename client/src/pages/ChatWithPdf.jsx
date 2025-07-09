@@ -1,16 +1,43 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-export default function ChatWithPdf() {
+function ChatWithPdf() {
+  const [file, setFile] = useState(null);
+  const [uploadResult, setUploadResult] = useState('');
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer]     = useState('');
-  const [loading, setLoading]   = useState(false);
+  const [answer, setAnswer] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleAsk = async () => {
-    if (!question.trim()) {
-      alert('Please type a question');
-      return;
+  // Upload PDF handler
+  const handleUpload = async () => {
+    if (!file) return alert('Select a PDF first!');
+
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    try {
+      setUploadResult('Uploading...');
+      const res = await fetch('http://localhost:8001/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUploadResult(' PDF uploaded & processed successfully!');
+      } else {
+        setUploadResult(` Upload failed: ${data.message}`);
+      }
+    } catch (err) {
+      console.error(err);
+      setUploadResult(' Upload failed (network error)');
     }
+  };
+
+  // Ask question handler
+  const handleAsk = async () => {
+    if (!question) return alert('Type a question!');
     setLoading(true);
+    setAnswer('');
+
     try {
       const res = await fetch('http://localhost:8001/api/chat', {
         method: 'POST',
@@ -21,31 +48,45 @@ export default function ChatWithPdf() {
       if (res.ok) {
         setAnswer(data.answer);
       } else {
-        setAnswer(`Error: ${data.message}`);
+        setAnswer(` Failed to get answer: ${data.error || data.message}`);
       }
     } catch (err) {
       console.error(err);
-      setAnswer('Error connecting to AI service');
+      setAnswer(' Failed to get answer (network error)');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Ask questions about your PDF</h2>
-      <input
-        type="text"
-        placeholder="Type your question..."
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        style={{ width: '300px', marginRight: '1rem' }}
-      />
-      <button onClick={handleAsk} disabled={loading}>
-        {loading ? 'Asking...' : 'Ask'}
-      </button>
-      <div style={{ marginTop: '1rem', whiteSpace: 'pre-wrap' }}>
-        <strong>Answer:</strong> {answer}
+    <div style={{ maxWidth: '600px', margin: 'auto', padding: '1rem' }}>
+      <h2>📝 Chat with your PDF</h2>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <input type="file" accept="application/pdf" onChange={e => setFile(e.target.files[0])} />
+        <button onClick={handleUpload}>Upload PDF</button>
+        <p>{uploadResult}</p>
+      </div>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <input
+          type="text"
+          placeholder="Ask a question..."
+          value={question}
+          onChange={e => setQuestion(e.target.value)}
+          style={{ width: '80%' }}
+        />
+        <button onClick={handleAsk} disabled={loading || !uploadResult.includes('success')}>
+          {loading ? 'Thinking...' : 'Ask'}
+        </button>
+      </div>
+
+      <div>
+        <h4> Answer:</h4>
+        <p>{answer}</p>
       </div>
     </div>
   );
 }
+
+export default ChatWithPdf;

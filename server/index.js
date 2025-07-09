@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //routes
 app.use("/api/auth", authRoute);
-app.use('/api/quiz', quizRoutes);
+app.use('/api', quizRoutes);
 app.use('/api', chatRoutes);
 
 // Connect to MongoDB
