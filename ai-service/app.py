@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Form
+from fastapi import HTTPException
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
@@ -7,6 +8,9 @@ from pymongo import MongoClient
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
+from langchain.prompts import PromptTemplate
+from langchain_core.runnables import RunnableLambda
+from langchain_google_genai import ChatGoogleGenerativeAI 
 from langchain.prompts import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
 
@@ -180,3 +184,81 @@ def answer_question(question, file_hash):
 async def debug_pdfs():
     docs = list(pdfs.find({}).limit(10))
     return {"count": len(docs), "docs": docs}
+
+
+class QuizRequest(BaseModel):
+    file_hash: str
+    topic: str
+    num_questions: int
+
+
+#----------------------------------------------------------#
+
+@app.post("/generate_quiz")
+async def generate_quiz(req: QuizRequest):
+    index_dir = f"faiss_indexes/{req.file_hash}"
+    if not os.path.exists(index_dir):
+        raise HTTPException(status_code=400, detail="PDF not processed yet.")
+
+    # Load vector store & get context
+    db = FAISS.load_local(index_dir, embeddings, allow_dangerous_deserialization=True)
+    docs = db.similarity_search(req.topic, k=10)
+    context = "\n".join([doc.page_content for doc in docs])
+
+    # Prompt
+    prompt_template = PromptTemplate(
+        template="""
+Based on the context below, generate {num_questions} multiple-choice quiz questions about the topic "{topic}".
+Each question must include:
+- 'question' (string)
+- 'options' (list of 4 strings)
+- 'correctAnswer' (string, must be EXACTLY one of the options)
+
+Return ONLY a valid JSON array, like:
+[
+  {{"question": "...", "options": ["a","b","c","d"], "correctAnswer": "a"}},
+  ...
+]
+
+Context:
+{context}
+""",
+        input_variables=["num_questions", "topic", "context"]
+    )
+
+    # LLM
+    model = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.3)
+
+    # Compose chain: prompt | llm
+    chain = prompt_template | model
+
+    print("[generate_quiz] Generating quiz...")
+
+    # Call invoke with proper dict
+    result = chain.invoke({
+        "num_questions": str(req.num_questions),
+        "topic": req.topic,
+        "context": context
+    })
+
+    # Gemini returns `result` as a string sometimes inside an object; adjust if needed
+    raw_output = result if isinstance(result, str) else getattr(result, 'content', str(result))
+    print("[generate_quiz] Raw LLM result:", raw_output)
+
+    # Clean markdown ```json
+    cleaned = raw_output.strip()
+    if cleaned.startswith("```json"):
+        cleaned = cleaned[len("```json"):].strip()
+    if cleaned.endswith("```"):
+        cleaned = cleaned[:-3].strip()
+
+    # Parse JSON
+    import json
+    try:
+        questions = json.loads(cleaned)
+        print(f"[generate_quiz] Parsed {len(questions)} questions")
+    except json.JSONDecodeError as e:
+        print("[generate_quiz] JSON decode error:", e)
+        raise HTTPException(status_code=500, detail="Failed to parse quiz JSON")
+
+    return {"questions": questions}

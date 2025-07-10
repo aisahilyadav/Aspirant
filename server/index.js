@@ -11,7 +11,7 @@ import chatRoutes from './src/routes/chat.route.js';
 
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8001;
 
 //lets tackle cors
 const corsOptions = {
@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //routes
 app.use("/api/auth", authRoute);
-app.use('/api', quizRoutes);
+app.use('/api/quiz', quizRoutes);
 app.use('/api', chatRoutes);
 
 // Connect to MongoDB

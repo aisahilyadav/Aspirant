@@ -35,6 +35,7 @@ ai-service/*.sqlite3
 ai-service/*.db
 ai-service/faiss_index/
 ai-service/0.6.18
+ai-service/uploads/
 
 # IDE / editor folders (applies to all)
 .vscode/
