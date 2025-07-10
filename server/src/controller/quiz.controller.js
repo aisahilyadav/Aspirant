@@ -135,6 +135,7 @@ export async function generateQuiz(req, res) {
   }
 }
 
+// 
 // 🟩 Submit Quiz
 export async function submitQuiz(req, res) {
   const { quizId, answers } = req.body;
@@ -148,14 +149,15 @@ export async function submitQuiz(req, res) {
       if (q.correctAnswer === answers[idx]) correct++;
     });
 
-      const score = correct;
+    const score = correct;
+
     console.log(`[submitQuiz] Score: ${score} / ${quiz.numQuestions}`);
 
     return res.json({
-      score,
-      total: quiz.numQuestions,
-      correctAnswers: correct
-    });
+  score,
+  total: quiz.numQuestions,
+  correctAnswers: quiz.questions.map(q => q.correctAnswer)
+});
 
   } catch (err) {
     console.error('[submitQuiz] Error:', err);
