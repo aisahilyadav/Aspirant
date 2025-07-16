@@ -2,10 +2,10 @@ import React from 'react';
 import { useState } from 'react';
 import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../store/auth";
+import GoogleLoginComponent from '../components/GoogleLogin';
 
 const Login = () => {
-
-      const [user, setUser] = useState({
+  const [user, setUser] = useState({
     email: "",
     password: "",
   });
@@ -14,7 +14,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { storeTokenInLS } = useAuth();
   
-
   const handleInput = (e) => {
     const { name, value } = e.target;
     setUser({
@@ -40,16 +39,9 @@ const Login = () => {
         const res_data = await response.json();
         console.log("Login successful:", res_data);
         
-        // Store token in localStorage
         storeTokenInLS(res_data.token);
-        
-        // Clear input fields
         setUser({ email: "", password: "" });
-        
-        // Show success alert
         alert("🎉 Login successful! Welcome back!");
-        
-        // Navigate to home page
         navigate("/");
       } else {
         const errorData = await response.json();
@@ -62,29 +54,58 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold text-center">Login</h2>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                        <input
-                            type="email"
-                            name="email"
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8 animate-fade-in-up">
+          <h1 className="text-3xl font-bold text-black mb-2">Welcome Back</h1>
+          <p className="text-gray-600">Sign in to your ASPIRANT account</p>
+        </div>
+
+        {/* Main Card */}
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 space-y-6 animate-slide-up">
+          
+          {/* Google Login */}
+          <div className="space-y-4">
+            <GoogleLoginComponent />
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-200" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-4 text-gray-500 font-medium">Or continue with email</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Regular Email Login */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
                 placeholder="Enter your email"
                 id="email"
                 required
                 autoComplete="email"
                 value={user.email}
                 onChange={handleInput}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="password"  className="block text-sm font-medium text-gray-700">Password</label>
-                        <input
-                             type="password"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
+                Password
+              </label>
+              <input
+                type="password"
                 name="password"
                 placeholder="Enter your password"
                 id="password"
@@ -92,25 +113,51 @@ const Login = () => {
                 autoComplete="current-password"
                 value={user.password}
                 onChange={handleInput}
-                            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 mt-4 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-                    >
-                        Login
-                    </button>
-                </form>
-                <p className="text-center">
-                    Don't have an account?{' '}
-                    <a href="/signup" className="text-blue-600 hover:underline">
-                        Sign up
-                    </a>
-                </p>
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
+              />
             </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-3 px-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Signing in...
+                </div>
+              ) : (
+                "Sign In"
+              )}
+            </button>
+          </form>
+          
+          <div className="text-center pt-4 border-t border-gray-100">
+            <p className="text-gray-600">
+              Don't have an account?{' '}
+              <NavLink 
+                to="/signup" 
+                className="text-black font-semibold hover:text-gray-700 transition-colors duration-200 underline-offset-4 hover:underline"
+              >
+                Sign up
+              </NavLink>
+            </p>
+          </div>
         </div>
-    );
+
+        {/* Footer */}
+        <div className="text-center mt-8 animate-fade-in-up animation-delay-300">
+          <p className="text-sm text-gray-500">
+            By signing in, you agree to our{' '}
+            <a href="#" className="text-gray-700 hover:text-black transition-colors duration-200">
+              Terms of Service
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Login;

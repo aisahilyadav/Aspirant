@@ -102,6 +102,11 @@ async def process_pdf(req: ProcessRequest):
     print("[process_pdf] Saving vector store...")
     save_vector_store(chunks, file_hash)
 
+     # 🔥 CLEAN UP: Delete local PDF after processing
+    if os.path.exists(local_pdf_path):
+        os.remove(local_pdf_path)
+        print(f"[process_pdf] Deleted local PDF after processing: {local_pdf_path}")
+
     print("[process_pdf] Done!")
     return {"message": "PDF processed successfully! You can start chatting now."}
 

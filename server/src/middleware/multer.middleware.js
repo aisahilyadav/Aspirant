@@ -1,15 +1,7 @@
 import multer from 'multer';
-import path from 'path';
 
-// configure storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
+// Use memory storage instead of disk storage
+const storage = multer.memoryStorage();
 
 // file filter: only pdfs
 const fileFilter = function (req, file, cb) {
@@ -20,7 +12,13 @@ const fileFilter = function (req, file, cb) {
   }
 };
 
-// create upload middleware
-const upload = multer({ storage, fileFilter });
+// create upload middleware with size limit
+const upload = multer({ 
+  storage, 
+  fileFilter,
+  limits: {
+    fileSize: 50 * 1024 * 1024 // 50MB limit (adjust as needed)
+  }
+});
 
 export default upload;

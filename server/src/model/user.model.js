@@ -13,7 +13,23 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true,
+        required: function() {
+            // Password is only required if googleId is not present
+            return !this.googleId;
+        },
+    },
+    googleId: {
+        type: String,
+        sparse: true, // Allows null values but ensures uniqueness when present
+    },
+    profilePicture: {
+        type: String,
+        default: null,
+    },
+    authProvider: {
+        type: String,
+        enum: ['local', 'google'],
+        default: 'local',
     },
     isAdmin:{
         type:Boolean,
@@ -21,19 +37,24 @@ const userSchema = new mongoose.Schema({
     },
 },{timestamps: true});
 
+// Create compound index for email uniqueness
+userSchema.index({ email: 1 }, { unique: true });
 
 //?secure the password using the bcrypt method
 userSchema.pre("save", async function (next){
 
     const user = this;
 
-    if(!user.isModified("password")){
-        next();
+    // Only hash password if it exists and is modified
+    if(!user.password || !user.isModified("password")){
+        return next();
     }
+    
     try {
         const saltRound = await bcrypt.genSalt(5);
         const hash_password = await bcrypt.hash(user.password, saltRound);
         user.password = hash_password;
+        next();
     } catch (error) {
         next(error)
     }
@@ -42,7 +63,10 @@ userSchema.pre("save", async function (next){
 
 //compare the password
 userSchema.methods.comparePassword = async function (password) {
-  return  bcrypt.compare(password, this.password);    
+    if (!this.password) {
+        return false; // No password set (Google user)
+    }
+    return bcrypt.compare(password, this.password);    
 }
 
 

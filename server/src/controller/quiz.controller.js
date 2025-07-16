@@ -20,22 +20,35 @@ export async function uploadPdf(req, res) {
   }
 
   try {
-    console.log("[Quiz] Received upload, filename =", req.file.filename);
+    console.log("[Quiz] Received upload, filename =", req.file.originalname);
+    console.log("[Quiz] File size =", req.file.size, "bytes");
 
-    const uploadsDir = path.join(__dirname, "../../uploads");
-    const absolutePath = path.join(uploadsDir, req.file.filename);
-
-    await fs.access(absolutePath);
-    console.log("[Quiz] File exists at:", absolutePath);
-
-    // Compute hash
-    const fileBuffer = await fs.readFile(absolutePath);
+    // Work directly with the file buffer (no local file created)
+    const fileBuffer = req.file.buffer;
     const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+    console.log("[Quiz] Computed hash:", fileHash);
 
-    // Upload to Cloudinary
+    // Check if PDF already exists
+    const existingPdf = await Pdf.findOne({ fileHash });
+    if (existingPdf) {
+      console.log("[Quiz] PDF already exists:", existingPdf._id);
+      return res.json({
+        message: "PDF already exists",
+        filename: req.file.originalname,
+        pdfId: existingPdf._id,
+        fileHash,
+        cloudinaryUrl: existingPdf.cloudinaryUrl
+      });
+    }
+
+    // Upload directly to Cloudinary from buffer
     await cloudinary.uploader.destroy(`pdfs/pdf_${fileHash}`, { resource_type: 'raw' });
 
-    const cloudRes = await cloudinary.uploader.upload(absolutePath, {
+    // Convert buffer to base64 for Cloudinary upload
+    const base64Data = fileBuffer.toString('base64');
+    const dataUri = `data:application/pdf;base64,${base64Data}`;
+
+    const cloudRes = await cloudinary.uploader.upload(dataUri, {
       resource_type: 'raw',
       folder: 'pdfs',
       public_id: `pdf_${fileHash}`,
@@ -50,7 +63,7 @@ export async function uploadPdf(req, res) {
 
     // Save PDF metadata
     const pdfDoc = await Pdf.create({
-      filename: req.file.filename,
+      filename: req.file.originalname, // Use original filename
       cloudinaryUrl: cloudRes.secure_url,
       fileHash,
       publicId,
@@ -58,7 +71,7 @@ export async function uploadPdf(req, res) {
 
     console.log('[Quiz] Saved to MongoDB:', pdfDoc);
 
-    // Call FastAPI /process_pdf to process and index
+    // Call FastAPI to process
     const apiRes = await fetch(`${RAG_SERVICE_URL}/process_pdf`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -72,15 +85,16 @@ export async function uploadPdf(req, res) {
     }
 
     const body = await apiRes.json();
-    console.log('[Quiz] FastAPI /process_pdf response:', body);
+    console.log('[Quiz] FastAPI response:', body);
 
     return res.json({
       message: body.message,
-      filename: req.file.filename,
+      filename: req.file.originalname,
       pdfId: pdfDoc._id,
       fileHash,
       cloudinaryUrl: cloudRes.secure_url
     });
+
   } catch (err) {
     console.error('[Quiz] Upload error:', err);
     return res.status(500).json({ message: 'Upload failed', error: err.message });

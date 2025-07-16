@@ -34,6 +34,8 @@ ai-service/.pytest_cache/
 ai-service/*.sqlite3
 ai-service/*.db
 ai-service/faiss_index/
+ai-service/faiss_indexes/
+ai-service/faiss_index/
 ai-service/0.6.18
 ai-service/uploads/
 

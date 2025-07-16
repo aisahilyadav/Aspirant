@@ -21,7 +21,8 @@ export const signupSchema = z.object({
        .max(32, { message: "Password must not exceed 32 characters." })
     
 });
- export const loginSchema = z.object({
+
+export const loginSchema = z.object({
        email: z
     .string({required_error: "email is required"})
         .trim()
@@ -33,4 +34,11 @@ export const signupSchema = z.object({
         .trim()
        .min(8, { message: "Password must be at least 8 characters long." })
        .max(32, { message: "Password must not exceed 32 characters." })
- })
+});
+
+export const googleAuthSchema = z.object({
+    googleToken: z.string({required_error: "Google token is required"}),
+    email: z.string().email({message: "Invalid email address"}),
+    name: z.string().min(1, {message: "Name is required"}),
+    picture: z.string().url().optional()
+});
