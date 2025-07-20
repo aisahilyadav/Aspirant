@@ -8,7 +8,9 @@ import {
   FiBookOpen,
   FiClipboard,
   FiFolder,
-  FiSettings
+  FiSettings,
+  FiCheckSquare,
+  FiCalendar
 } from "react-icons/fi";
 
 const Layout = ({ children }) => {
@@ -29,26 +31,17 @@ const Layout = ({ children }) => {
   const sidebarItems = [
     { icon: FiHome, title: "Home", path: "/home" },
     { icon: FiBookOpen, title: "Quiz", path: "/quiz" },
+    { icon: FiCheckSquare, title: "Todos", path: "/todos" },
+    { icon: FiCalendar, title: "Calendar", path: "/calendar" },
     { icon: FiClipboard, title: "Notes", path: "/notes" },
-    { icon: FiFolder, title: "Resources", path: "/resources" },
+    { icon: FiFolder, title: "Files", path: "/files" },
     { icon: FiUser, title: "Profile", path: "/profile" },
     { icon: FiSettings, title: "Settings", path: "/settings" },
   ];
 
   return (
-    <>
-      {/* Fixed Navbar */}
-      <RegularNavbar
-        isLoggedIn={isLoggedIn}
-        user={user}
-        isMenuOpen={isMenuOpen}
-        toggleMenu={toggleMenu}
-        handleLogout={handleLogout}
-        setIsMenuOpen={setIsMenuOpen}
-        sidebarItems={sidebarItems}
-      />
-
-      {/* Fixed Sidebar */}
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar - only show when logged in */}
       {isLoggedIn && (
         <Sidebar
           sidebarOpen={sidebarOpen}
@@ -59,23 +52,33 @@ const Layout = ({ children }) => {
         />
       )}
 
-      {/* Main Content - ONLY handle margins here */}
-      <main 
-        className={`
-          pt-16 
-          ${isLoggedIn 
-            ? sidebarOpen 
-              ? 'ml-[280px]' 
-              : 'ml-[80px]'
-            : 'ml-0'
-          } 
-          transition-all duration-300 ease-in-out
-          min-h-screen
-        `}
-      >
-        {children}
-      </main>
-    </>
+      {/* Main content area with proper spacing */}
+      <div className={`flex-1 flex flex-col overflow-hidden ${
+        isLoggedIn 
+          ? sidebarOpen 
+            ? 'ml-[280px]' // Account for expanded sidebar width
+            : 'ml-[80px]'  // Account for collapsed sidebar width
+          : 'ml-0'
+      } transition-all duration-300`}>
+        {/* Top Navigation */}
+        <RegularNavbar
+          isLoggedIn={isLoggedIn}
+          user={user}
+          isMenuOpen={isMenuOpen}
+          toggleMenu={toggleMenu}
+          handleLogout={handleLogout}
+          setIsMenuOpen={setIsMenuOpen}
+          sidebarItems={sidebarItems}
+        />
+
+        {/* Page Content with proper top margin */}
+        <main className={`flex-1 overflow-auto ${
+          isLoggedIn ? 'pt-0' : 'pt-16'
+        }`}>
+          {children}
+        </main>
+      </div>
+    </div>
   );
 };
 
