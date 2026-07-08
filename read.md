@@ -3,7 +3,8 @@ npm run dev
 
 
 //activate virtual environment in windows
-.\venv\Scripts\activate
+.\.venv\Scripts\activate
+
 
 //run fastapi server
 uvicorn app:app --reload

@@ -3,7 +3,7 @@ const API_URL = 'http://localhost:8001/api';
 export async function uploadPdf(file) {
   const formData = new FormData();
   formData.append('pdf', file);
-  const res = await fetch(`${API_URL}/upload`, { method: 'POST', body: formData });
+  const res = await fetch(`${API_URL}/quiz/upload`, { method: 'POST', body: formData });
   return res.json();
 }
 

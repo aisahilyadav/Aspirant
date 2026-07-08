@@ -317,7 +317,7 @@ export default function PreQuiz() {
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .animate-fade-in {
           animation: fadeIn 0.3s ease-in-out;
         }

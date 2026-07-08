@@ -4,6 +4,7 @@ const pdfSchema = new mongoose.Schema({
   filename: String,
   cloudinaryUrl: String,
   fileHash: String,
+  publicId: String,
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -2,31 +2,40 @@ from fastapi import FastAPI, Form
 from fastapi import HTTPException
 from pydantic import BaseModel
 import os
+
 from dotenv import load_dotenv
+load_dotenv()
 from PyPDF2 import PdfReader
 from pymongo import MongoClient
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
-from langchain.prompts import PromptTemplate
-from langchain_core.runnables import RunnableLambda
+from langchain_core.prompts import PromptTemplate
+
 from langchain_google_genai import ChatGoogleGenerativeAI 
-from langchain.prompts import PromptTemplate
-from langchain.chains.question_answering import load_qa_chain
+from langchain_core.prompts import PromptTemplate
+from google import genai
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
+for model in client.models.list():
+    print(model.name)
 
 load_dotenv()
 client = MongoClient(os.getenv("MONGO_URI"))
 print("[Init] Loaded GOOGLE_API_KEY:", os.getenv("GOOGLE_API_KEY"))
+db_name = os.getenv("MONGO_DB_NAME", "aspirant")
 
 # Choose your database and collection
-db = client["self-learning-platform"]
+db = client[db_name]
 pdfs = db["pdfs"]
 
 
 app = FastAPI()
 
 # Initialize embeddings once; vector DB will use this
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="models/gemini-embedding-001"
+)
 
 @app.get("/")
 async def root():
@@ -71,7 +80,10 @@ async def process_pdf(req: ProcessRequest):
 
     # Check if vector store already exists
     index_dir = f"faiss_indexes/{file_hash}"
-    if os.path.exists(index_dir):
+    index_faiss = os.path.join(index_dir, "index.faiss")
+    index_pkl = os.path.join(index_dir, "index.pkl")
+
+    if os.path.isfile(index_faiss) and os.path.isfile(index_pkl):
         print("[process_pdf] PDF already processed. Vector store exists.")
         return {"message": "PDF already processed! You can start chatting now."}
 
@@ -154,36 +166,63 @@ def save_vector_store(chunks, file_hash):
 def answer_question(question, file_hash):
     index_dir = f"faiss_indexes/{file_hash}"
     print(f"[answer_question] Loading vector store from {index_dir}...")
+
     if not os.path.exists(index_dir):
-        print("[answer_question] Index not found!")
         return "PDF is still processing. Try again later."
-    db = FAISS.load_local(index_dir, embeddings, allow_dangerous_deserialization=True)
+
+    index_faiss = os.path.join(index_dir, "index.faiss")
+    index_pkl = os.path.join(index_dir, "index.pkl")
+
+    print("Looking for:", index_dir)
+    print("index.faiss exists:", os.path.isfile(index_faiss))
+    print("index.pkl exists:", os.path.isfile(index_pkl))
+
+    if not (os.path.isfile(index_faiss) and os.path.isfile(index_pkl)):
+        raise HTTPException(status_code=400, detail="PDF not processed yet.")
+
+    db = FAISS.load_local(
+        index_dir,
+        embeddings,
+        allow_dangerous_deserialization=True
+    )
 
     docs = db.similarity_search(question)
 
+    context = "\n\n".join([doc.page_content for doc in docs])
+
     print("[answer_question] Initializing LLM...")
-    model = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.3)
+    model = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        temperature=0.3
+        )
 
-    prompt_template = """
-    Answer the question as detailed as possible from the provided context.
-    If answer not in context, say "answer is not available in the context."
+    prompt = PromptTemplate(
+        template="""
+Answer the question as detailed as possible from the provided context.
+If the answer is not in the context, say "answer is not available in the context."
 
-    Context:
-    {context}
+Context:
+{context}
 
-    Question:
-    {question}
+Question:
+{question}
 
-    Answer:
-    """
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+Answer:
+""",
+        input_variables=["context", "question"]
+    )
 
-    chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
+    # ✅ Modern LCEL chain
+    chain = prompt | model
 
     print("[answer_question] Running chain...")
-    result = chain({"input_documents": docs, "question": question}, return_only_outputs=True)
+    result = chain.invoke({
+        "context": context,
+        "question": question
+    })
 
-    return result['output_text']
+    return result.content
+
 
 @app.get("/debug/pdfs")
 async def debug_pdfs():
@@ -201,8 +240,17 @@ class QuizRequest(BaseModel):
 
 @app.post("/generate_quiz")
 async def generate_quiz(req: QuizRequest):
+    print("Received file_hash:", req.file_hash)
+
     index_dir = f"faiss_indexes/{req.file_hash}"
-    if not os.path.exists(index_dir):
+    index_faiss = os.path.join(index_dir, "index.faiss")
+    index_pkl = os.path.join(index_dir, "index.pkl")
+
+    print("Looking for:", index_dir)
+    print("index.faiss exists:", os.path.isfile(index_faiss))
+    print("index.pkl exists:", os.path.isfile(index_pkl))
+
+    if not (os.path.isfile(index_faiss) and os.path.isfile(index_pkl)):
         raise HTTPException(status_code=400, detail="PDF not processed yet.")
 
     # Load vector store & get context
@@ -232,7 +280,10 @@ Context:
     )
 
     # LLM
-    model = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.3)
+    model = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        temperature=0.3
+        )
 
     # Compose chain: prompt | llm
     chain = prompt_template | model

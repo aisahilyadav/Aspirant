@@ -11,6 +11,8 @@ import Signup from '../pages/Signup';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 import Quiz from '../pages/Quiz';
+import PreQuiz from '../pages/PreQuiz';
+
 import QuizResult from '../pages/QuizResult';
 import ChatWithPdf from '../pages/ChatWithPdf';
 
@@ -67,6 +69,14 @@ function AppRouter() {
         />
         <Route
           path="/quiz"
+          element={
+            <ProtectedRoute>
+              <PreQuiz />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/quiz/:quizId"
           element={
             <ProtectedRoute>
               <Quiz />

@@ -32,11 +32,32 @@ export async function uploadPdf(req, res) {
     const existingPdf = await Pdf.findOne({ fileHash });
     if (existingPdf) {
       console.log("[Quiz] PDF already exists:", existingPdf._id);
+
+      const signedUrl = generateSignedPdfUrl(existingPdf.publicId);
+
+      const apiRes = await fetch(`${RAG_SERVICE_URL}/process_pdf`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          file_hash: existingPdf.fileHash,
+          signed_url: signedUrl
+        })
+      });
+
+      if (!apiRes.ok) {
+        const text = await apiRes.text();
+        console.error('[Quiz] FastAPI error (existing PDF):', text);
+        return res.status(502).json({ message: 'AI service error', detail: text });
+      }
+
+      const body = await apiRes.json();
+      console.log('[Quiz] FastAPI response (existing PDF):', body);
+
       return res.json({
-        message: "PDF already exists",
+        message: body.message,
         filename: req.file.originalname,
         pdfId: existingPdf._id,
-        fileHash,
+        fileHash: existingPdf.fileHash,
         cloudinaryUrl: existingPdf.cloudinaryUrl
       });
     }
@@ -168,10 +189,10 @@ export async function submitQuiz(req, res) {
     console.log(`[submitQuiz] Score: ${score} / ${quiz.numQuestions}`);
 
     return res.json({
-  score,
-  total: quiz.numQuestions,
-  correctAnswers: quiz.questions.map(q => q.correctAnswer)
-});
+      score,
+      total: quiz.numQuestions,
+      correctAnswers: quiz.questions.map(q => q.correctAnswer)
+    });
 
   } catch (err) {
     console.error('[submitQuiz] Error:', err);
