@@ -18,8 +18,8 @@ import {
   FiItalic,
   FiUnderline,
   FiList,
-  FiIndent,
-  FiOutdent
+  FiChevronsLeft,
+  FiChevronsRight
 } from 'react-icons/fi';
 import { 
   getNotes, 
@@ -466,14 +466,14 @@ export default function Notes() {
                 className="p-1.5 hover:bg-gray-100 rounded text-gray-700"
                 title="Indent"
               >
-                <FiIndent className="w-4 h-4" />
+                <FiChevronsRight className="w-4 h-4" />
               </button>
               <button
                 onClick={() => applyFormat('outdent')}
                 className="p-1.5 hover:bg-gray-100 rounded text-gray-700"
                 title="Outdent"
               >
-                <FiOutdent className="w-4 h-4" />
+                <FiChevronsLeft className="w-4 h-4" />
               </button>
 
               <div className="w-[1px] h-4 bg-gray-300 mx-1" />
