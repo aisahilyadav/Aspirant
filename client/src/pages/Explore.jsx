@@ -2,12 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   FiCompass, 
-  FiAward, 
-  FiMessageSquare, 
-  FiFileText, 
-  FiZap, 
-  FiArrowRight, 
-  FiLayers 
+  FiArrowRight 
 } from 'react-icons/fi';
 
 export default function Explore() {
@@ -18,57 +13,65 @@ export default function Explore() {
       num: "01",
       title: "Interactive AI Quiz Engine",
       description: "Auto-generate practice exams from text paragraphs or uploaded PDFs. Test your retention with multiple-choice questions, accurate score calculations, and immediate correction sheets.",
-      color: "border-purple-500/30 text-purple-400",
-      bgOrb: "bg-purple-500/5",
+      color: "border-stone-300 text-stone-700",
+      rotation: "rotate-[-0.5deg]",
       path: "/quiz"
     },
     {
       num: "02",
       title: "PDF RAG Chat Sidebar",
       description: "Chat interactively with text blocks extracted from your source materials. Perfect for clarifying complex concepts, translating dense terminology, and finding quick answers.",
-      color: "border-blue-500/30 text-blue-400",
-      bgOrb: "bg-blue-500/5",
+      color: "border-stone-300 text-stone-700",
+      rotation: "rotate-[0.5deg]",
       path: "/notes"
     },
     {
       num: "03",
       title: "Rich Notes Canvas",
       description: "Say goodbye to simple text areas. Write beautiful notes, structure them with H1/H2 headers, bullet lists, custom highlight backgrounds, colors, and auto-save text content in the background.",
-      color: "border-green-500/30 text-green-400",
-      bgOrb: "bg-green-500/5",
+      color: "border-stone-300 text-stone-700",
+      rotation: "rotate-[0.8deg]",
       path: "/notes"
     },
     {
       num: "04",
       title: "Streak & Progress Tracker",
       description: "Build a consistent study streak, monitor your daily study duration (⏱), and tick off tasks inside your Todo dashboard to stay accountable to your study schedule.",
-      color: "border-yellow-500/30 text-yellow-400",
-      bgOrb: "bg-yellow-500/5",
+      color: "border-stone-300 text-stone-700",
+      rotation: "rotate-[-0.8deg]",
       path: "/todos"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white pt-24 pb-16 font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#FAF9F6] text-stone-850 pt-24 pb-16 font-sans overflow-x-hidden relative">
       
-      {/* Background Orbs */}
-      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/4 translate-x-1/2 w-[400px] h-[400px] bg-purple-600/5 rounded-full blur-[130px] pointer-events-none" />
+      {/* SVG Handdrawn Rough Line Filter */}
+      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
+        <defs>
+          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Background paper grid pattern */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header Section */}
-        <div className="border-b border-white/10 pb-12 mb-16">
-          <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 block mb-3 flex items-center gap-1.5">
-            <FiCompass className="animate-spin" style={{ animationDuration: '6s' }} />
-            Explore Modules
+        <div className="border-b border-stone-200 pb-12 mb-16">
+          <span className="font-handwritten text-lg text-stone-500 block mb-2 rotate-[-1deg] flex items-center gap-2">
+            <FiCompass className="animate-spin text-stone-400" style={{ animationDuration: '8s' }} />
+            [ explore study modules ]
           </span>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-6">
-            Discover the <span className="font-serif italic font-normal text-indigo-200">AI Study</span> Arsenal.
+          <h1 className="text-4xl md:text-5xl font-serif-book font-extrabold tracking-tight text-stone-900 leading-tight mb-4">
+            Discover the <span className="underline decoration-stone-400 decoration-wavy decoration-2">AI Study</span> Workspace.
           </h1>
-          <p className="text-lg text-gray-400 max-w-2xl leading-relaxed">
-            Take a tour of our core functionalities. Explore how Aspirant automates notes, schedules, 
-            questions, and reference searches.
+          <p className="text-sm sm:text-base text-stone-605 max-w-2xl leading-relaxed">
+            Take a tour of our core functionalities. Explore how Aspirant automates notes, schedules, questions, and reference searches.
           </p>
         </div>
 
@@ -78,51 +81,49 @@ export default function Explore() {
             <div 
               key={i} 
               onClick={() => navigate(feature.path)}
-              className="relative overflow-hidden p-8 rounded-3xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.02] hover:border-white/15 transition-all duration-300 group cursor-pointer flex flex-col justify-between min-h-[300px]"
+              className={`p-8 rounded-3xl border border-stone-300 bg-white hover:shadow-md transition-all duration-300 group cursor-pointer flex flex-col justify-between min-h-[280px] ${feature.rotation}`}
+              style={{ filter: 'url(#handdrawn)' }}
             >
-              {/* Backlight Orb */}
-              <div className={`absolute top-0 right-0 w-32 h-32 ${feature.bgOrb} rounded-full blur-[60px] pointer-events-none`} />
-
               <div className="flex justify-between items-start mb-6">
-                <span className="text-sm font-mono text-gray-500 font-extrabold">
+                <span className="text-xs font-mono text-stone-400 font-extrabold">
                   {feature.num}
                 </span>
-                <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1 rounded bg-white/5 border ${feature.color}`}>
+                <span className="text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md bg-stone-50 border border-stone-200 text-stone-600 font-mono">
                   Interactive Module
                 </span>
               </div>
 
               <div>
-                <h3 className="text-2xl font-black tracking-tight text-white mb-3 group-hover:translate-x-1 transition-transform">
+                <h3 className="text-xl font-bold tracking-tight text-stone-900 mb-3 group-hover:translate-x-0.5 transition-transform uppercase">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-gray-400 leading-relaxed mb-6">
+                <p className="text-xs text-stone-500 leading-relaxed mb-6 font-serif-book">
                   {feature.description}
                 </p>
               </div>
 
-              <div className="flex items-center text-xs font-bold text-white group-hover:text-purple-300 transition-colors uppercase tracking-wider">
+              <div className="flex items-center text-xs font-extrabold text-stone-850 hover:text-stone-950 transition-colors uppercase tracking-widest">
                 Launch Module
-                <FiArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                <FiArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           ))}
         </div>
 
         {/* Visual Showcase Callout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 border border-white/10 rounded-3xl p-8 bg-white/[0.01] items-center gap-8">
-          <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-2xl font-extrabold tracking-tight">
+        <div className="grid grid-cols-1 lg:grid-cols-3 border border-stone-300 rounded-3xl p-8 bg-white items-center gap-8" style={{ filter: 'url(#handdrawn)' }}>
+          <div className="lg:col-span-2 space-y-3 text-left">
+            <h2 className="text-xl font-serif-book font-extrabold tracking-tight text-stone-900">
               Ready to construct your study system?
             </h2>
-            <p className="text-sm text-gray-400 leading-relaxed">
+            <p className="text-xs text-stone-500 leading-relaxed font-serif-book">
               Connect textbooks, parse summaries, launch chat assistants, and monitor study metrics today.
             </p>
           </div>
           <div className="flex justify-start lg:justify-end">
             <button
               onClick={() => navigate('/signup')}
-              className="px-8 py-4 bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl hover:bg-gray-100 transition-colors flex items-center gap-2"
+              className="px-8 py-4 bg-stone-850 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl hover:bg-stone-950 transition-transform hover:-translate-y-0.5 shadow-sm flex items-center gap-2"
             >
               Sign Up Now
               <FiArrowRight className="w-4 h-4" />
