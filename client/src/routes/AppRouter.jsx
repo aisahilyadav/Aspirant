@@ -5,7 +5,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import PublicRoute from '../components/PublicRoute';
 
 // Import existing pages
-import HeroSection from '../components/HeroSection';
+import LandingPage from '../pages/LandingPage';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Home from '../pages/Home';
@@ -36,7 +36,7 @@ function AppRouter() {
           path="/"
           element={
             <PublicRoute>
-              <HeroSection />
+              <LandingPage />
             </PublicRoute>
           }
         />
