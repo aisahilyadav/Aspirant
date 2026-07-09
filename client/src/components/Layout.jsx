@@ -29,12 +29,11 @@ const Layout = ({ children }) => {
 
   // Sidebar navigation items
   const sidebarItems = [
-    { icon: FiHome, title: "Home", path: "/home" },
+    { icon: FiHome, title: "Home (Dashboard)", path: "/home" },
     { icon: FiBookOpen, title: "Quiz", path: "/quiz" },
     { icon: FiCheckSquare, title: "Todos", path: "/todos" },
     { icon: FiCalendar, title: "Calendar", path: "/calendar" },
     { icon: FiClipboard, title: "Notes", path: "/notes" },
-    { icon: FiFolder, title: "Files", path: "/files" },
     { icon: FiUser, title: "Profile", path: "/profile" },
     { icon: FiSettings, title: "Settings", path: "/settings" },
   ];

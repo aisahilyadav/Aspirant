@@ -8,6 +8,7 @@ import quizRoutes from './src/routes/quiz.route.js';
 import chatRoutes from './src/routes/chat.route.js';
 import todoRoutes from './src/routes/todo.route.js'; // Add this import
 import noteRoutes from './src/routes/note.route.js';
+import dashboardRoutes from './src/routes/dashboard.route.js';
 
 const app = express();
 const PORT = process.env.PORT || 8001;
@@ -29,6 +30,7 @@ app.use('/api/quiz', quizRoutes);
 app.use('/api', chatRoutes);
 app.use('/api/todos', todoRoutes); // Add this route
 app.use('/api/notes', noteRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Connect to MongoDB
 connectDB().then(() =>{

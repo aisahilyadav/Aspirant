@@ -386,3 +386,25 @@ Summary:
     raw_output = result if isinstance(result, str) else getattr(result, 'content', str(result))
     return {"summary": raw_output.strip()}
 
+
+class RecommendRequest(BaseModel):
+    topic: str
+
+
+@app.post("/recommend")
+async def recommend(req: RecommendRequest):
+    print("Received recommendation request for topic:", req.topic)
+    
+    prompt = f"Provide a brief, motivating study recommendation and practical learning tip (2-3 sentences max) for a student studying the topic: '{req.topic}'."
+    
+    model = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        temperature=0.7
+    )
+    
+    print("[recommend] Generating recommendation...")
+    result = model.invoke(prompt)
+    raw_output = result if isinstance(result, str) else getattr(result, 'content', str(result))
+    return {"recommendation": raw_output.strip()}
+
+
