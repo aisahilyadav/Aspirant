@@ -14,6 +14,11 @@ import Quiz from '../pages/Quiz';
 import PreQuiz from '../pages/PreQuiz';
 import Notes from '../pages/Notes';
 import Settings from '../pages/Settings';
+import Product from '../pages/Product';
+import Explore from '../pages/Explore';
+import Docs from '../pages/Docs';
+import About from '../pages/About';
+import Contact from '../pages/Contact';
 
 import QuizResult from '../pages/QuizResult';
 import ChatWithPdf from '../pages/ChatWithPdf';
@@ -51,6 +56,13 @@ function AppRouter() {
             </PublicRoute>
           }
         />
+
+        {/* Public Marketing Routes */}
+        <Route path="/product" element={<Product />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/docs" element={<Docs />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
 
         {/* Protected Routes */}
         <Route

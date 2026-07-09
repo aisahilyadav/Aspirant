@@ -86,22 +86,22 @@ export default function TodoDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#030303] text-white">
       {/* Add proper spacing from top navigation */}
-      <div className="pt-16">
+      <div className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Todo Dashboard</h1>
-              <p className="text-gray-600">Manage your tasks and stay organized</p>
+              <h1 className="text-3xl font-extrabold text-white mb-2">Todo Dashboard</h1>
+              <p className="text-gray-450 text-sm">Manage your tasks and stay organized</p>
             </div>
             
             <button
               onClick={() => setShowForm(true)}
-              className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors duration-200"
+              className="flex items-center space-x-2 px-5 py-3 bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl hover:bg-gray-150 transition-colors duration-200 shadow-md shadow-white/5"
             >
-              <FiPlus className="w-4 h-4" />
+              <FiPlus className="w-4 h-4 text-black" />
               <span>New Todo</span>
             </button>
           </div>
@@ -112,49 +112,51 @@ export default function TodoDashboard() {
             <div className="lg:col-span-1 space-y-6">
               {/* Simple Stats Cards */}
               <div className="grid grid-cols-1 gap-4">
-                <div className="bg-white rounded-xl p-4 border border-gray-200">
+                <div className="bg-white/[0.01] hover:bg-white/[0.02] rounded-2xl p-4 border border-white/5 transition-colors">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Total Tasks</p>
-                      <p className="text-2xl font-bold text-gray-900">{todos.length}</p>
+                      <p className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Total Tasks</p>
+                      <p className="text-2xl font-black text-white mt-1">{todos.length}</p>
                     </div>
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <FiList className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white">
+                      <FiList className="w-5 h-5" />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-4 border border-gray-200">
+                <div className="bg-white/[0.01] hover:bg-white/[0.02] rounded-2xl p-4 border border-white/5 transition-colors">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">In Progress</p>
-                      <p className="text-2xl font-bold text-blue-600">
+                      <p className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">In Progress</p>
+                      <p className="text-2xl font-black text-blue-400 mt-1">
                         {todos.filter(t => t.status === 'in-progress').length}
                       </p>
                     </div>
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <FiClock className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 bg-blue-500/10 border border-blue-500/15 rounded-xl flex items-center justify-center text-blue-400">
+                      <FiClock className="w-5 h-5" />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-4 border border-gray-200">
+                <div className="bg-white/[0.01] hover:bg-white/[0.02] rounded-2xl p-4 border border-white/5 transition-colors">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Completed</p>
-                      <p className="text-2xl font-bold text-green-600">
+                      <p className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Completed</p>
+                      <p className="text-2xl font-black text-green-400 mt-1">
                         {todos.filter(t => t.status === 'completed').length}
                       </p>
                     </div>
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                      <FiCheckCircle className="w-5 h-5 text-green-600" />
+                    <div className="w-10 h-10 bg-green-500/10 border border-green-500/15 rounded-xl flex items-center justify-center text-green-400">
+                      <FiCheckCircle className="w-5 h-5" />
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Calendar Widget */}
-              <TodoCalendarWidget />
+              <div className="bg-white/[0.01] border border-white/5 rounded-3xl p-4">
+                <TodoCalendarWidget />
+              </div>
             </div>
 
             {/* Right Column - Todo List */}
@@ -162,20 +164,20 @@ export default function TodoDashboard() {
               {/* Todo List */}
               {loading ? (
                 <div className="flex items-center justify-center py-12">
-                  <div className="w-8 h-8 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-2 border-white/10 border-t-white rounded-full animate-spin"></div>
                 </div>
               ) : todos.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <FiList className="w-12 h-12 text-gray-400" />
+                <div className="text-center py-12 bg-white/[0.005] border border-white/5 rounded-3xl p-8">
+                  <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
+                    <FiList className="w-8 h-8" />
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No todos found</h3>
-                  <p className="text-gray-600 mb-6">Get started by creating your first todo</p>
+                  <h3 className="text-base font-extrabold text-white mb-1 uppercase tracking-wider">No todos found</h3>
+                  <p className="text-gray-500 text-xs mb-6">Get started by creating your first todo</p>
                   <button
                     onClick={() => setShowForm(true)}
-                    className="inline-flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                    className="inline-flex items-center space-x-2 px-6 py-3 bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-xl hover:bg-gray-150 transition-colors duration-200"
                   >
-                    <FiPlus className="w-4 h-4" />
+                    <FiPlus className="w-4 h-4 text-black" />
                     <span>Create Todo</span>
                   </button>
                 </div>

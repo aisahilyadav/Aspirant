@@ -135,9 +135,9 @@ export default function Settings() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center pt-16">
+      <div className="min-h-screen bg-[#030303] text-white flex items-center justify-center pt-16">
         <div className="flex flex-col items-center space-y-4">
-          <FiLoader className="animate-spin text-black w-8 h-8" />
+          <FiLoader className="animate-spin text-white w-8 h-8" />
           <span className="text-gray-500 text-sm">Loading settings...</span>
         </div>
       </div>
@@ -145,16 +145,16 @@ export default function Settings() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 pb-12">
+    <div className="min-h-screen bg-[#030303] text-white pt-20 pb-12 font-sans">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
-            <FiSettings className="mr-3 w-8 h-8 text-black" />
+        <div className="mb-10 border-b border-white/10 pb-6">
+          <h1 className="text-3xl font-extrabold text-white tracking-tight flex items-center">
+            <FiSettings className="mr-3 w-8 h-8 text-white" />
             Account Settings
           </h1>
-          <p className="text-gray-600 mt-1 text-sm">
+          <p className="text-gray-450 mt-1 text-sm">
             Manage your account credentials, AI companion model, and study dashboard preferences.
           </p>
         </div>
@@ -163,19 +163,19 @@ export default function Settings() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* Column 1: Profile & Password */}
-          <div className="bg-white rounded-3xl border border-gray-250/70 p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+          <div className="bg-white/[0.01] rounded-3xl border border-white/5 p-6 sm:p-8 flex flex-col justify-between shadow-2xl">
             <form onSubmit={handleUpdateProfile} className="space-y-6">
-              <div className="flex items-center space-x-2.5 text-gray-900 border-b border-gray-100 pb-4">
-                <FiUser className="w-5 h-5 text-gray-700" />
-                <h3 className="text-base font-extrabold">Profile Credentials</h3>
+              <div className="flex items-center space-x-2.5 text-white border-b border-white/10 pb-4">
+                <FiUser className="w-5 h-5 text-gray-400" />
+                <h3 className="text-sm font-extrabold uppercase tracking-wider">Profile Credentials</h3>
               </div>
 
               {/* Message */}
               {profileMessage && (
                 <div className={`p-4 rounded-xl text-xs font-semibold ${
                   profileMessage.type === 'success' 
-                    ? 'bg-green-50 border border-green-200 text-green-800' 
-                    : 'bg-red-50 border border-red-200 text-red-800'
+                    ? 'bg-green-500/10 border border-green-500/20 text-green-300' 
+                    : 'bg-red-500/10 border border-red-500/20 text-red-300'
                 }`}>
                   {profileMessage.text}
                 </div>
@@ -183,45 +183,45 @@ export default function Settings() {
 
               {/* Username Input */}
               <div className="space-y-2">
-                <label className="text-xs font-extrabold text-gray-550 uppercase tracking-wider block">
+                <label className="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest block">
                   Username
                 </label>
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full bg-white border border-gray-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
                   required
                 />
               </div>
 
               {/* Email Address (Read-only) */}
               <div className="space-y-2">
-                <label className="text-xs font-extrabold text-gray-550 uppercase tracking-wider block">
+                <label className="text-[10px] font-extrabold text-gray-550 uppercase tracking-widest block">
                   Email Address
                 </label>
                 <input
                   type="email"
                   value={email}
                   disabled
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-450 rounded-xl px-4 py-2.5 text-sm cursor-not-allowed"
+                  className="w-full bg-black/50 border border-white/5 text-gray-500 rounded-xl px-4 py-2.5 text-xs cursor-not-allowed"
                 />
-                <span className="text-[10px] text-gray-450 block">
-                  Linked via {authProvider === 'google' ? 'Google authentication' : 'Local email sign-in'}.
+                <span className="text-[9px] text-gray-550 block font-mono">
+                  LINKED VIA {authProvider === 'google' ? 'GOOGLE AUTHENTICATION' : 'LOCAL EMAIL SIGN-IN'}.
                 </span>
               </div>
 
               {/* Password Section (Only if local user) */}
               {authProvider === 'local' && (
-                <div className="space-y-4 pt-4 border-t border-gray-100">
-                  <div className="flex items-center space-x-2 text-gray-900 mb-2">
+                <div className="space-y-4 pt-4 border-t border-white/10">
+                  <div className="flex items-center space-x-2 text-white mb-2">
                     <FiLock className="w-4 h-4 text-gray-500" />
-                    <h4 className="text-xs font-extrabold uppercase tracking-wide">Change Password</h4>
+                    <h4 className="text-[10px] font-extrabold uppercase tracking-widest">Change Password</h4>
                   </div>
 
                   {/* Current Password */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-600 block">
+                    <label className="text-xs font-bold text-gray-400 block">
                       Current Password
                     </label>
                     <input
@@ -229,14 +229,14 @@ export default function Settings() {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white border border-gray-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
+                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
                       required={!!newPassword}
                     />
                   </div>
 
                   {/* New Password */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-600 block">
+                    <label className="text-xs font-bold text-gray-400 block">
                       New Password
                     </label>
                     <input
@@ -244,13 +244,13 @@ export default function Settings() {
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white border border-gray-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
+                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
                     />
                   </div>
 
                   {/* Confirm New Password */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-600 block">
+                    <label className="text-xs font-bold text-gray-400 block">
                       Confirm New Password
                     </label>
                     <input
@@ -258,7 +258,7 @@ export default function Settings() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white border border-gray-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
+                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
                     />
                   </div>
                 </div>
@@ -267,7 +267,7 @@ export default function Settings() {
               <button
                 type="submit"
                 disabled={profileSaving}
-                className="w-full py-3 bg-black hover:bg-gray-850 text-white rounded-xl font-bold text-xs shadow-sm transition-colors flex items-center justify-center"
+                className="w-full py-3.5 bg-white hover:bg-gray-150 text-black font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-md transition-colors flex items-center justify-center"
               >
                 {profileSaving ? (
                   <>
@@ -282,19 +282,19 @@ export default function Settings() {
           </div>
 
           {/* Column 2: Preferences */}
-          <div className="bg-white rounded-3xl border border-gray-250/70 p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+          <div className="bg-white/[0.01] rounded-3xl border border-white/5 p-6 sm:p-8 flex flex-col justify-between shadow-2xl">
             <form onSubmit={handleUpdatePreferences} className="space-y-6">
-              <div className="flex items-center space-x-2.5 text-gray-900 border-b border-gray-100 pb-4">
-                <FiSliders className="w-5 h-5 text-gray-700" />
-                <h3 className="text-base font-extrabold">Study Preferences</h3>
+              <div className="flex items-center space-x-2.5 text-white border-b border-white/10 pb-4">
+                <FiSliders className="w-5 h-5 text-gray-400" />
+                <h3 className="text-sm font-extrabold uppercase tracking-wider">Study Preferences</h3>
               </div>
 
               {/* Message */}
               {prefMessage && (
                 <div className={`p-4 rounded-xl text-xs font-semibold ${
                   prefMessage.type === 'success' 
-                    ? 'bg-green-50 border border-green-200 text-green-800' 
-                    : 'bg-red-50 border border-red-200 text-red-800'
+                    ? 'bg-green-500/10 border border-green-500/20 text-green-300' 
+                    : 'bg-red-500/10 border border-red-500/20 text-red-300'
                 }`}>
                   {prefMessage.text}
                 </div>
@@ -302,40 +302,40 @@ export default function Settings() {
 
               {/* Preferred AI Companion Model */}
               <div className="space-y-2">
-                <label className="text-xs font-extrabold text-gray-550 uppercase tracking-wider flex items-center gap-1.5">
-                  <FiCpu className="w-3.5 h-3.5 text-gray-500" />
+                <label className="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
+                  <FiCpu className="w-3.5 h-3.5 text-gray-550" />
                   Default AI Model
                 </label>
                 <select
                   value={defaultModel}
                   onChange={(e) => setDefaultModel(e.target.value)}
-                  className="w-full bg-white border border-gray-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
                 >
-                  <option value="gemini-2.5-flash">Gemini 2.5 Flash (Recommended - Faster responses)</option>
-                  <option value="gemini-2.5-pro">Gemini 2.5 Pro (Deep logical parsing)</option>
-                  <option value="gemini-3.5-flash">Gemini 3.5 Flash (Experimental)</option>
+                  <option value="gemini-2.5-flash" className="bg-[#0c0c0e]">Gemini 2.5 Flash (Recommended - Faster responses)</option>
+                  <option value="gemini-2.5-pro" className="bg-[#0c0c0e]">Gemini 2.5 Pro (Deep logical parsing)</option>
+                  <option value="gemini-3.5-flash" className="bg-[#0c0c0e]">Gemini 3.5 Flash (Experimental)</option>
                 </select>
               </div>
 
               {/* Preferred Study Mode */}
               <div className="space-y-2">
-                <label className="text-xs font-extrabold text-gray-550 uppercase tracking-wider block">
+                <label className="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest block">
                   Study Pace / Mode
                 </label>
                 <select
                   value={studyMode}
                   onChange={(e) => setStudyMode(e.target.value)}
-                  className="w-full bg-white border border-gray-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
                 >
-                  <option value="pomodoro">Pomodoro (25m study / 5m break cycles)</option>
-                  <option value="intensive">Intensive (50m study / 10m break cycles)</option>
-                  <option value="custom">Self-Paced / Open time limits</option>
+                  <option value="pomodoro" className="bg-[#0c0c0e]">Pomodoro (25m study / 5m break cycles)</option>
+                  <option value="intensive" className="bg-[#0c0c0e]">Intensive (50m study / 10m break cycles)</option>
+                  <option value="custom" className="bg-[#0c0c0e]">Self-Paced / Open time limits</option>
                 </select>
               </div>
 
               {/* Default Quiz Questions count */}
               <div className="space-y-2">
-                <label className="text-xs font-extrabold text-gray-550 uppercase tracking-wider block">
+                <label className="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest block">
                   Default Quiz Questions Count
                 </label>
                 <input
@@ -344,20 +344,20 @@ export default function Settings() {
                   max="20"
                   value={defaultQuizQuestions}
                   onChange={(e) => setDefaultQuizQuestions(e.target.value)}
-                  className="w-full bg-white border border-gray-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
                 />
               </div>
 
               {/* Email Notifications Toggle */}
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-center justify-between p-3.5 bg-white/[0.005] border border-white/5 rounded-xl">
                 <div className="flex items-center space-x-3">
-                  <FiBell className="text-gray-500 w-4 h-4" />
+                  <FiBell className="text-gray-400 w-4 h-4" />
                   <div>
-                    <label className="text-xs font-bold text-gray-800 block">
+                    <label className="text-xs font-bold text-white block">
                       Email Notifications
                     </label>
-                    <span className="text-[10px] text-gray-450 block">
-                      Receive reminders for study deadlines and calendar todos
+                    <span className="text-[9px] text-gray-550 block font-mono">
+                      RECEIVE REMINDERS FOR DEADLINES AND TODOS
                     </span>
                   </div>
                 </div>
@@ -365,30 +365,30 @@ export default function Settings() {
                   type="checkbox"
                   checked={emailNotifications}
                   onChange={(e) => setEmailNotifications(e.target.checked)}
-                  className="h-4 w-4 text-black border-gray-300 rounded focus:ring-black"
+                  className="h-4 w-4 text-black bg-white border-white/25 rounded focus:ring-white"
                 />
               </div>
 
               {/* UI Theme Selection */}
               <div className="space-y-2">
-                <label className="text-xs font-extrabold text-gray-550 uppercase tracking-wider flex items-center gap-1.5">
-                  <FiMonitor className="w-3.5 h-3.5 text-gray-500" />
+                <label className="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
+                  <FiMonitor className="w-3.5 h-3.5 text-gray-550" />
                   Appearance Theme
                 </label>
                 <select
                   value={theme}
                   onChange={(e) => setTheme(e.target.value)}
-                  className="w-full bg-white border border-gray-250 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
                 >
-                  <option value="light">Classic Light (Curated white & slates)</option>
-                  <option value="dark">Dark Theme (Coming soon)</option>
+                  <option value="light" className="bg-[#0c0c0e]">Dark Contrast Mode (Default)</option>
+                  <option value="dark" className="bg-[#0c0c0e]">Midnight Classic (Experimental)</option>
                 </select>
               </div>
 
               <button
                 type="submit"
                 disabled={prefSaving}
-                className="w-full py-3 bg-black hover:bg-gray-850 text-white rounded-xl font-bold text-xs shadow-sm transition-colors flex items-center justify-center"
+                className="w-full py-3.5 bg-white hover:bg-gray-150 text-black font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-md transition-colors flex items-center justify-center"
               >
                 {prefSaving ? (
                   <>

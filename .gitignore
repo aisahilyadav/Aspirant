@@ -6,6 +6,7 @@
 # Node.js client (React)
 client/node_modules/
 client/build/
+client/dist/
 
 client/.env
 client/.env.local

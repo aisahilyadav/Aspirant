@@ -39,7 +39,7 @@ const Layout = ({ children }) => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-[#030303] text-white">
       {/* Sidebar - only show when logged in */}
       {isLoggedIn && (
         <Sidebar

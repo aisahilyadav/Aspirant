@@ -14,65 +14,48 @@ const RegularNavbar = ({
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isLoggedIn 
-        ? 'bg-white border-b border-gray-200 shadow-sm' 
-        : 'bg-[#030303]/80 backdrop-blur-md border-b border-white/10'
+        ? 'bg-[#030303] border-b border-white/10 shadow-lg shadow-black/10' 
+        : 'bg-[#030303]/85 backdrop-blur-md border-b border-white/10'
     }`}>
-      <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         
-        {/* Logo - Better positioning for sidebar alignment */}
-        <div className="flex-shrink-0 transition-all duration-300">
+        {/* Brand Logo */}
+        <div className="flex-shrink-0">
           <Link to={isLoggedIn ? "/home" : "/"} className="flex items-center">
-            <div className={`text-2xl font-black tracking-tight ${
-              isLoggedIn ? 'text-black' : 'text-white'
-            }`}>
+            <div className="text-xl font-black tracking-widest uppercase text-white font-mono">
               aspirant
             </div>
           </Link>
         </div>
 
-        {/* Desktop Navigation (only show when not logged in) */}
+        {/* Desktop Navigation Links */}
         {!isLoggedIn && (
           <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              <Link
-                to="/product"
-                className="text-gray-400 hover:text-white px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200"
-              >
-                Product
-              </Link>
-              <Link
-                to="/explore"
-                className="text-gray-400 hover:text-white px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200"
-              >
-                Explore
-              </Link>
-              <Link
-                to="/docs"
-                className="text-gray-400 hover:text-white px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200"
-              >
-                Docs
-              </Link>
-              <Link
-                to="/about"
-                className="text-gray-400 hover:text-white px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200"
-              >
-                About
-              </Link>
+            <div className="ml-10 flex items-baseline space-x-6">
+              {['Product', 'Explore', 'Docs', 'About', 'Contact'].map((item) => (
+                <Link
+                  key={item}
+                  to={`/${item.toLowerCase()}`}
+                  className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 hover:text-white transition-colors duration-200"
+                >
+                  {item}
+                </Link>
+              ))}
             </div>
           </div>
         )}
 
-        {/* Desktop Auth Buttons */}
+        {/* Desktop Auth Actions */}
         <div className="hidden md:block">
           <div className="ml-4 flex items-center space-x-4">
             {isLoggedIn ? (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-700 text-sm font-medium">
-                  Welcome, {user?.username}
+                <span className="text-gray-400 text-xs font-bold uppercase tracking-wide">
+                  {user?.username}
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-black border border-gray-300 rounded-lg hover:border-black transition-all duration-200"
+                  className="px-4 py-2 text-[10px] font-extrabold uppercase tracking-wider text-gray-400 hover:text-white border border-white/10 rounded-lg hover:border-white transition-all duration-200"
                 >
                   Logout
                 </button>
@@ -81,13 +64,13 @@ const RegularNavbar = ({
               <>
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white border border-white/20 rounded-lg hover:border-white transition-all duration-200"
+                  className="px-4 py-2 text-[10px] font-extrabold uppercase tracking-wider text-gray-300 hover:text-white border border-white/10 rounded-lg hover:border-white transition-all duration-200"
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-4 py-2 text-sm font-medium text-black bg-white rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-sm"
+                  className="px-4 py-2 text-[10px] font-extrabold uppercase tracking-wider text-black bg-white rounded-lg hover:bg-gray-150 transition-all duration-200 shadow-md shadow-white/5"
                 >
                   Sign Up
                 </Link>
@@ -96,21 +79,19 @@ const RegularNavbar = ({
           </div>
         </div>
 
-        {/* Mobile menu button (only show when not logged in) */}
+        {/* Mobile menu trigger */}
         {!isLoggedIn && (
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className={`inline-flex items-center justify-center p-2 rounded-md transition-colors duration-200 ${
-                isLoggedIn ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:text-white hover:bg-white/10'
-              }`}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/5 transition-colors duration-200"
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
               {isMenuOpen ? (
-                <FiX className="h-6 w-6" />
+                <FiX className="h-5 w-5" />
               ) : (
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
@@ -119,45 +100,20 @@ const RegularNavbar = ({
         )}
       </div>
 
-      {/* Mobile menu (only show when not logged in) */}
+      {/* Mobile Drawer Menu */}
       {!isLoggedIn && (
         <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden bg-[#030303] border-t border-white/10`}>
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              to="/"
-              className="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium tracking-wide transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              to="/product"
-              className="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium tracking-wide transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Product
-            </Link>
-            <Link
-              to="/explore"
-              className="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium tracking-wide transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Explore
-            </Link>
-            <Link
-              to="/docs"
-              className="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium tracking-wide transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Docs
-            </Link>
-            <Link
-              to="/about"
-              className="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium tracking-wide transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </Link>
+            {['Product', 'Explore', 'Docs', 'About', 'Contact'].map((item) => (
+              <Link
+                key={item}
+                to={`/${item.toLowerCase()}`}
+                className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 hover:text-white block px-3 py-2 transition-colors duration-200"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item}
+              </Link>
+            ))}
           </div>
           
           {/* Mobile Auth Buttons */}
@@ -165,14 +121,14 @@ const RegularNavbar = ({
             <div className="px-2 space-y-1">
               <Link
                 to="/login"
-                className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white transition-colors duration-200"
+                className="block px-3 py-2 text-[10px] font-extrabold uppercase tracking-wider text-gray-400 hover:text-white transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="block px-3 py-2 text-base font-medium text-black bg-white rounded-lg hover:bg-gray-100 transition-colors duration-200 mx-3 mt-2 text-center"
+                className="block px-3 py-2 text-[10px] font-extrabold uppercase tracking-wider text-black bg-white rounded-lg hover:bg-gray-150 transition-colors duration-200 mx-3 mt-2 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Sign Up
