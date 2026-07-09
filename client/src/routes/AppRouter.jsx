@@ -12,6 +12,7 @@ import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 import Quiz from '../pages/Quiz';
 import PreQuiz from '../pages/PreQuiz';
+import Notes from '../pages/Notes';
 
 import QuizResult from '../pages/QuizResult';
 import ChatWithPdf from '../pages/ChatWithPdf';
@@ -96,6 +97,14 @@ function AppRouter() {
           element={
             <ProtectedRoute>
               <ChatWithPdf />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notes"
+          element={
+            <ProtectedRoute>
+              <Notes />
             </ProtectedRoute>
           }
         />

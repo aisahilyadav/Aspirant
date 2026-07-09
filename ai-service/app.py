@@ -318,3 +318,71 @@ Context:
         raise HTTPException(status_code=500, detail="Failed to parse quiz JSON")
 
     return {"questions": questions}
+
+
+class SummarizeRequest(BaseModel):
+    file_hash: str
+
+
+@app.post("/summarize")
+async def summarize(req: SummarizeRequest):
+    print("Received file_hash for summarization:", req.file_hash)
+
+    index_dir = f"faiss_indexes/{req.file_hash}"
+    index_faiss = os.path.join(index_dir, "index.faiss")
+    index_pkl = os.path.join(index_dir, "index.pkl")
+
+    if not (os.path.isfile(index_faiss) and os.path.isfile(index_pkl)):
+        raise HTTPException(status_code=400, detail="PDF not processed yet.")
+
+    # Load vector store & get context chunks
+    db = FAISS.load_local(index_dir, embeddings, allow_dangerous_deserialization=True)
+    
+    # Retrieve all documents from FAISS store
+    docs = list(db.docstore._dict.values())
+    
+    # Combine chunks up to 100,000 characters
+    combined_text = ""
+    for doc in docs:
+        if len(combined_text) + len(doc.page_content) < 100000:
+            combined_text += doc.page_content + "\n"
+        else:
+            break
+
+    if not combined_text.strip():
+        raise HTTPException(status_code=400, detail="No text content found in FAISS index.")
+
+    # Prompt
+    prompt_template = PromptTemplate(
+        template="""You are an expert study assistant. Generate a highly structured, clear, and comprehensive summary of the following document content. 
+Use Markdown with standard styling:
+- **Overview**: High-level summary of what the document is about.
+- **Key Concepts / Highlights**: Main themes, terms, or topics discussed.
+- **Detailed Takeaways**: Crucial facts, data points, or explanations.
+- **Conclusion / Summary**: A final synthesis.
+
+Document Content:
+{context}
+
+Summary:
+""",
+        input_variables=["context"]
+    )
+
+    # LLM
+    model = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        temperature=0.3
+    )
+
+    # Compose chain
+    chain = prompt_template | model
+
+    print("[summarize] Generating summary...")
+    result = chain.invoke({
+        "context": combined_text
+    })
+
+    raw_output = result if isinstance(result, str) else getattr(result, 'content', str(result))
+    return {"summary": raw_output.strip()}
+
