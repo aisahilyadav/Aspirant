@@ -238,10 +238,12 @@ export default function Notes() {
   }, [chatHistory, selectedNote]);
 
   // Filter notes by search
-  const filteredNotes = notes.filter(n => 
-    n.title.toLowerCase().includes(search.toLowerCase()) ||
-    n.content.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredNotes = notes.filter(n => {
+    const titleMatch = n.title.toLowerCase().includes(search.toLowerCase());
+    const strippedContent = n.content ? n.content.replace(/<[^>]*>/g, '').toLowerCase() : '';
+    const contentMatch = strippedContent.includes(search.toLowerCase());
+    return titleMatch || contentMatch;
+  });
 
   // Markdown rendering helper
   const renderMarkdown = (text) => {
@@ -308,8 +310,9 @@ export default function Notes() {
           ) : (
             filteredNotes.map((note) => {
               const isSelected = selectedNote?._id === note._id;
-              const previewText = note.content 
-                ? note.content.substring(0, 60) + (note.content.length > 60 ? '...' : '') 
+              const strippedContent = note.content ? note.content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() : '';
+              const previewText = strippedContent 
+                ? strippedContent.substring(0, 60) + (strippedContent.length > 60 ? '...' : '') 
                 : 'Empty note';
               const dateString = new Date(note.updatedAt).toLocaleDateString(undefined, {
                 month: 'short',
