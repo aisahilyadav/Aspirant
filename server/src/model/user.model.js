@@ -35,6 +35,13 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false,
     },
+    studySettings: {
+        defaultModel: { type: String, default: 'gemini-2.5-flash' },
+        studyMode: { type: String, default: 'pomodoro' },
+        defaultQuizQuestions: { type: Number, default: 10 },
+        emailNotifications: { type: Boolean, default: true },
+        theme: { type: String, default: 'light' }
+    }
 },{timestamps: true});
 
 // Create compound index for email uniqueness

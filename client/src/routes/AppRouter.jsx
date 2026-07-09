@@ -13,6 +13,7 @@ import Profile from '../pages/Profile';
 import Quiz from '../pages/Quiz';
 import PreQuiz from '../pages/PreQuiz';
 import Notes from '../pages/Notes';
+import Settings from '../pages/Settings';
 
 import QuizResult from '../pages/QuizResult';
 import ChatWithPdf from '../pages/ChatWithPdf';
@@ -123,6 +124,14 @@ function AppRouter() {
           element={
             <ProtectedRoute>
               <TodoCalendar />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />
