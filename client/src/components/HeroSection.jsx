@@ -1,172 +1,183 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth';
+import { 
+  FiArrowRight, 
+  FiAward, 
+  FiBookOpen, 
+  FiClock, 
+  FiCpu, 
+  FiFileText, 
+  FiLayers, 
+  FiMessageSquare, 
+  FiZap 
+} from 'react-icons/fi';
 
-const HeroSection = () => {
+export default function HeroSection() {
   const { isLoggedIn, user } = useAuth();
+  const navigate = useNavigate();
 
   return (
-    <section className="relative h-screen bg-gray-50 flex items-center justify-center overflow-hidden">
-      {/* Background Pattern */}
-      <div className="fixed inset-0 opacity-5 pointer-events-none z-0">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, black 1px, transparent 0)`,
-          backgroundSize: '60px 60px'
-        }}></div>
+    <section className="relative min-h-screen bg-[#050508] text-white flex flex-col justify-center overflow-x-hidden pt-24 pb-16">
+      
+      {/* 1. Futuristic Background Accents */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Glowing Backlight Orbs */}
+        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[130px]" />
+        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[150px]" />
+        
+        {/* Dot Matrix Pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.06]" 
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+            backgroundSize: '32px 32px'
+          }}
+        />
       </div>
 
-      {/* Main Container */}
-      <div className="relative z-10 w-full max-w-[90vw] mx-auto bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12 lg:p-16 h-[90%] flex items-center">
+      {/* 2. Hero Content Area */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
-        <div className="grid lg:grid-cols-2 gap-16 items-center w-full">
-          
-          {/* Left Side - Content */}
-          <div className="text-left animate-fade-in-up">
-            {isLoggedIn && (
-              <div className="mb-6">
-                <p className="text-lg text-gray-500 font-light tracking-wide uppercase  mb-2">
-                  Welcome back,
-                </p>
-                <h2 className="text-3xl font-bold text-black tracking-tight">
-                  {user?.username}
-                </h2>
-              </div>
-            )}
-
-            <div className="mb-8">
-              <span className="inline-block  font-headingpx-4 py-2 bg-black text-white text-sm font-medium tracking-wider uppercase rounded-full mb-6">
-                AI-Powered Learning
-              </span>
-              
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-black mb-6 leading-[0.9] tracking-tighter">
-                Learn
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-700 to-black">
-                  Smarter.
-                </span>
-                <br />
-                <span className="font-heading italic">Achieve Faster.</span>
-              </h1>
-              
-              <p className="text-xl text-gray-600 font- max-w-2xl leading-relaxed mb-8 tracking-wide">
-                Transform your study materials into personalized learning paths with AI-generated quizzes, 
-                smart scheduling, and real-time progress tracking.
-              </p>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 mb-8 animate-fade-in-up animation-delay-200">
-              {isLoggedIn ? (
-                <>
-                  <Link
-                    to="/dashboard"
-                    className="px-10 py-5 bg-black text-white font-bold text-lg rounded-2xl hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 text-center tracking-wide uppercase"
-                  >
-                    Go to Dashboard
-                  </Link>
-                  <Link
-                    to="/quiz"
-                    className="px-10 py-5 border-3 border-black text-black font-bold text-lg rounded-2xl hover:bg-black hover:text-white transition-all duration-300 text-center tracking-wide uppercase"
-                  >
-                    Take Quiz
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/signup"
-                    className="px-10 py-5 bg-black text-white font-bold text-lg rounded-2xl hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 text-center tracking-wide uppercase"
-                  >
-                    Start Learning
-                  </Link>
-                  <Link
-                    to="/login"
-                    className="px-10 py-5 border-3 border-black text-black font-bold text-lg rounded-2xl hover:bg-black hover:text-white transition-all duration-300 text-center tracking-wide uppercase"
-                  >
-                    Sign In
-                  </Link>
-                </>
-              )}
-            </div>
-
-            {/* Trust indicators */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-8 text-gray-600 animate-fade-in-up animation-delay-400">
-              <div className="flex items-center space-x-3">
-                <div className="flex space-x-1">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="w-5 h-5 bg-yellow-400 rounded-sm transform rotate-45"></div>
-                  ))}
-                </div>
-                <span className="font-bold text-black text-lg">4.9/5</span>
-              </div>
-              
-              <div className="h-8 w-px bg-gray-300 hidden sm:block"></div>
-              
-              <div className="flex flex-col">
-                <span className="font-black text-2xl text-black tracking-tight">10,000+</span>
-                <span className="text-sm font-medium tracking-wider uppercase text-gray-500">
-                  Active Students
-                </span>
-              </div>
-            </div>
+        <div className="text-center max-w-4xl mx-auto mb-16 space-y-6">
+          {/* AI Banner */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-wider text-purple-300">
+            <FiCpu className="animate-spin text-purple-400 w-3.5 h-3.5" style={{ animationDuration: '4s' }} />
+            The Future of Learning is AI-Powered
           </div>
 
-          {/* Right Side - Visual */}
-          <div className="relative flex justify-center lg:justify-end animate-slide-up animation-delay-300">
-            <div className="relative w-full max-w-lg">
-              <svg
-                viewBox="0 0 400 500"
-                className="w-full h-auto drop-shadow-2xl"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="200" cy="250" r="200" fill="url(#gradient1)" opacity="0.05" />
-                <path
-                  d="M80 120 Q140 40 220 70 Q300 100 340 180 Q370 260 320 340 Q270 420 190 380 Q110 340 70 260 Q50 180 80 120 Z"
-                  fill="url(#gradient2)"
-                  className="drop-shadow-2xl"
-                />
-                <circle cx="200" cy="220" r="50" fill="rgba(255,255,255,0.15)" />
-                <circle cx="180" cy="200" r="25" fill="rgba(255,255,255,0.25)" />
-                <rect x="160" y="180" width="80" height="50" rx="6" fill="rgba(255,255,255,0.9)" />
-                <line x1="175" y1="195" x2="225" y2="195" stroke="#000" strokeWidth="2" opacity="0.4" />
-                <line x1="175" y1="205" x2="220" y2="205" stroke="#000" strokeWidth="2" opacity="0.4" />
-                <line x1="175" y1="215" x2="215" y2="215" stroke="#000" strokeWidth="2" opacity="0.4" />
-                
-                <defs>
-                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#000" />
-                    <stop offset="100%" stopColor="#666" />
-                  </linearGradient>
-                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#2a2a2a" />
-                    <stop offset="50%" stopColor="#1a1a1a" />
-                    <stop offset="100%" stopColor="#000" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              
-              {/* Floating Achievement Cards */}
-              <div className="absolute top-16 -left-6 bg-white rounded-2xl shadow-2xl p-6 animate-float border border-gray-100">
-                <div className="flex items-center space-x-3">
-                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                  <span className="text-base font-bold tracking-wide">Quiz Generated</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1 font-medium">From your PDF</p>
-              </div>
-              
-              <div className="absolute bottom-24 -right-6 bg-white rounded-2xl shadow-2xl p-6 animate-float border border-gray-100" style={{animationDelay: '1s'}}>
-                <div className="flex items-center space-x-3">
-                  <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                  <span className="text-base font-bold tracking-wide">85% Improved</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1 font-medium">Learning efficiency</p>
-              </div>
+          {/* Headline */}
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-[1.05] text-white">
+            Learn <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-indigo-300 to-white">Smarter.</span>
+            <br />
+            Achieve <span className="font-serif italic font-normal text-indigo-200">Faster.</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-base md:text-xl text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed">
+            Upload study files to instantly generate practice exams, draft rich formatted summaries, 
+            chat with your PDFs in real time, and monitor study streaks on your learning dashboard.
+          </p>
+
+          {/* CTA Group */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to="/home"
+                  className="w-full sm:w-auto px-8 py-4 bg-white text-black font-extrabold rounded-xl hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-white/5 group"
+                >
+                  Go to Dashboard
+                  <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link
+                  to="/quiz"
+                  className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/15 text-white font-extrabold rounded-xl hover:bg-white/10 hover:border-white/20 transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  Take Practice Quiz
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/signup"
+                  className="w-full sm:w-auto px-8 py-4 bg-white text-black font-extrabold rounded-xl hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-white/5 group"
+                >
+                  Start Studying Free
+                  <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link
+                  to="/login"
+                  className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/15 text-white font-extrabold rounded-xl hover:bg-white/10 hover:border-white/20 transition-all duration-300 flex items-center justify-center"
+                >
+                  Sign In to Account
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Trust statistics banner */}
+          <div className="flex justify-center items-center gap-8 pt-8 text-gray-500 text-xs font-bold uppercase tracking-wider">
+            <div className="flex items-center gap-2">
+              <span className="text-white text-sm font-extrabold">★ 4.9/5</span> Rating
+            </div>
+            <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+            <div className="flex items-center gap-2">
+              <span className="text-white text-sm font-extrabold">10K+</span> Active Students
+            </div>
+            <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+            <div className="flex items-center gap-2">
+              <span className="text-white text-sm font-extrabold">100%</span> Free Plan
             </div>
           </div>
         </div>
+
+        {/* 3. Feature Showcase Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+          
+          {/* Card 1: Practice Quizzes */}
+          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/15 hover:bg-white/[0.04] transition-all duration-300 group flex flex-col justify-between h-56">
+            <div className="p-3 bg-purple-500/10 text-purple-400 rounded-xl w-fit">
+              <FiAward className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-base font-extrabold text-white mb-2 group-hover:text-purple-300 transition-colors">
+                Practice Quizzes
+              </h3>
+              <p className="text-sm text-gray-400 leading-normal">
+                Convert notes and course readings into instant, customized multiple-choice practice exams.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 2: PDF Chat Companion */}
+          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/15 hover:bg-white/[0.04] transition-all duration-300 group flex flex-col justify-between h-56">
+            <div className="p-3 bg-blue-500/10 text-blue-400 rounded-xl w-fit">
+              <FiMessageSquare className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-base font-extrabold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                PDF Chat Companion
+              </h3>
+              <p className="text-sm text-gray-400 leading-normal">
+                Query source textbooks directly and discuss complex core chapters in an active chat sidebar.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 3: Rich Notes Canvas */}
+          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/15 hover:bg-white/[0.04] transition-all duration-300 group flex flex-col justify-between h-56">
+            <div className="p-3 bg-green-500/10 text-green-400 rounded-xl w-fit">
+              <FiFileText className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-base font-extrabold text-white mb-2 group-hover:text-green-300 transition-colors">
+                Rich Study Notes
+              </h3>
+              <p className="text-sm text-gray-400 leading-normal">
+                Draft beautiful notes with H1 headings, custom list points, highlights, colors, and debounced auto-saving.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 4: Study Dashboard */}
+          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/15 hover:bg-white/[0.04] transition-all duration-300 group flex flex-col justify-between h-56">
+            <div className="p-3 bg-yellow-500/10 text-yellow-400 rounded-xl w-fit">
+              <FiZap className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-base font-extrabold text-white mb-2 group-hover:text-yellow-300 transition-colors">
+                Streak & Study Metrics
+              </h3>
+              <p className="text-sm text-gray-400 leading-normal">
+                Track study time (⏱), current active streak count, weekly objectives, and pending task checklists.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </section>
   );
-};
-
-export default HeroSection;
+}
