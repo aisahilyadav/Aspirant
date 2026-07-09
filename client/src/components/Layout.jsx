@@ -71,9 +71,7 @@ const Layout = ({ children }) => {
         />
 
         {/* Page Content with proper top margin */}
-        <main className={`flex-1 overflow-auto ${
-          isLoggedIn ? 'pt-0' : 'pt-16'
-        }`}>
+        <main className="flex-1 overflow-auto pt-0">
           {children}
         </main>
       </div>

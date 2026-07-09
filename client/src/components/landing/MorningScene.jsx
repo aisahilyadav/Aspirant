@@ -24,7 +24,7 @@ export default function MorningScene({ onCtaClick }) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-[#1c1917] text-stone-100 px-6 pt-24 pb-16 transition-colors duration-1000 select-none overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center bg-[#1c1917] text-stone-100 px-6 pt-20 pb-16 transition-colors duration-1000 select-none overflow-hidden">
       
       {/* Background paper grid pattern (faint, dark opacity) */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.04] paper-grid" />
@@ -104,16 +104,39 @@ export default function MorningScene({ onCtaClick }) {
 
           </div>
 
-          {/* Right Side: Interactive 3D Notebook Component (5 columns) */}
+          {/* Right Side: Interactive 3D Notebook & Floating Pencil (5 columns) */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end py-6">
             <div 
-              className="relative w-80 h-96 flex items-center justify-center cursor-pointer select-none"
+              className="relative w-96 h-96 flex items-center justify-center cursor-pointer select-none"
               style={{ perspective: '1200px' }}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onClick={() => setIsOpen(!isOpen)}
             >
               
+              {/* Interactive Floating Pencil */}
+              <div 
+                className="absolute z-30 transition-transform duration-300 ease-out"
+                style={{
+                  transform: `translate3d(${tilt.x * 2.5}px, ${tilt.y * 2.5}px, 60px) rotateZ(${tilt.x * 0.8 - 25}deg)`,
+                  width: '28px',
+                  height: '110px',
+                  right: '16px',
+                  top: '40px'
+                }}
+              >
+                <svg viewBox="0 0 30 110" className="w-full h-full text-stone-850" fill="none" stroke="currentColor" strokeWidth="2">
+                  {/* Pencil body */}
+                  <path d="M10 10 L20 10 L20 85 L15 100 L10 85 Z" fill="#F8D66D" />
+                  {/* Lead tip */}
+                  <path d="M13 95 L17 95 L15 100 Z" fill="#1D1D1D" />
+                  {/* Eraser */}
+                  <path d="M10 10 C10 5, 20 5, 20 10" fill="#D9866B" />
+                  {/* Pencil stripes */}
+                  <line x1="15" y1="10" x2="15" y2="85" strokeWidth="1" strokeDasharray="3 3" />
+                </svg>
+              </div>
+
               {/* The 3D Book Object */}
               <div 
                 className="relative w-64 h-80 transition-all duration-300 ease-out"
@@ -126,25 +149,36 @@ export default function MorningScene({ onCtaClick }) {
                 
                 {/* Spine Shadow / Thickness */}
                 <div 
-                  className="absolute inset-y-0.5 bg-stone-300 w-2.5 rounded-l-md"
+                  className="absolute inset-y-0.5 bg-stone-400 w-3.5 rounded-l-md"
                   style={{
-                    transform: 'rotateY(-90deg) translateZ(1.25px)',
+                    transform: 'rotateY(-90deg) translateZ(1.75px)',
                     transformOrigin: 'left center'
                   }}
                 />
 
-                {/* Back Cover Layer */}
+                {/* Back Cover Layer with 3D Page Stacking Thickness */}
                 <div 
-                  className="absolute inset-0 bg-[#EFE6D8] border-2 border-stone-400 rounded-lg shadow-lg"
+                  className="absolute inset-0 bg-[#EFE6D8] border-2 border-stone-400 rounded-lg"
                   style={{ 
-                    transform: 'translateZ(-6px)',
-                    transformStyle: 'preserve-3d'
+                    transform: 'translateZ(-8px)',
+                    transformStyle: 'preserve-3d',
+                    boxShadow: '1px 1px 0px #c2c0bb, 2px 2px 0px #c2c0bb, 3px 3px 0px #c2c0bb, 4px 4px 0px #c2c0bb, 5px 5px 0px #c2c0bb, 8px 8px 24px rgba(0,0,0,0.55)'
                   }}
                 />
+
+                {/* Protruding Colored Index Tabs (Sticking out of pages) */}
+                <div 
+                  className="absolute z-0 flex flex-col gap-3 right-[-8px] top-12"
+                  style={{ transform: 'translateZ(-4px)' }}
+                >
+                  <div className="w-4 h-6 rounded-r bg-[#D9866B] border border-l-0 border-stone-400 opacity-90 shadow-sm" title="Notes tab" />
+                  <div className="w-4 h-6 rounded-r bg-[#A9C5A0] border border-l-0 border-stone-400 opacity-90 shadow-sm" title="Quizzes tab" />
+                  <div className="w-4 h-6 rounded-r bg-[#8FB7D9] border border-l-0 border-stone-400 opacity-90 shadow-sm" title="Stats tab" />
+                </div>
                 
                 {/* Lined Pages Middle Layer (flips open) */}
                 <div 
-                  className="absolute inset-y-1.5 right-1 left-3 bg-[#FDFBF6] border-y border-r border-stone-300 rounded-r-md transition-transform duration-700 ease-in-out shadow-sm"
+                  className="absolute inset-y-1.5 right-1.5 left-3.5 bg-[#FDFBF6] border-y border-r border-stone-300 rounded-r-md transition-transform duration-700 ease-in-out shadow-sm"
                   style={{
                     transform: isOpen ? 'rotateY(-138deg)' : 'rotateY(0deg)',
                     transformOrigin: 'left center',
@@ -168,7 +202,7 @@ export default function MorningScene({ onCtaClick }) {
                     <span className="font-mono text-[8px] text-stone-355">flip sheet...</span>
                   </div>
                   
-                  {/* Back of flipping sheet */}
+                  {/* Back of flipping sheet (AI Core Concept) */}
                   <div 
                     className="absolute inset-0 p-5 bg-[#FDFBF6] border-y border-l border-stone-300 rounded-l-md text-left text-stone-850"
                     style={{
@@ -177,10 +211,16 @@ export default function MorningScene({ onCtaClick }) {
                     }}
                   >
                     <div className="space-y-2">
-                      <span className="font-mono text-[8px] font-bold text-stone-450 uppercase tracking-widest">Page 02</span>
+                      <div className="flex justify-between items-center border-b border-stone-200 pb-1">
+                        <span className="font-mono text-[8px] font-bold text-stone-450 uppercase tracking-widest">AI SUMMARY</span>
+                        {/* Little sparkle icon */}
+                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-stone-600" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M12 2 L13 7 L18 8 L13 9 L12 14 L11 9 L6 8 L11 7 Z" />
+                        </svg>
+                      </div>
                       <p className="font-handwritten text-xs text-stone-700 leading-snug">
-                        "Study Photosynthesis."<br />
-                        Mitochondria cellular powerhouse generates chemical ATP.
+                        "Active Recall Concept."<br />
+                        Photosynthesis yields chemical energy in chloroplasts.
                       </p>
                     </div>
                   </div>
