@@ -1,5 +1,6 @@
 import {User} from "../model/user.model.js"
 import { OAuth2Client } from 'google-auth-library';
+import fetch from 'node-fetch';
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -88,17 +89,24 @@ export const googleAuth = async (req, res) => {
     try {
         const { googleToken, email, name, picture } = req.body;
 
-        // Verify the Google token
-        const ticket = await client.verifyIdToken({
-            idToken: googleToken,
-            audience: process.env.GOOGLE_CLIENT_ID,
+        // Verify the Google access token
+        const googleResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+            headers: {
+                Authorization: `Bearer ${googleToken}`,
+            },
         });
 
-        const payload = ticket.getPayload();
-        const googleId = payload['sub'];
-        const verifiedEmail = payload['email'];
-        const verifiedName = payload['name'];
-        const verifiedPicture = payload['picture'];
+        if (!googleResponse.ok) {
+            return res.status(400).json({
+                message: "Google token verification failed"
+            });
+        }
+
+        const payload = await googleResponse.json();
+        const googleId = payload.id;
+        const verifiedEmail = payload.email;
+        const verifiedName = payload.name;
+        const verifiedPicture = payload.picture;
 
         // Double-check that the email matches
         if (verifiedEmail !== email) {
