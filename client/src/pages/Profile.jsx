@@ -21,7 +21,8 @@ import {
   FiChevronRight,
   FiCamera,
   FiBell,
-  FiLock
+  FiLock,
+  FiLoader
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
@@ -39,16 +40,15 @@ function Profile() {
     xp: 0
   });
 
-  // Mock data - in real app, fetch from API
+  // Fetch stats simulation
   useEffect(() => {
-    // Simulate loading profile stats
     setProfileStats({
       quizzesCompleted: 24,
       totalQuestions: 480,
       averageScore: 87,
       studyStreak: 12,
       todosCompleted: 156,
-      totalStudyTime: 2840, // minutes
+      totalStudyTime: 2840,
       level: 3,
       xp: 2450
     });
@@ -56,13 +56,13 @@ function Profile() {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center max-w-md">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FiShield className="w-8 h-8 text-gray-400" />
+      <div className="min-h-screen bg-[#FAF9F6] flex items-center justify-center pt-16 select-none font-sans">
+        <div className="bg-white p-8 rounded-3xl border border-stone-200 text-center max-w-md" style={{ filter: 'url(#handdrawn)' }}>
+          <div className="w-16 h-16 bg-stone-50 border border-stone-200 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FiShield className="w-8 h-8 text-stone-500" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
-          <p className="text-gray-600">Please log in to view your profile.</p>
+          <h2 className="text-2xl font-serif-cormorant font-bold text-stone-900 mb-2">Access Denied</h2>
+          <p className="text-xs text-stone-550">Please log in to view your profile.</p>
         </div>
       </div>
     );
@@ -95,35 +95,35 @@ function Profile() {
       score: '9/10',
       time: '2 hours ago',
       icon: FiBook,
-      color: 'blue'
+      color: 'bg-stone-50 text-stone-850'
     },
     {
       type: 'todo',
       title: 'Finished React Components Study Session',
       time: '5 hours ago',
       icon: FiCheckCircle,
-      color: 'green'
+      color: 'bg-stone-50 text-stone-850'
     },
     {
       type: 'achievement',
       title: 'Unlocked "Quiz Master" badge',
       time: '1 day ago',
       icon: FiAward,
-      color: 'yellow'
+      color: 'bg-stone-50 text-stone-850'
     },
     {
       type: 'streak',
       title: 'Maintained 12-day study streak',
       time: '2 days ago',
-      icon: FiZap, // Changed from FiFire to FiZap
-      color: 'red'
+      icon: FiZap,
+      color: 'bg-stone-50 text-stone-850'
     }
   ];
 
   const achievements = [
     { id: 1, name: 'First Quiz', description: 'Complete your first quiz', unlocked: true, icon: FiBook },
     { id: 2, name: 'Quick Learner', description: 'Complete 5 quizzes', unlocked: true, icon: FiZap },
-    { id: 3, name: 'Dedicated Student', description: '7-day study streak', unlocked: true, icon: FiZap }, // Changed from FiFire to FiZap
+    { id: 3, name: 'Dedicated Student', description: '7-day study streak', unlocked: true, icon: FiZap },
     { id: 4, name: 'Quiz Master', description: 'Complete 25 quizzes', unlocked: false, icon: FiAward },
     { id: 5, name: 'Knowledge Seeker', description: 'Answer 500 questions', unlocked: false, icon: FiBookOpen },
     { id: 6, name: 'Perfectionist', description: 'Get 100% on 5 quizzes', unlocked: false, icon: FiStar }
@@ -140,192 +140,181 @@ function Profile() {
     <div className="space-y-6">
       {/* Quick Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200"
+        
+        <div 
+          className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm flex flex-col justify-between hover:scale-[1.01] transition-transform"
+          style={{ filter: 'url(#handdrawn)' }}
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <FiBook className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 bg-stone-50 border border-stone-150 rounded-xl flex items-center justify-center">
+              <FiBook className="w-6 h-6 text-stone-700" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">{profileStats.quizzesCompleted}</span>
+            <span className="text-2xl font-serif-cormorant font-bold text-stone-900">{profileStats.quizzesCompleted}</span>
           </div>
-          <h3 className="text-sm font-medium text-gray-600">Quizzes Completed</h3>
-          <p className="text-xs text-gray-500 mt-1">+3 this week</p>
-        </motion.div>
+          <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-stone-500">Quizzes Completed</h3>
+          <p className="text-[10px] text-stone-400 font-handwritten mt-1">* 3 completed this week</p>
+        </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200"
+        <div 
+          className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm flex flex-col justify-between hover:scale-[1.01] transition-transform"
+          style={{ filter: 'url(#handdrawn)' }}
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <FiTarget className="w-6 h-6 text-green-600" />
+            <div className="w-12 h-12 bg-stone-50 border border-stone-150 rounded-xl flex items-center justify-center">
+              <FiTarget className="w-6 h-6 text-stone-700" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">{profileStats.averageScore}%</span>
+            <span className="text-2xl font-serif-cormorant font-bold text-stone-900">{profileStats.averageScore}%</span>
           </div>
-          <h3 className="text-sm font-medium text-gray-600">Average Score</h3>
-          <p className="text-xs text-gray-500 mt-1">+5% from last month</p>
-        </motion.div>
+          <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-stone-500">Average Score</h3>
+          <p className="text-[10px] text-stone-400 font-handwritten mt-1">* +5% from last month</p>
+        </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200"
+        <div 
+          className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm flex flex-col justify-between hover:scale-[1.01] transition-transform"
+          style={{ filter: 'url(#handdrawn)' }}
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-              <FiZap className="w-6 h-6 text-red-600" />
+            <div className="w-12 h-12 bg-stone-50 border border-stone-150 rounded-xl flex items-center justify-center">
+              <FiZap className="w-6 h-6 text-stone-700" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">{profileStats.studyStreak}</span>
+            <span className="text-2xl font-serif-cormorant font-bold text-stone-900">{profileStats.studyStreak}</span>
           </div>
-          <h3 className="text-sm font-medium text-gray-600">Study Streak</h3>
-          <p className="text-xs text-gray-500 mt-1">Keep it up!</p>
-        </motion.div>
+          <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-stone-500">Study Streak</h3>
+          <p className="text-[10px] text-stone-400 font-handwritten mt-1">* consecutive logs</p>
+        </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200"
+        <div 
+          className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm flex flex-col justify-between hover:scale-[1.01] transition-transform"
+          style={{ filter: 'url(#handdrawn)' }}
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <FiClock className="w-6 h-6 text-purple-600" />
+            <div className="w-12 h-12 bg-stone-50 border border-stone-150 rounded-xl flex items-center justify-center">
+              <FiClock className="w-6 h-6 text-stone-700" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">{formatStudyTime(profileStats.totalStudyTime)}</span>
+            <span className="text-2xl font-serif-cormorant font-bold text-stone-900">{formatStudyTime(profileStats.totalStudyTime)}</span>
           </div>
-          <h3 className="text-sm font-medium text-gray-600">Study Time</h3>
-          <p className="text-xs text-gray-500 mt-1">This month</p>
-        </motion.div>
+          <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-stone-500">Study Time</h3>
+          <p className="text-[10px] text-stone-400 font-handwritten mt-1">* total logged minutes</p>
+        </div>
+
       </div>
 
       {/* Level Progress */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-white rounded-xl border border-gray-200 p-6"
+      <div 
+        className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm text-left"
+        style={{ filter: 'url(#handdrawn)' }}
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">{profileStats.level}</span>
+            <div className="w-12 h-12 bg-stone-850 text-white rounded-xl flex items-center justify-center font-extrabold text-lg shadow-sm">
+              {profileStats.level}
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Level {profileStats.level}</h3>
-              <p className="text-sm text-gray-600">{getXpToNextLevel()} XP to next level</p>
+              <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider">Level {profileStats.level}</h3>
+              <p className="text-xs text-stone-550 font-serif-cormorant">{getXpToNextLevel()} XP remaining to level up</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-gray-900">{profileStats.xp}</p>
-            <p className="text-sm text-gray-600">Total XP</p>
+            <p className="text-2xl font-serif-cormorant font-bold text-stone-900">{profileStats.xp}</p>
+            <p className="text-[8px] font-mono text-stone-400 uppercase tracking-widest">Total XP</p>
           </div>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-3">
+        <div className="w-full bg-stone-100 border border-stone-200 rounded-full h-2">
           <div 
-            className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-300" 
+            className="bg-stone-800 h-full rounded-full transition-all duration-300" 
             style={{ width: `${getXpProgress()}%` }}
           ></div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Recent Activity */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="bg-white rounded-xl border border-gray-200 p-6"
+      <div 
+        className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm text-left"
+        style={{ filter: 'url(#handdrawn)' }}
       >
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+        <h3 className="text-base font-bold text-stone-950 uppercase tracking-wider mb-4 flex items-center border-b border-stone-150 pb-3">
           <FiActivity className="w-5 h-5 mr-2" />
-          Recent Activity
+          Recent Session Logs
         </h3>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {recentActivities.map((activity, index) => (
-            <div key={index} className="flex items-center space-x-4 p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                activity.color === 'blue' ? 'bg-blue-100' :
-                activity.color === 'green' ? 'bg-green-100' :
-                activity.color === 'yellow' ? 'bg-yellow-100' :
-                activity.color === 'red' ? 'bg-red-100' : 'bg-gray-100'
-              }`}>
-                <activity.icon className={`w-5 h-5 ${
-                  activity.color === 'blue' ? 'text-blue-600' :
-                  activity.color === 'green' ? 'text-green-600' :
-                  activity.color === 'yellow' ? 'text-yellow-600' :
-                  activity.color === 'red' ? 'text-red-600' : 'text-gray-600'
-                }`} />
+            <div key={index} className="flex items-center space-x-4 p-3 hover:bg-stone-50/40 rounded-xl transition-colors">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-stone-200 ${activity.color}`}>
+                <activity.icon className="w-5 h-5" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">{activity.title}</p>
-                <p className="text-xs text-gray-500">{activity.time}</p>
+                <p className="text-sm font-semibold text-stone-850 font-serif-cormorant">{activity.title}</p>
+                <p className="text-xs text-stone-500 font-medium">{activity.time}</p>
               </div>
               {activity.score && (
-                <span className="text-sm font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded-full">
+                <span className="text-[9px] font-extrabold px-2.5 py-1 bg-stone-100 border border-stone-200 rounded-md text-stone-700 uppercase flex-shrink-0 tracking-wider">
                   {activity.score}
                 </span>
               )}
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 
   const renderStats = () => (
     <div className="space-y-6">
       {/* Detailed Stats Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quiz Performance</h3>
-          <div className="space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-left">
+        <div 
+          className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm"
+          style={{ filter: 'url(#handdrawn)' }}
+        >
+          <h3 className="text-sm font-bold text-stone-950 uppercase tracking-wider mb-4 border-b border-stone-150 pb-2">Quiz Performance</h3>
+          <div className="space-y-4 font-serif-cormorant text-stone-700">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Total Questions Answered</span>
-              <span className="font-semibold text-gray-900">{profileStats.totalQuestions}</span>
+              <span>Total Questions Answered</span>
+              <span className="font-bold text-stone-900">{profileStats.totalQuestions}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Correct Answers</span>
-              <span className="font-semibold text-gray-900">{Math.round(profileStats.totalQuestions * (profileStats.averageScore / 100))}</span>
+              <span>Correct Answers</span>
+              <span className="font-bold text-stone-900">{Math.round(profileStats.totalQuestions * (profileStats.averageScore / 100))}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Accuracy Rate</span>
-              <span className="font-semibold text-green-600">{profileStats.averageScore}%</span>
+            <div className="flex justify-between items-center border-t border-stone-100 pt-3">
+              <span>Accuracy Rate</span>
+              <span className="font-bold text-stone-950 text-lg">{profileStats.averageScore}%</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Study Habits</h3>
-          <div className="space-y-4">
+        <div 
+          className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm"
+          style={{ filter: 'url(#handdrawn)' }}
+        >
+          <h3 className="text-sm font-bold text-stone-950 uppercase tracking-wider mb-4 border-b border-stone-150 pb-2">Study Habits</h3>
+          <div className="space-y-4 font-serif-cormorant text-stone-700">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Tasks Completed</span>
-              <span className="font-semibold text-gray-900">{profileStats.todosCompleted}</span>
+              <span>Tasks Completed</span>
+              <span className="font-bold text-stone-900">{profileStats.todosCompleted}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Current Streak</span>
-              <span className="font-semibold text-red-600">{profileStats.studyStreak} days</span>
+              <span>Current Streak</span>
+              <span className="font-bold text-stone-905">{profileStats.studyStreak} days</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Average Daily Study</span>
-              <span className="font-semibold text-gray-900">2.5 hours</span>
+            <div className="flex justify-between items-center border-t border-stone-100 pt-3">
+              <span>Average Daily Study</span>
+              <span className="font-bold text-stone-950 text-lg">2.5 hours</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Progress Chart Placeholder */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Progress Over Time</h3>
-        <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+      <div 
+        className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm text-left"
+        style={{ filter: 'url(#handdrawn)' }}
+      >
+        <h3 className="text-sm font-bold text-stone-950 uppercase tracking-wider mb-4">Progress Over Time</h3>
+        <div className="h-64 flex items-center justify-center bg-stone-50/20 border border-stone-200 border-dashed rounded-2xl">
           <div className="text-center">
-            <FiTrendingUp className="w-16 h-16 text-gray-400 mx-auto mb-2" />
-            <p className="text-gray-500">Progress chart coming soon</p>
+            <FiTrendingUp className="w-12 h-12 text-stone-400 mx-auto mb-2" />
+            <p className="text-xs text-stone-500 font-handwritten">* Progress charts compiling...</p>
           </div>
         </div>
       </div>
@@ -336,132 +325,87 @@ function Profile() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {achievements.map((achievement) => (
-          <motion.div
+          <div
             key={achievement.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: achievement.id * 0.1 }}
-            className={`p-6 rounded-xl border-2 transition-all duration-200 ${
+            className={`p-6 rounded-3xl border transition-all duration-300 text-center ${
               achievement.unlocked 
-                ? 'border-green-200 bg-green-50 hover:shadow-md' 
-                : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                ? 'border-stone-300 bg-white hover:scale-[1.01] shadow-sm' 
+                : 'border-stone-200 bg-stone-50/40 opacity-70'
             }`}
+            style={{ filter: 'url(#handdrawn)' }}
           >
-            <div className="text-center">
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+            <div>
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border ${
                 achievement.unlocked 
-                  ? 'bg-green-100 text-green-600' 
-                  : 'bg-gray-200 text-gray-400'
+                  ? 'bg-stone-50 border-stone-300 text-stone-900 shadow-sm' 
+                  : 'bg-stone-100 border-stone-200 text-stone-400'
               }`}>
                 <achievement.icon className="w-8 h-8" />
               </div>
-              <h3 className={`font-semibold mb-2 ${
-                achievement.unlocked ? 'text-gray-900' : 'text-gray-500'
+              <h3 className={`font-bold mb-2 uppercase tracking-wide text-xs ${
+                achievement.unlocked ? 'text-stone-900' : 'text-stone-450'
               }`}>
                 {achievement.name}
               </h3>
-              <p className={`text-sm ${
-                achievement.unlocked ? 'text-gray-600' : 'text-gray-400'
+              <p className={`text-xs font-serif-cormorant leading-relaxed ${
+                achievement.unlocked ? 'text-stone-650' : 'text-stone-400'
               }`}>
                 {achievement.description}
               </p>
               {achievement.unlocked && (
                 <div className="mt-3">
-                  <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                    <FiCheckCircle className="w-3 h-3 mr-1" />
+                  <span className="inline-flex items-center px-2.5 py-1 bg-stone-50 border border-stone-200 text-[9px] font-extrabold uppercase tracking-widest rounded-md text-stone-850">
+                    <FiCheckCircle className="w-3 h-3 mr-1 text-stone-900" />
                     Unlocked
                   </span>
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>
   );
 
   const renderSettings = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6">Account Settings</h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+    <div className="space-y-6 text-left">
+      <div 
+        className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm"
+        style={{ filter: 'url(#handdrawn)' }}
+      >
+        <h3 className="text-sm font-bold text-stone-950 uppercase tracking-wider mb-6 border-b border-stone-150 pb-3">Account Settings</h3>
+        <div className="space-y-3 font-sans-inter">
+          <div className="flex items-center justify-between p-3.5 hover:bg-stone-50/40 rounded-2xl transition-colors cursor-pointer">
             <div className="flex items-center space-x-3">
-              <FiEdit3 className="w-5 h-5 text-gray-400" />
+              <FiEdit3 className="w-5 h-5 text-stone-450" />
               <div>
-                <p className="font-medium text-gray-900">Edit Profile</p>
-                <p className="text-sm text-gray-500">Update your personal information</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-stone-900">Edit Profile</p>
+                <p className="text-[10px] text-stone-500">Update username credentials</p>
               </div>
             </div>
-            <FiChevronRight className="w-5 h-5 text-gray-400" />
+            <FiChevronRight className="w-5 h-5 text-stone-450" />
           </div>
 
-          <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+          <div className="flex items-center justify-between p-3.5 hover:bg-stone-50/40 rounded-2xl transition-colors cursor-pointer">
             <div className="flex items-center space-x-3">
-              <FiCamera className="w-5 h-5 text-gray-400" />
+              <FiCamera className="w-5 h-5 text-stone-450" />
               <div>
-                <p className="font-medium text-gray-900">Profile Picture</p>
-                <p className="text-sm text-gray-500">Change your avatar</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-stone-900">Profile Picture</p>
+                <p className="text-[10px] text-stone-500">Change your avatar</p>
               </div>
             </div>
-            <FiChevronRight className="w-5 h-5 text-gray-400" />
+            <FiChevronRight className="w-5 h-5 text-stone-450" />
           </div>
 
-          <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+          <div className="flex items-center justify-between p-3.5 hover:bg-stone-50/40 rounded-2xl transition-colors cursor-pointer">
             <div className="flex items-center space-x-3">
-              <FiBell className="w-5 h-5 text-gray-400" />
+              <FiBell className="w-5 h-5 text-stone-450" />
               <div>
-                <p className="font-medium text-gray-900">Notifications</p>
-                <p className="text-sm text-gray-500">Manage your notification preferences</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-stone-900">Notifications</p>
+                <p className="text-[10px] text-stone-500">Manage device notification preferences</p>
               </div>
             </div>
-            <FiChevronRight className="w-5 h-5 text-gray-400" />
-          </div>
-
-          <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors duration-200">
-            <div className="flex items-center space-x-3">
-              <FiLock className="w-5 h-5 text-gray-400" />
-              <div>
-                <p className="font-medium text-gray-900">Change Password</p>
-                <p className="text-sm text-gray-500">Update your account password</p>
-              </div>
-            </div>
-            <FiChevronRight className="w-5 h-5 text-gray-400" />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6">Preferences</h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium text-gray-900">Dark Mode</p>
-              <p className="text-sm text-gray-500">Toggle dark theme</p>
-            </div>
-            <button className="w-12 h-6 bg-gray-200 rounded-full relative transition-colors duration-200">
-              <div className="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-200"></div>
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium text-gray-900">Email Notifications</p>
-              <p className="text-sm text-gray-500">Receive updates via email</p>
-            </div>
-            <button className="w-12 h-6 bg-blue-600 rounded-full relative transition-colors duration-200">
-              <div className="w-5 h-5 bg-white rounded-full absolute top-0.5 right-0.5 transition-transform duration-200"></div>
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium text-gray-900">Study Reminders</p>
-              <p className="text-sm text-gray-500">Daily learning reminders</p>
-            </div>
-            <button className="w-12 h-6 bg-blue-600 rounded-full relative transition-colors duration-200">
-              <div className="w-5 h-5 bg-white rounded-full absolute top-0.5 right-0.5 transition-transform duration-200"></div>
-            </button>
+            <FiChevronRight className="w-5 h-5 text-stone-450" />
           </div>
         </div>
       </div>
@@ -469,99 +413,85 @@ function Profile() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="pt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Profile Header */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-            <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 px-8 py-12">
-              <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg text-blue-600 text-4xl font-bold"
-                >
-                  {user?.username?.charAt(0).toUpperCase() || "U"}
-                </motion.div>
-                <div className="text-center md:text-left flex-1">
-                  <motion.h1 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="text-3xl md:text-4xl font-bold text-white mb-2"
-                  >
-                    {user?.username || "User"}
-                  </motion.h1>
-                  <motion.p 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="text-blue-100 text-lg mb-3"
-                  >
-                    {user?.email || "user@example.com"}
-                  </motion.p>
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0 md:space-x-6"
-                  >
-                    <div className="flex items-center text-white">
-                      <FiCalendar className="w-4 h-4 mr-2" />
-                      <span className="text-sm">Joined {new Date(user?.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="w-3 h-3 bg-green-400 rounded-full mr-2"></span>
-                      <span className="text-sm text-green-200">Active</span>
-                    </div>
-                  </motion.div>
+    <div className="min-h-screen bg-[#FAF9F6] text-stone-850 pt-24 pb-12 px-6 relative overflow-x-hidden select-none">
+      
+      {/* Background Grid */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
+
+      {/* Handdrawn filter SVG */}
+      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
+        <defs>
+          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
+      <div className="max-w-6xl mx-auto relative z-10 space-y-8">
+        
+        {/* Profile Header */}
+        <div 
+          className="bg-[#EFE6D8]/50 border border-stone-250/70 rounded-3xl p-6 sm:p-8 shadow-sm text-left flex flex-col md:flex-row items-center justify-between gap-6"
+          style={{ filter: 'url(#handdrawn)' }}
+        >
+          <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+            <div className="w-20 h-20 bg-stone-900 text-stone-100 rounded-full flex items-center justify-center shadow-md text-3xl font-extrabold">
+              {user?.username?.charAt(0).toUpperCase() || "U"}
+            </div>
+            <div className="text-center md:text-left space-y-1">
+              <h1 className="text-3xl font-serif-cormorant font-bold text-stone-900 leading-none">
+                {user?.username || "User"}
+              </h1>
+              <p className="text-xs text-stone-605">
+                {user?.email || "user@example.com"}
+              </p>
+              <div className="flex flex-col sm:flex-row items-center space-y-1.5 sm:space-y-0 sm:space-x-4 pt-1.5">
+                <div className="flex items-center text-[10px] text-stone-500 font-mono uppercase tracking-wider">
+                  <FiCalendar className="w-3.5 h-3.5 mr-1" />
+                  <span>Joined {new Date(user?.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
                 </div>
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 backdrop-blur-sm border border-white border-opacity-20"
-                >
-                  Edit Profile
-                </motion.button>
+                <div className="flex items-center text-[10px] text-stone-500 font-mono uppercase tracking-wider">
+                  <span className="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>
+                  <span>Active</span>
+                </div>
               </div>
             </div>
-
-            {/* Tab Navigation */}
-            <div className="border-b border-gray-200">
-              <nav className="flex space-x-8 px-8">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center space-x-2 py-4 text-sm font-medium border-b-2 transition-colors duration-200 ${
-                      activeTab === tab.id
-                        ? 'border-blue-600 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    <tab.icon className="w-4 h-4" />
-                    <span>{tab.label}</span>
-                  </button>
-                ))}
-              </nav>
-            </div>
           </div>
-
-          {/* Tab Content */}
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {activeTab === 'overview' && renderOverview()}
-            {activeTab === 'stats' && renderStats()}
-            {activeTab === 'achievements' && renderAchievements()}
-            {activeTab === 'settings' && renderSettings()}
-          </motion.div>
+          
+          <button className="px-5 py-2.5 bg-stone-850 hover:bg-stone-950 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all shadow-sm">
+            Edit Account
+          </button>
         </div>
+
+        {/* Tab Navigation */}
+        <div className="border-b border-stone-200">
+          <nav className="flex space-x-6">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center space-x-2 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-colors duration-200 ${
+                  activeTab === tab.id
+                    ? 'border-stone-850 text-stone-950 font-extrabold'
+                    : 'border-transparent text-stone-500 hover:text-stone-700'
+                }`}
+              >
+                <tab.icon className="w-4 h-4" />
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        <div className="pt-4">
+          {activeTab === 'overview' && renderOverview()}
+          {activeTab === 'stats' && renderStats()}
+          {activeTab === 'achievements' && renderAchievements()}
+          {activeTab === 'settings' && renderSettings()}
+        </div>
+
       </div>
     </div>
   );

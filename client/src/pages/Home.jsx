@@ -34,16 +34,16 @@ export default function Home() {
     } catch (err) {
       console.error('Fetch dashboard error:', err);
     } finally {
-      setLoading(false);
+      setData(false);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#030303] text-white flex items-center justify-center pt-16">
+      <div className="min-h-screen bg-[#FAF9F6] text-stone-850 flex items-center justify-center pt-16 select-none">
         <div className="flex flex-col items-center space-y-4">
-          <FiLoader className="animate-spin text-white w-8 h-8" />
-          <span className="text-gray-500 text-sm">Loading your dashboard...</span>
+          <FiLoader className="animate-spin text-stone-850 w-8 h-8" />
+          <span className="text-stone-500 text-sm font-handwritten">opening study journal...</span>
         </div>
       </div>
     );
@@ -64,124 +64,161 @@ export default function Home() {
   const currentTopic = data?.currentTopic || "General Studies";
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white pt-20 pb-12 font-sans relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#FAF9F6] text-stone-850 pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none">
       
-      {/* Background Accent Orb */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-purple-650/5 rounded-full blur-[150px] pointer-events-none" />
+      {/* Background Subtle Grid Pattern */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Handdrawn filter SVG */}
+      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
+        <defs>
+          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
+      <div className="max-w-7xl mx-auto relative z-10 space-y-8">
         
         {/* Welcome Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4 border-b border-white/10 pb-8">
-          <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
-              Welcome back, {user?.username || 'Student'}! 🎓
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-stone-200 pb-6">
+          <div className="space-y-1.5">
+            <span className="font-handwritten text-lg text-stone-500 block rotate-[-1deg]">
+              [ learning log dashboard ]
+            </span>
+            <h1 className="text-4xl font-serif-cormorant font-bold text-stone-900 tracking-tight leading-none">
+              Welcome back, {user?.username || 'Student'}!
             </h1>
-            <p className="text-gray-400 mt-1 text-sm md:text-base">
-              Here is your learning progress and AI study insights for today.
+            <p className="text-xs sm:text-sm text-stone-605">
+              Track active recall milestones, study streaking logs, and RAG outlines.
             </p>
           </div>
-          <div className="flex items-center bg-yellow-500/10 border border-yellow-500/20 px-4 py-2.5 rounded-xl self-start md:self-auto">
-            <FiZap className="text-yellow-400 w-5 h-5 mr-2 animate-pulse fill-yellow-400/20" />
+          
+          <div 
+            className="flex items-center bg-[#F8D66D]/20 border border-stone-300 px-4 py-2 rounded-xl self-start md:self-auto shadow-sm"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
+            <FiZap className="text-stone-800 w-5 h-5 mr-2 animate-bounce fill-stone-800/10" />
             <div>
-              <p className="text-[9px] text-yellow-500 font-extrabold uppercase tracking-wider">Current Streak</p>
-              <p className="text-sm font-extrabold text-white">{stats.studyStreak} Days Active</p>
+              <p className="text-[8px] text-stone-500 font-mono font-extrabold uppercase tracking-wider">Current Streak</p>
+              <p className="text-xs font-extrabold text-stone-900 uppercase font-sans-inter">{stats.studyStreak} Days Active</p>
             </div>
           </div>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-10">
-          {/* Card 1: PDFs Studied */}
-          <div className="bg-white/[0.01] hover:bg-white/[0.02] p-5 rounded-2xl border border-white/5 flex flex-col justify-between transition-colors">
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
+          
+          {/* PDFs Studied */}
+          <div 
+            className="bg-white border border-stone-200 p-5 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 shadow-sm"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">PDFs Studied</span>
-              <div className="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
+              <span className="text-[9px] font-extrabold text-stone-450 uppercase tracking-widest font-mono">PDFs Studied</span>
+              <div className="p-1.5 bg-stone-50 border border-stone-200 text-stone-750 rounded-lg">
                 <FiFileText className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <p className="text-2xl font-black text-white">{stats.pdfsStudied}</p>
-              <p className="text-[9px] text-blue-400 font-bold uppercase tracking-wider mt-1">Uploaded & Indexed</p>
+              <p className="text-2xl font-serif-cormorant font-bold text-stone-900">{stats.pdfsStudied}</p>
+              <p className="text-[8px] text-stone-500 font-handwritten mt-0.5">* materials cached</p>
             </div>
           </div>
 
-          {/* Card 2: Quizzes Completed */}
-          <div className="bg-white/[0.01] hover:bg-white/[0.02] p-5 rounded-2xl border border-white/5 flex flex-col justify-between transition-colors">
+          {/* Quizzes Completed */}
+          <div 
+            className="bg-white border border-stone-200 p-5 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 shadow-sm"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Quizzes Done</span>
-              <div className="p-1.5 bg-green-500/10 text-green-400 rounded-lg">
+              <span className="text-[9px] font-extrabold text-stone-450 uppercase tracking-widest font-mono">Quizzes Done</span>
+              <div className="p-1.5 bg-stone-50 border border-stone-200 text-stone-750 rounded-lg">
                 <FiAward className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <p className="text-2xl font-black text-white">{stats.quizzesCompleted}</p>
-              <p className="text-[9px] text-green-400 font-bold uppercase tracking-wider mt-1">AI Generated</p>
+              <p className="text-2xl font-serif-cormorant font-bold text-stone-900">{stats.quizzesCompleted}</p>
+              <p className="text-[8px] text-stone-500 font-handwritten mt-0.5">* recall practice</p>
             </div>
           </div>
 
-          {/* Card 3: Study Streak */}
-          <div className="bg-white/[0.01] hover:bg-white/[0.02] p-5 rounded-2xl border border-white/5 flex flex-col justify-between transition-colors">
+          {/* Study Streak */}
+          <div 
+            className="bg-white border border-stone-200 p-5 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 shadow-sm"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Streak</span>
-              <div className="p-1.5 bg-yellow-500/10 text-yellow-400 rounded-lg">
+              <span className="text-[9px] font-extrabold text-stone-450 uppercase tracking-widest font-mono">Active Streak</span>
+              <div className="p-1.5 bg-stone-50 border border-stone-200 text-stone-750 rounded-lg">
                 <FiZap className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <p className="text-2xl font-black text-white">{stats.studyStreak}d</p>
-              <p className="text-[9px] text-yellow-400 font-bold uppercase tracking-wider mt-1">Keep it burning!</p>
+              <p className="text-2xl font-serif-cormorant font-bold text-stone-900">{stats.studyStreak}d</p>
+              <p className="text-[8px] text-stone-500 font-handwritten mt-0.5">* logs continuous</p>
             </div>
           </div>
 
-          {/* Card 4: Time Studied Today */}
-          <div className="bg-white/[0.01] hover:bg-white/[0.02] p-5 rounded-2xl border border-white/5 flex flex-col justify-between transition-colors">
+          {/* Time Studied Today */}
+          <div 
+            className="bg-white border border-stone-200 p-5 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 shadow-sm"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Time Today</span>
-              <div className="p-1.5 bg-purple-500/10 text-purple-400 rounded-lg">
+              <span className="text-[9px] font-extrabold text-stone-450 uppercase tracking-widest font-mono">Time Today</span>
+              <div className="p-1.5 bg-stone-50 border border-stone-200 text-stone-750 rounded-lg">
                 <FiClock className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <p className="text-2xl font-black text-white">⏱ {stats.timeStudiedToday}m</p>
-              <p className="text-[9px] text-purple-400 font-bold uppercase tracking-wider mt-1">Active studying</p>
+              <p className="text-2xl font-serif-cormorant font-bold text-stone-900">{stats.timeStudiedToday}m</p>
+              <p className="text-[8px] text-stone-500 font-handwritten mt-0.5">* focus minutes</p>
             </div>
           </div>
 
-          {/* Card 5: Weekly Goal */}
-          <div className="bg-white/[0.01] hover:bg-white/[0.02] p-5 rounded-2xl border border-white/5 flex flex-col justify-between transition-colors">
+          {/* Weekly Goal */}
+          <div 
+            className="bg-white border border-stone-200 p-5 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 shadow-sm"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Weekly Goal</span>
-              <div className="p-1.5 bg-red-500/10 text-red-400 rounded-lg">
+              <span className="text-[9px] font-extrabold text-stone-450 uppercase tracking-widest font-mono">Weekly Goal</span>
+              <div className="p-1.5 bg-stone-50 border border-stone-200 text-stone-750 rounded-lg">
                 <FiTarget className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <div className="flex items-center justify-between text-2xl font-black text-white mb-1">
+              <div className="flex items-center justify-between text-2xl font-serif-cormorant font-bold text-stone-900 mb-1">
                 <span>{stats.weeklyGoal}%</span>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-1.5 mt-2">
+              <div className="w-full bg-stone-100 border border-stone-200 rounded-full h-1.5 mt-2">
                 <div 
-                  className="bg-white h-1.5 rounded-full" 
+                  className="bg-stone-850 h-full rounded-full" 
                   style={{ width: `${stats.weeklyGoal}%` }}
                 />
               </div>
             </div>
           </div>
 
-          {/* Card 6: Accuracy Percentage */}
-          <div className="bg-white/[0.01] hover:bg-white/[0.02] p-5 rounded-2xl border border-white/5 flex flex-col justify-between transition-colors">
+          {/* Accuracy Percentage */}
+          <div 
+            className="bg-white border border-stone-200 p-5 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 shadow-sm"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Quiz Accuracy</span>
-              <div className="p-1.5 bg-indigo-500/10 text-indigo-400 rounded-lg">
+              <span className="text-[9px] font-extrabold text-stone-450 uppercase tracking-widest font-mono">Accuracy</span>
+              <div className="p-1.5 bg-stone-50 border border-stone-200 text-stone-750 rounded-lg">
                 <FiCheckCircle className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <p className="text-2xl font-black text-white">{stats.accuracyPercentage}%</p>
-              <p className="text-[9px] text-indigo-400 font-bold uppercase tracking-wider mt-1">Correct rate</p>
+              <p className="text-2xl font-serif-cormorant font-bold text-stone-900">{stats.accuracyPercentage}%</p>
+              <p className="text-[8px] text-stone-500 font-handwritten mt-0.5">* test questions</p>
             </div>
           </div>
+
         </div>
 
         {/* Bottom Split Layout */}
@@ -191,47 +228,50 @@ export default function Home() {
           <div className="lg:col-span-2 space-y-8">
             
             {/* Today's Tasks */}
-            <div className="bg-white/[0.01] border border-white/5 rounded-3xl p-6">
-              <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-                <h3 className="text-base font-bold text-white flex items-center">
-                  <FiCheckSquare className="mr-2 text-white w-5 h-5" />
-                  Today's Tasks
+            <div 
+              className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm"
+              style={{ filter: 'url(#handdrawn)' }}
+            >
+              <div className="flex items-center justify-between mb-6 border-b border-stone-150 pb-4">
+                <h3 className="text-base font-bold text-stone-950 uppercase tracking-wider flex items-center">
+                  <FiCheckSquare className="mr-2 text-stone-800 w-5 h-5" />
+                  Today's Study List
                 </h3>
                 <Link 
                   to="/todos" 
-                  className="text-[10px] font-extrabold uppercase tracking-widest text-purple-400 hover:text-purple-300 flex items-center"
+                  className="text-[10px] font-extrabold uppercase tracking-widest text-stone-600 hover:text-stone-900 flex items-center"
                 >
-                  View Todo list
+                  Open Planner
                   <FiArrowRight className="ml-1 w-3.5 h-3.5" />
                 </Link>
               </div>
 
               {todaysTasks.length === 0 ? (
-                <div className="text-center py-8 bg-white/[0.005] border border-white/5 rounded-2xl text-gray-500 text-xs">
-                  🎉 All caught up for today! No pending tasks.
+                <div className="text-center py-8 bg-stone-50/20 border border-stone-150 border-dashed rounded-2xl text-stone-500 text-xs font-handwritten">
+                  * All caught up for today! No pending objectives.
                 </div>
               ) : (
                 <div className="space-y-3">
                   {todaysTasks.map(task => (
                     <div 
                       key={task._id}
-                      className="p-4 bg-white/[0.005] hover:bg-white/[0.015] border border-white/5 rounded-2xl transition-colors flex justify-between items-center group cursor-pointer"
+                      className="p-4 bg-stone-50/20 hover:bg-stone-50/50 border border-stone-200 rounded-2xl transition-colors flex justify-between items-center group cursor-pointer"
                       onClick={() => navigate('/todos')}
                     >
                       <div className="flex items-center space-x-3 min-w-0 pr-4">
-                        <div className="w-2 h-2 rounded-full bg-white flex-shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-stone-500 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-semibold text-white truncate">
+                          <p className="text-sm font-semibold text-stone-850 truncate font-serif-cormorant">
                             {task.title}
                           </p>
                           {task.description && (
-                            <p className="text-xs text-gray-500 truncate mt-0.5 font-medium">
+                            <p className="text-xs text-stone-500 truncate mt-0.5">
                               {task.description}
                             </p>
                           )}
                         </div>
                       </div>
-                      <span className="text-[9px] font-extrabold px-2 py-1 bg-white/5 border border-white/10 rounded-md text-gray-300 uppercase flex-shrink-0 tracking-wider">
+                      <span className="text-[8px] font-extrabold px-2.5 py-1 bg-white border border-stone-200 rounded-md text-stone-605 uppercase flex-shrink-0 tracking-wider">
                         {task.category}
                       </span>
                     </div>
@@ -241,23 +281,26 @@ export default function Home() {
             </div>
 
             {/* Continue Last PDF */}
-            <div className="bg-white/[0.01] border border-white/5 rounded-3xl p-6">
-              <h3 className="text-base font-bold text-white flex items-center mb-6 border-b border-white/5 pb-4">
-                <FiBookOpen className="mr-2 text-white w-5 h-5" />
-                Continue Last PDF
+            <div 
+              className="bg-white border border-stone-200 rounded-3xl p-6 shadow-sm"
+              style={{ filter: 'url(#handdrawn)' }}
+            >
+              <h3 className="text-base font-bold text-stone-950 uppercase tracking-wider flex items-center mb-6 border-b border-stone-150 pb-4">
+                <FiBookOpen className="mr-2 text-stone-800 w-5 h-5" />
+                Continue Last Material
               </h3>
 
               {continueLastPdf ? (
-                <div className="p-5 bg-gradient-to-br from-neutral-900 to-black border border-white/10 rounded-2xl flex flex-col md:flex-row justify-between md:items-center gap-4">
-                  <div className="min-w-0">
-                    <span className="text-[9px] bg-white/10 text-white font-extrabold px-2 py-1 rounded-md uppercase tracking-wider">
-                      Study Material
+                <div className="p-5 bg-stone-50/40 border border-stone-200 rounded-2xl flex flex-col md:flex-row justify-between md:items-center gap-4">
+                  <div className="min-w-0 text-left">
+                    <span className="text-[8px] bg-stone-200 text-stone-700 font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider font-mono">
+                      Study Outline
                     </span>
-                    <h4 className="text-base font-extrabold mt-2 truncate text-white">
+                    <h4 className="text-base font-serif-cormorant font-bold mt-2.5 truncate text-stone-900">
                       {continueLastPdf.filename}
                     </h4>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Ready to resume summary analysis and RAG chat.
+                    <p className="text-xs text-stone-500 mt-1">
+                      Ready to resume summary analysis and vector queries.
                     </p>
                   </div>
                   <button
@@ -268,15 +311,15 @@ export default function Home() {
                         navigate('/chat');
                       }
                     }}
-                    className="self-start md:self-auto bg-white text-black font-extrabold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl hover:bg-gray-150 transition-colors flex items-center whitespace-nowrap shadow-md"
+                    className="self-start md:self-auto bg-stone-850 hover:bg-stone-950 text-white font-extrabold text-xs uppercase tracking-widest py-3 px-5 rounded-xl transition-colors flex items-center whitespace-nowrap shadow-sm"
                   >
                     Resume Study
-                    <FiArrowRight className="ml-1.5 w-3.5 h-3.5" />
+                    <FiArrowRight className="ml-2 w-3.5 h-3.5" />
                   </button>
                 </div>
               ) : (
-                <div className="text-center py-8 bg-white/[0.005] border border-white/5 rounded-2xl text-gray-500 text-xs">
-                  No PDFs uploaded yet. Upload a PDF in the Quiz or Notes tab to begin!
+                <div className="text-center py-8 bg-stone-50/20 border border-stone-150 border-dashed rounded-2xl text-stone-500 text-xs font-handwritten">
+                  * No PDFs uploaded yet. Index a PDF in the Quiz or Notes tab to begin.
                 </div>
               )}
             </div>
@@ -285,30 +328,40 @@ export default function Home() {
 
           {/* Right Column: AI Recommendations */}
           <div className="lg:col-span-1">
-            <div className="bg-gradient-to-b from-purple-950/20 to-indigo-950/20 border border-purple-500/10 rounded-3xl p-6 h-full flex flex-col justify-between">
+            <div 
+              className="bg-white border border-stone-200 rounded-3xl p-6 h-full flex flex-col justify-between shadow-sm relative overflow-hidden"
+              style={{ filter: 'url(#handdrawn)' }}
+            >
+              
+              {/* Coffee Stain bottom right detail */}
+              <div className="absolute bottom-[-16px] right-[-16px] w-20 h-20 border-2 border-stone-150 rounded-full opacity-20 pointer-events-none" />
+
               <div>
-                <div className="flex items-center space-x-2 text-purple-300 mb-6 border-b border-purple-500/10 pb-4">
-                  <div className="p-1.5 bg-purple-500/10 text-purple-400 rounded-xl">
+                <div className="flex items-center space-x-2 text-stone-900 mb-6 border-b border-stone-150 pb-4">
+                  <div className="p-1.5 bg-stone-50 border border-stone-200 text-stone-800 rounded-xl">
                     <FiCpu className="w-5 h-5 animate-pulse" />
                   </div>
-                  <h3 className="text-sm font-extrabold uppercase tracking-wider">AI Recommendation</h3>
+                  <h3 className="text-xs font-extrabold uppercase tracking-widest font-mono">AI Recommendation</h3>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 text-left">
                   <div>
-                    <span className="text-[9px] bg-purple-500/20 text-purple-300 font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                    <span className="text-[8px] bg-stone-100 border border-stone-200 text-stone-600 font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider font-mono">
                       Topic: {currentTopic}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-300 font-medium leading-relaxed italic bg-black/40 p-4 rounded-2xl border border-white/5 shadow-inner">
+                  <p className="text-xs text-stone-700 font-handwritten leading-relaxed italic bg-stone-50/40 p-4 rounded-2xl border border-stone-200/60 shadow-inner">
                     "{aiRecommendation}"
                   </p>
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-purple-500/10 text-[10px] text-gray-500 font-mono">
-                Generated dynamically based on your latest study outlines.
+              {/* Sleeping cat small doodle tail wiggle beside cat */}
+              <div className="mt-8 pt-4 border-t border-stone-150 flex items-center justify-between text-[8px] text-stone-400 font-mono">
+                <span>[ COMPILED BY AI ]</span>
+                <span className="font-handwritten text-[9px] text-stone-400">* cat tail wiggles lazily</span>
               </div>
+
             </div>
           </div>
 

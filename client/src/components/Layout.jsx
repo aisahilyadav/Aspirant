@@ -39,7 +39,7 @@ const Layout = ({ children }) => {
   ];
 
   return (
-    <div className={`flex h-screen ${isLoggedIn ? 'bg-[#030303] text-white' : 'bg-[#FDFBF6]'}`}>
+    <div className="flex h-screen bg-[#FAF9F6] text-stone-850">
       {/* Sidebar - only show when logged in */}
       {isLoggedIn && (
         <Sidebar
