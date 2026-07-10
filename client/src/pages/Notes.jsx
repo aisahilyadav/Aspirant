@@ -112,9 +112,7 @@ export default function Notes() {
     const timer = setTimeout(async () => {
       try {
         const res = await updateNote(selectedNote._id, { title, content });
-        // Update local list
         setNotes(prev => prev.map(n => n._id === res.note._id ? res.note : n));
-        // Keep selectedNote record in sync
         setSelectedNote(res.note);
         setSaveStatus('saved');
       } catch (err) {
@@ -165,7 +163,6 @@ export default function Notes() {
     setUploadingPdf(true);
     try {
       const res = await uploadNotePdf(selectedNote._id, file);
-      // Update note in list
       setNotes(prev => prev.map(n => n._id === res.note._id ? res.note : n));
       setSelectedNote(res.note);
       alert('PDF uploaded and processed successfully!');
@@ -202,7 +199,6 @@ export default function Notes() {
     const userMsg = { role: 'user', content: chatInput };
     const currentNoteId = selectedNote._id;
     
-    // Append user message locally
     setChatHistory(prev => ({
       ...prev,
       [currentNoteId]: [...(prev[currentNoteId] || []), userMsg]
@@ -253,17 +249,17 @@ export default function Notes() {
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
     
-    html = html.replace(/^### (.*$)/gim, '<h3 class="text-md font-bold mt-4 mb-1 text-gray-900">$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2 class="text-lg font-bold mt-5 mb-2 text-gray-900">$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1 class="text-xl font-bold mt-6 mb-3 text-gray-900">$1</h1>');
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>');
-    html = html.replace(/^\- (.*$)/gim, '<li class="ml-4 list-disc text-gray-700 my-1">$1</li>');
+    html = html.replace(/^### (.*$)/gim, '<h3 class="text-md font-bold mt-4 mb-1 text-stone-900">$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2 class="text-lg font-bold mt-5 mb-2 text-stone-900">$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1 class="text-xl font-bold mt-6 mb-3 text-stone-900">$1</h1>');
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-stone-950">$1</strong>');
+    html = html.replace(/^\- (.*$)/gim, '<li class="ml-4 list-disc text-stone-850 my-1 font-serif-cormorant font-bold">$1</li>');
     
     html = html.split('\n').map(line => {
       if (line.trim().startsWith('<h') || line.trim().startsWith('<li') || line.trim() === '') {
         return line;
       }
-      return `<p class="text-gray-700 my-2 leading-relaxed text-sm">${line}</p>`;
+      return `<p class="text-stone-800 my-2 leading-relaxed text-sm font-serif-cormorant font-bold">${line}</p>`;
     }).join('\n');
 
     return html;
@@ -272,81 +268,100 @@ export default function Notes() {
   const activeChat = chatHistory[selectedNote?._id] || [];
 
   return (
-    <div className="flex h-screen pt-16 bg-[#030303] text-white overflow-hidden font-sans">
+    <div className="flex h-screen pt-0 bg-[#FAF9F6] text-stone-900 overflow-hidden font-sans relative select-none">
       
+      {/* Background Subtle Grid Pattern */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
+
+      {/* Handdrawn filter SVG */}
+      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
+        <defs>
+          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* 1. Left Panel: Note List */}
-      <div className="w-80 border-r border-white/10 flex flex-col flex-shrink-0 bg-[#030303]">
-        <div className="p-4 border-b border-white/10 flex items-center justify-between">
-          <h2 className="text-sm font-black uppercase tracking-wider text-white">My Notes</h2>
+      <div 
+        className="w-80 border-r border-stone-250/70 flex flex-col flex-shrink-0 bg-[#FDFBF6] z-10"
+        style={{ filter: 'url(#handdrawn)' }}
+      >
+        <div className="p-5 border-b border-stone-200 flex items-center justify-between">
+          <div className="space-y-0.5 text-left">
+            <span className="font-handwritten text-xs text-stone-500 block rotate-[-1deg]">[ Index ]</span>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-stone-950">Study Journal</h2>
+          </div>
           <button 
             onClick={handleCreateNote}
-            className="p-2 bg-white hover:bg-gray-150 text-black rounded-lg transition-colors flex items-center justify-center shadow-md shadow-white/5"
+            className="p-2.5 bg-[#F8C537] hover:bg-stone-900 border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:text-white rounded-xl transition-all active:translate-x-[1px] active:translate-y-[1px] active:shadow-none flex items-center justify-center"
             title="Create Note"
           >
-            <FiPlus className="w-4 h-4" />
+            <FiPlus className="w-4.5 h-4.5" />
           </button>
         </div>
 
         {/* Search */}
-        <div className="p-3 border-b border-white/10">
+        <div className="p-4 border-b border-stone-150">
           <div className="relative">
-            <FiSearch className="absolute left-3 top-2.5 text-gray-500 w-4 h-4" />
+            <FiSearch className="absolute left-3.5 top-3 text-stone-450 w-4 h-4" />
             <input
               type="text"
-              placeholder="Search notes..."
+              placeholder="Search journals..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-black border border-white/10 rounded-lg pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-white/20 text-white transition-colors"
+              className="w-full bg-white border-2 border-stone-900 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-900 placeholder-stone-400 font-serif-cormorant font-bold transition-colors shadow-sm"
             />
           </div>
         </div>
 
         {/* List of notes */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+        <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
           {filteredNotes.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 text-xs font-semibold uppercase tracking-wider">
-              No notes found
+            <div className="text-center py-8 text-stone-450 text-xs font-handwritten font-bold">
+              * No journals found
             </div>
           ) : (
-            filteredNotes.map((note) => {
+            filteredNotes.map((note, index) => {
               const isSelected = selectedNote?._id === note._id;
               const strippedContent = note.content ? note.content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() : '';
               const previewText = strippedContent 
                 ? strippedContent.substring(0, 60) + (strippedContent.length > 60 ? '...' : '') 
-                : 'Empty note';
+                : 'Empty journal';
               const dateString = new Date(note.updatedAt).toLocaleDateString(undefined, {
                 month: 'short',
                 day: 'numeric'
               });
 
+              // Cycle distinct color tags on folders
+              const colors = ['border-l-[#F26430]', 'border-l-[#2ECC71]', 'border-l-[#2C5EFA]', 'border-l-[#F8C537]'];
+              const folderColor = colors[index % colors.length];
+
               return (
                 <div
                   key={note._id}
                   onClick={() => handleSelectNote(note)}
-                  className={`p-3.5 rounded-xl cursor-pointer transition-all duration-200 group flex justify-between items-start ${
+                  className={`p-4 rounded-2xl cursor-pointer transition-all duration-200 group flex justify-between items-start border-l-4 ${folderColor} ${
                     isSelected 
-                      ? 'bg-white text-black font-extrabold shadow-md shadow-white/5' 
-                      : 'hover:bg-white/5 text-gray-400'
+                      ? 'bg-white border-2 border-stone-900 border-l-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-stone-950 font-extrabold' 
+                      : 'hover:bg-stone-50 border border-stone-200 text-stone-605'
                   }`}
                 >
-                  <div className="flex-1 min-w-0 pr-2">
-                    <h3 className={`font-bold text-xs truncate ${isSelected ? 'text-black font-extrabold' : 'text-white'}`}>
+                  <div className="flex-1 min-w-0 pr-2 text-left">
+                    <h3 className={`font-serif-cormorant font-bold text-sm truncate ${isSelected ? 'text-stone-950' : 'text-stone-850'}`}>
                       {note.title || 'Untitled Note'}
                     </h3>
-                    <p className={`text-[11px] mt-1 truncate ${isSelected ? 'text-gray-700' : 'text-gray-500'}`}>
+                    <p className={`text-[10px] mt-1 truncate ${isSelected ? 'text-stone-750 font-medium' : 'text-stone-450 font-medium'}`}>
                       {previewText}
                     </p>
-                    <span className={`text-[9px] font-mono mt-2 block ${isSelected ? 'text-gray-650' : 'text-gray-550'}`}>
+                    <span className={`text-[8px] font-mono mt-2 block ${isSelected ? 'text-stone-700' : 'text-stone-400'}`}>
                       {dateString}
                     </span>
                   </div>
                   <button
                     onClick={(e) => handleDeleteNote(note._id, e)}
-                    className={`p-1.5 rounded-lg transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100 ${
-                      isSelected 
-                        ? 'hover:bg-gray-200 text-gray-700' 
-                        : 'hover:bg-white/5 text-gray-400 hover:text-red-400'
-                    }`}
+                    className="p-1 rounded-lg transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100 hover:bg-stone-100 hover:text-red-650"
                     title="Delete Note"
                   >
                     <FiTrash2 className="w-3.5 h-3.5" />
@@ -359,165 +374,158 @@ export default function Notes() {
       </div>
 
       {/* 2. Middle Panel: Editor */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#030303]">
+      <div className="flex-1 flex flex-col min-w-0 z-0 text-left">
         {selectedNote ? (
           <>
-            {/* Editor Top Bar (Auto-save status) */}
-            <div className="px-6 py-3 border-b border-white/10 flex items-center justify-between bg-white/[0.005]">
-              <div className="flex items-center space-x-2 text-[10px] font-mono font-bold tracking-wider">
+            {/* Editor Top Bar */}
+            <div 
+              className="px-6 py-4 border-b border-stone-200 flex items-center justify-between bg-white/40 shadow-sm"
+              style={{ filter: 'url(#handdrawn)' }}
+            >
+              <div className="flex items-center space-x-2 text-[9px] font-mono font-bold tracking-widest uppercase">
                 {saveStatus === 'saving' && (
                   <>
-                    <FiLoader className="animate-spin text-purple-400 w-3.5 h-3.5" />
-                    <span className="text-gray-500">SAVING...</span>
+                    <FiLoader className="animate-spin text-stone-850 w-3.5 h-3.5" />
+                    <span className="text-stone-500">SAVING NOTE...</span>
                   </>
                 )}
                 {saveStatus === 'saved' && (
                   <>
-                    <FiCheck className="text-green-400 w-3.5 h-3.5" />
-                    <span className="text-gray-500">CHANGES SAVED</span>
+                    <FiCheck className="text-green-700 w-3.5 h-3.5" />
+                    <span className="text-stone-500">SAVED TO JOURNAL</span>
                   </>
                 )}
                 {saveStatus === 'error' && (
                   <>
-                    <span className="text-red-500">SAVING FAILED</span>
+                    <span className="text-red-600">SAVING FAILED</span>
                   </>
                 )}
               </div>
               
-              {/* Toggle Study Panel Button */}
               <button
                 onClick={() => setAiPanelOpen(!aiPanelOpen)}
-                className="flex items-center text-[10px] font-extrabold uppercase tracking-widest text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1.5 rounded-lg transition-colors"
+                className="flex items-center text-[9px] font-extrabold uppercase tracking-widest text-stone-750 hover:text-stone-950 bg-white hover:bg-stone-50 border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none px-3.5 py-1.5 rounded-xl transition-all"
               >
                 {aiPanelOpen ? (
                   <>
                     <span>Hide Assistant</span>
-                    <FiChevronRight className="w-3 h-3 ml-1" />
+                    <FiChevronRight className="w-3.5 h-3.5 ml-1" />
                   </>
                 ) : (
                   <>
-                    <FiBookOpen className="w-3 h-3 mr-1" />
-                    <span>Open Study Panel</span>
-                    <FiChevronLeft className="w-3 h-3 ml-1" />
+                    <FiBookOpen className="w-3.5 h-3.5 mr-1" />
+                    <span>Study Panel</span>
+                    <FiChevronLeft className="w-3.5 h-3.5 ml-1" />
                   </>
                 )}
               </button>
             </div>
 
-            {/* Formatting Toolbar */}
-            <div className="px-6 py-2 border-b border-white/10 flex flex-wrap items-center gap-1 bg-[#030303]">
-              {/* Headings */}
+            {/* Formatting Toolbar - Ring Binder details */}
+            <div className="px-6 py-2.5 border-b border-stone-200 flex flex-wrap items-center gap-1.5 bg-[#FAF9F6]">
               <button
                 onClick={() => applyFormat('formatBlock', '<h1>')}
-                className="p-1.5 hover:bg-white/5 rounded text-xs font-bold text-gray-300 hover:text-white"
+                className="px-2 py-1 hover:bg-stone-100 rounded-md text-[10px] font-mono font-bold text-stone-750"
                 title="Heading 1"
               >
                 H1
               </button>
               <button
                 onClick={() => applyFormat('formatBlock', '<h2>')}
-                className="p-1.5 hover:bg-white/5 rounded text-xs font-bold text-gray-300 hover:text-white"
+                className="px-2 py-1 hover:bg-stone-100 rounded-md text-[10px] font-mono font-bold text-stone-750"
                 title="Heading 2"
               >
                 H2
               </button>
               <button
                 onClick={() => applyFormat('formatBlock', '<p>')}
-                className="p-1.5 hover:bg-white/5 rounded text-xs font-semibold text-gray-500 hover:text-white"
+                className="px-2 py-1 hover:bg-stone-100 rounded-md text-[10px] font-mono font-bold text-stone-750"
                 title="Normal Text"
               >
-                Normal
+                TXT
               </button>
 
-              <div className="w-[1px] h-4 bg-white/10 mx-1" />
+              <div className="w-[1px] h-4 bg-stone-300 mx-1" />
 
-              {/* Text formatting */}
               <button
                 onClick={() => applyFormat('bold')}
-                className="p-1.5 hover:bg-white/5 rounded text-gray-400 hover:text-white"
+                className="p-1.5 hover:bg-stone-100 rounded-md text-stone-700"
                 title="Bold"
               >
                 <FiBold className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => applyFormat('italic')}
-                className="p-1.5 hover:bg-white/5 rounded text-gray-400 hover:text-white"
+                className="p-1.5 hover:bg-stone-100 rounded-md text-stone-700"
                 title="Italic"
               >
                 <FiItalic className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => applyFormat('underline')}
-                className="p-1.5 hover:bg-white/5 rounded text-gray-400 hover:text-white"
+                className="p-1.5 hover:bg-stone-100 rounded-md text-stone-700"
                 title="Underline"
               >
                 <FiUnderline className="w-3.5 h-3.5" />
               </button>
 
-              <div className="w-[1px] h-4 bg-white/10 mx-1" />
+              <div className="w-[1px] h-4 bg-stone-300 mx-1" />
 
-              {/* Lists and Indents */}
               <button
                 onClick={() => applyFormat('insertUnorderedList')}
-                className="p-1.5 hover:bg-white/5 rounded text-gray-400 hover:text-white"
+                className="p-1.5 hover:bg-stone-100 rounded-md text-stone-700"
                 title="Bulleted List"
               >
                 <FiList className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => applyFormat('indent')}
-                className="p-1.5 hover:bg-white/5 rounded text-gray-400 hover:text-white"
+                className="p-1.5 hover:bg-stone-100 rounded-md text-stone-700"
                 title="Indent"
               >
                 <FiChevronsRight className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => applyFormat('outdent')}
-                className="p-1.5 hover:bg-white/5 rounded text-gray-400 hover:text-white"
+                className="p-1.5 hover:bg-stone-100 rounded-md text-stone-700"
                 title="Outdent"
               >
                 <FiChevronsLeft className="w-3.5 h-3.5" />
               </button>
 
-              <div className="w-[1px] h-4 bg-white/10 mx-1" />
+              <div className="w-[1px] h-4 bg-stone-300 mx-1" />
 
-              {/* Highlight */}
               <button
-                onClick={() => applyFormat('backColor', '#a855f7')}
-                className="p-1 px-2 hover:bg-purple-950/30 rounded text-purple-300 font-bold text-xs"
-                title="Highlight Purple"
+                onClick={() => applyFormat('backColor', '#FEF5D1')}
+                className="px-2.5 py-1 hover:bg-[#FEF5D1] rounded-md text-stone-900 border border-stone-300 bg-white font-mono font-bold text-[9px] uppercase tracking-wider"
+                title="Highlight Text"
               >
                 Highlight
               </button>
 
-              <div className="w-[1px] h-4 bg-white/10 mx-1" />
+              <div className="w-[1px] h-4 bg-stone-300 mx-1" />
 
               {/* Text Colors */}
-              <div className="flex items-center gap-1 border border-white/10 rounded p-1">
+              <div className="flex items-center gap-1 border border-stone-250 bg-white rounded-md p-1">
                 <button
-                  onClick={() => applyFormat('foreColor', '#ffffff')}
-                  className="w-3 h-3 rounded-full bg-white border border-white/20"
-                  title="White"
+                  onClick={() => applyFormat('foreColor', '#1c1917')}
+                  className="w-3 h-3 rounded-full bg-stone-900 border border-stone-400"
+                  title="Dark"
                 />
                 <button
-                  onClick={() => applyFormat('foreColor', '#f87171')}
-                  className="w-3 h-3 rounded-full bg-red-400"
-                  title="Light Red"
+                  onClick={() => applyFormat('foreColor', '#F26430')}
+                  className="w-3 h-3 rounded-full bg-[#F26430]"
+                  title="Orange"
                 />
                 <button
-                  onClick={() => applyFormat('foreColor', '#60a5fa')}
-                  className="w-3 h-3 rounded-full bg-blue-400"
-                  title="Light Blue"
+                  onClick={() => applyFormat('foreColor', '#2C5EFA')}
+                  className="w-3 h-3 rounded-full bg-[#2C5EFA]"
+                  title="Blue"
                 />
                 <button
-                  onClick={() => applyFormat('foreColor', '#4ade80')}
-                  className="w-3 h-3 rounded-full bg-green-400"
-                  title="Light Green"
-                />
-                <button
-                  onClick={() => applyFormat('foreColor', '#c084fc')}
-                  className="w-3 h-3 rounded-full bg-purple-400"
-                  title="Light Purple"
+                  onClick={() => applyFormat('foreColor', '#2ECC71')}
+                  className="w-3 h-3 rounded-full bg-[#2ECC71]"
+                  title="Green"
                 />
               </div>
             </div>
@@ -526,16 +534,16 @@ export default function Notes() {
             <div className="flex-1 flex flex-col p-8 overflow-y-auto space-y-4">
               <input
                 type="text"
-                placeholder="Note Title"
+                placeholder="Journal Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full text-3xl font-extrabold border-none outline-none focus:ring-0 bg-transparent text-white placeholder-gray-700"
+                className="w-full text-3xl font-serif-cormorant font-bold border-none outline-none focus:ring-0 bg-transparent text-stone-950 placeholder-stone-350"
               />
               <div
                 ref={editorRef}
                 contentEditable
                 onInput={(e) => setContent(e.currentTarget.innerHTML)}
-                className="w-full flex-1 border-none outline-none focus:ring-0 text-gray-300 leading-relaxed text-base rich-editor min-h-[300px]"
+                className="w-full flex-1 border-none outline-none focus:ring-0 text-stone-900 font-serif-cormorant font-bold leading-relaxed text-lg rich-editor min-h-[300px]"
                 data-placeholder="Write your study notes here..."
               />
             </div>
@@ -543,23 +551,25 @@ export default function Notes() {
             <style>{`
               .rich-editor h1 {
                 font-size: 1.875rem;
+                font-family: Cormorant Garamond, serif;
                 font-weight: 800;
                 margin-top: 1.5rem;
                 margin-bottom: 0.5rem;
-                color: #ffffff;
+                color: #1c1917;
               }
               .rich-editor h2 {
                 font-size: 1.5rem;
+                font-family: Cormorant Garamond, serif;
                 font-weight: 700;
                 margin-top: 1.25rem;
                 margin-bottom: 0.5rem;
-                color: #ffffff;
+                color: #1c1917;
               }
               .rich-editor p {
                 margin-top: 0.5rem;
                 margin-bottom: 0.5rem;
                 line-height: 1.625;
-                color: #d1d5db;
+                color: #292524;
               }
               .rich-editor ul {
                 list-style-type: disc;
@@ -575,28 +585,28 @@ export default function Notes() {
               }
               .rich-editor blockquote {
                 border-left-width: 4px;
-                border-color: #e5e7eb;
+                border-color: #1c1917;
                 padding-left: 1rem;
                 font-style: italic;
-                color: #4b5563;
+                color: #44403c;
                 margin-top: 0.5rem;
                 margin-bottom: 0.5rem;
               }
               .rich-editor:empty:before {
                 content: attr(data-placeholder);
-                color: #d1d5db;
+                color: #a8a29e;
                 cursor: text;
               }
             `}</style>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gray-50/20 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
+          <div className="flex-1 flex flex-col items-center justify-center p-8 bg-stone-50/20 text-center">
+            <div className="w-16 h-16 bg-white border border-stone-200 rounded-full flex items-center justify-center mb-4 text-stone-400 shadow-sm">
               <FiFileText className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">No Note Selected</h3>
-            <p className="text-gray-500 text-sm max-w-sm">
-              Choose a note from the sidebar or click the plus button to create a new blank note.
+            <h3 className="text-lg font-serif-cormorant font-bold text-stone-900 mb-2">No Note Selected</h3>
+            <p className="text-xs text-stone-500 max-w-xs">
+              Choose a journal folder from the directory list or hit the plus button to create a new page.
             </p>
           </div>
         )}
@@ -610,12 +620,13 @@ export default function Notes() {
             animate={{ width: 380, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="border-l border-white/10 flex flex-col flex-shrink-0 bg-[#030303] h-full overflow-hidden"
+            className="border-l border-stone-250/70 flex flex-col flex-shrink-0 bg-[#FDFBF6] h-full overflow-hidden z-10"
+            style={{ filter: 'url(#handdrawn)' }}
           >
             {/* Header */}
-            <div className="p-4 border-b border-white/10 bg-[#030303]">
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-white flex items-center">
-                <FiBookOpen className="mr-2 w-4 h-4" />
+            <div className="p-4 border-b border-stone-200 bg-[#FDFBF6] text-left">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-stone-950 flex items-center">
+                <FiBookOpen className="mr-2 w-4 h-4 text-[#D9866B]" />
                 PDF Study Assistant
               </h3>
             </div>
@@ -623,19 +634,19 @@ export default function Notes() {
             {/* If no PDF attached */}
             {!selectedNote.pdfId ? (
               <div className="flex-1 p-6 flex flex-col justify-center items-center text-center">
-                <div className="w-14 h-14 bg-blue-500/10 text-blue-400 border border-blue-500/15 rounded-2xl flex items-center justify-center mb-4">
-                  <FiUpload className="w-6 h-6" />
+                <div className="w-14 h-14 bg-stone-50 text-stone-800 border-2 border-stone-900 rounded-2xl flex items-center justify-center mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <FiUpload className="w-6 h-6 animate-bounce" />
                 </div>
-                <h4 className="font-extrabold text-white text-sm mb-1 uppercase tracking-wider">Attach Study PDF</h4>
-                <p className="text-xs text-gray-500 mb-6 max-w-xs leading-normal">
-                  Upload a PDF textbook, lecture, or syllabus to summarize it and chat with it.
+                <h4 className="font-serif-cormorant font-bold text-stone-950 text-lg mb-1">Attach Study PDF</h4>
+                <p className="text-xs text-stone-500 mb-6 max-w-xs leading-normal">
+                  Upload a PDF outline or lecture slides to summarize and vectors-query the contents.
                 </p>
 
-                <label className="cursor-pointer inline-flex items-center bg-white hover:bg-gray-150 text-black font-extrabold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-md transition-all">
+                <label className="cursor-pointer inline-flex items-center bg-[#2C5EFA] hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-widest py-3 px-5 border-2 border-stone-900 rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all">
                   {uploadingPdf ? (
                     <>
                       <FiLoader className="animate-spin mr-2 w-3.5 h-3.5" />
-                      <span>Processing PDF...</span>
+                      <span>Indexing PDF...</span>
                     </>
                   ) : (
                     <>
@@ -654,16 +665,16 @@ export default function Notes() {
               </div>
             ) : (
               // If PDF is attached
-              <div className="flex-1 flex flex-col overflow-hidden">
+              <div className="flex-1 flex flex-col overflow-hidden text-left">
                 {/* PDF info bar */}
-                <div className="p-3 bg-green-500/10 border-b border-green-500/15 flex items-center justify-between text-green-300">
+                <div className="p-3.5 bg-stone-50 border-b border-stone-200 flex items-center justify-between text-stone-850">
                   <div className="flex items-center min-w-0 pr-2">
-                    <FiFileText className="text-green-400 w-4 h-4 mr-2 flex-shrink-0" />
-                    <span className="text-xs font-semibold truncate">
+                    <FiFileText className="text-[#D9866B] w-4.5 h-4.5 mr-2 flex-shrink-0" />
+                    <span className="text-xs font-bold font-serif-cormorant truncate">
                       {selectedNote.pdfId.filename}
                     </span>
                   </div>
-                  <label className="text-[9px] uppercase tracking-wider font-extrabold text-green-300 bg-white/5 hover:bg-white/10 border border-green-500/20 rounded-md px-2 py-1 cursor-pointer transition-colors">
+                  <label className="text-[9px] uppercase tracking-widest font-extrabold text-stone-800 bg-white border border-stone-250 rounded-md px-2 py-1 cursor-pointer hover:bg-stone-900 hover:text-white transition-colors flex-shrink-0">
                     Replace
                     <input
                       type="file"
@@ -675,24 +686,24 @@ export default function Notes() {
                   </label>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex border-b border-white/10 bg-[#030303] text-[10px] font-extrabold uppercase tracking-wider">
+                {/* Overlapping divider tabs (yellow & blue index cards) */}
+                <div className="flex border-b border-stone-200 bg-[#FDFBF6] text-[10px] font-mono font-bold uppercase tracking-wider">
                   <button
                     onClick={() => setAiTab('summary')}
-                    className={`flex-1 py-3.5 text-center border-b-2 transition-all ${
+                    className={`flex-1 py-3 text-center border-r border-stone-200 transition-all ${
                       aiTab === 'summary' 
-                        ? 'border-white text-white' 
-                        : 'border-transparent text-gray-500 hover:text-white'
+                        ? 'bg-[#F8C537] text-stone-950 border-b-2 border-b-stone-900 font-extrabold' 
+                        : 'text-stone-500 hover:bg-stone-50/50'
                     }`}
                   >
                     Summary
                   </button>
                   <button
                     onClick={() => setAiTab('chat')}
-                    className={`flex-1 py-3.5 text-center border-b-2 transition-all ${
+                    className={`flex-1 py-3 text-center transition-all ${
                       aiTab === 'chat' 
-                        ? 'border-white text-white' 
-                        : 'border-transparent text-gray-500 hover:text-white'
+                        ? 'bg-[#2C5EFA] text-white border-b-2 border-b-stone-900 font-extrabold' 
+                        : 'text-stone-500 hover:bg-stone-50/50'
                     }`}
                   >
                     Chat Assistant
@@ -700,27 +711,27 @@ export default function Notes() {
                 </div>
 
                 {/* Tab content */}
-                <div className="flex-1 overflow-hidden flex flex-col bg-[#030303]">
+                <div className="flex-1 overflow-hidden flex flex-col bg-[#FDFBF6]">
                   
                   {/* Summary Tab */}
                   {aiTab === 'summary' && (
-                    <div className="flex-1 overflow-y-auto p-4 bg-[#030303]">
+                    <div className="flex-1 overflow-y-auto p-4">
                       {selectedNote.summary ? (
                         <div className="space-y-4">
                           <div 
-                            className="prose prose-invert prose-sm text-xs text-gray-300 leading-relaxed"
+                            className="prose prose-sm leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: renderMarkdown(selectedNote.summary) }}
                           />
                           <button
                             onClick={handleSummarizePdf}
                             disabled={summarizing}
-                            className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl text-xs font-bold transition-colors flex items-center justify-center mt-6"
+                            className="w-full py-3 bg-white hover:bg-stone-50 text-stone-900 border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none text-xs font-extrabold uppercase tracking-widest transition-all mt-6"
                           >
                             {summarizing ? (
-                              <>
-                                <FiLoader className="animate-spin mr-2 w-3.5 h-3.5" />
-                                <span>Regenerating Summary...</span>
-                              </>
+                              <div className="flex items-center justify-center">
+                                <FiLoader className="animate-spin mr-2 w-4 h-4" />
+                                <span>Generating...</span>
+                              </div>
                             ) : (
                               <span>Regenerate Summary</span>
                             )}
@@ -728,22 +739,22 @@ export default function Notes() {
                         </div>
                       ) : (
                         <div className="py-12 text-center flex flex-col items-center justify-center">
-                          <div className="w-12 h-12 bg-purple-500/10 text-purple-400 border border-purple-500/15 rounded-full flex items-center justify-center mb-3">
-                            <FiBookOpen className="w-5 h-5" />
+                          <div className="w-12 h-12 bg-white border border-stone-200 rounded-full flex items-center justify-center mb-3 shadow-sm">
+                            <FiBookOpen className="w-5 h-5 text-stone-700" />
                           </div>
-                          <h5 className="font-extrabold text-white text-sm mb-1 uppercase tracking-wider">Generate PDF Summary</h5>
-                          <p className="text-xs text-gray-500 mb-6 max-w-xs">
-                            Generate a study outline covering key concepts, takeaways, and outlines.
+                          <h5 className="font-serif-cormorant font-bold text-stone-950 text-base mb-1">Generate PDF Outline</h5>
+                          <p className="text-xs text-stone-450 mb-6 max-w-xs font-handwritten">
+                            Create a study outline covering key concepts and summaries.
                           </p>
                           <button
                             onClick={handleSummarizePdf}
                             disabled={summarizing}
-                            className="bg-white hover:bg-gray-150 text-black font-extrabold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-md transition-all flex items-center"
+                            className="bg-stone-850 hover:bg-stone-950 text-white font-extrabold text-xs uppercase tracking-widest py-3 px-5 rounded-xl transition-all shadow-sm flex items-center"
                           >
                             {summarizing ? (
                               <>
                                 <FiLoader className="animate-spin mr-2 w-3.5 h-3.5" />
-                                <span>Generating...</span>
+                                <span>Generating Summary...</span>
                               </>
                             ) : (
                               <span>Generate Summary</span>
@@ -756,14 +767,14 @@ export default function Notes() {
 
                   {/* Chat Tab */}
                   {aiTab === 'chat' && (
-                    <div className="flex-1 flex flex-col overflow-hidden bg-[#030303]">
+                    <div className="flex-1 flex flex-col overflow-hidden bg-[#FDFBF6]">
                       
                       {/* Chat Messages */}
                       <div className="flex-1 overflow-y-auto p-4 space-y-3">
                         {activeChat.length === 0 ? (
-                          <div className="text-center py-12 text-gray-500 text-xs font-medium leading-relaxed">
-                            Ask me anything about the content of <br />
-                            <span className="font-semibold text-gray-400">{selectedNote.pdfId.filename}</span>.
+                          <div className="text-center py-12 text-stone-400 text-xs font-handwritten font-bold">
+                            * Ask me anything about the content of <br />
+                            <span className="font-serif-cormorant text-stone-650 underline">{selectedNote.pdfId.filename}</span>.
                           </div>
                         ) : (
                           activeChat.map((msg, index) => {
@@ -773,23 +784,23 @@ export default function Notes() {
                                 key={index}
                                 className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
                               >
-                                <div
-                                  className={`max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed shadow-md ${
-                                    isUser
-                                      ? 'bg-white text-black font-semibold rounded-tr-none'
-                                      : 'bg-white/5 text-gray-300 border border-white/10 rounded-tl-none'
-                                  }`}
-                                >
-                                  {msg.content}
-                                </div>
+                                {isUser ? (
+                                  <div className="max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed bg-stone-900 text-stone-100 shadow-sm rounded-tr-none font-sans font-medium">
+                                    {msg.content}
+                                  </div>
+                                ) : (
+                                  <div className="max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed bg-[#FEF5D1] text-stone-950 border-2 border-stone-900 rounded-tl-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-serif-cormorant font-bold">
+                                    {msg.content}
+                                  </div>
+                                )}
                               </div>
                             );
                           })
                         )}
                         {chatLoading && (
                           <div className="flex justify-start">
-                            <div className="bg-white/5 border border-white/10 rounded-2xl rounded-tl-none p-3 text-xs flex items-center space-x-2 text-gray-400 shadow-md">
-                              <FiLoader className="animate-spin w-3.5 h-3.5" />
+                            <div className="bg-stone-50 border border-stone-200 rounded-2xl rounded-tl-none p-3 text-xs flex items-center space-x-2 text-stone-500 shadow-sm font-handwritten font-bold">
+                              <FiLoader className="animate-spin w-3.5 h-3.5 text-stone-850" />
                               <span>Thinking...</span>
                             </div>
                           </div>
@@ -797,10 +808,10 @@ export default function Notes() {
                         <div ref={chatEndRef} />
                       </div>
 
-                      {/* Chat Input */}
+                      {/* Chat Input form */}
                       <form 
                         onSubmit={handleSendChat}
-                        className="p-3 bg-[#030303] border-t border-white/10 flex items-center space-x-2"
+                        className="p-3 bg-[#FDFBF6] border-t border-stone-200 flex items-center space-x-2"
                       >
                         <input
                           type="text"
@@ -808,12 +819,12 @@ export default function Notes() {
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           disabled={chatLoading}
-                          className="flex-1 bg-black border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-white/20 transition-colors"
+                          className="flex-1 bg-white border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-stone-950 font-serif-cormorant font-bold shadow-sm"
                         />
                         <button
                           type="submit"
                           disabled={chatLoading || !chatInput.trim()}
-                          className="p-2.5 bg-white hover:bg-gray-150 text-black rounded-xl disabled:opacity-40 disabled:hover:bg-white transition-colors flex items-center justify-center flex-shrink-0 shadow-md"
+                          className="p-2.5 bg-[#F26430] hover:bg-[#e05825] border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-white rounded-xl disabled:opacity-40 disabled:hover:bg-[#F26430] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all flex items-center justify-center flex-shrink-0"
                         >
                           <FiSend className="w-3.5 h-3.5" />
                         </button>

@@ -13,16 +13,15 @@ export default function QuizConfigForm({ onGenerate, loading }) {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Form */}
+    <div className="space-y-6 text-left">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Topic Input */}
         <div className="space-y-2">
-          <label htmlFor="topic" className="flex items-center text-base font-semibold text-gray-900">
-            <FiBook className="w-4 h-4 mr-2 text-purple-600" />
+          <label htmlFor="topic" className="flex items-center text-sm font-bold text-stone-900 uppercase tracking-wider">
+            <FiBook className="w-4.5 h-4.5 mr-2 text-[#D9866B]" />
             What topic should the quiz focus on?
           </label>
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-xs text-stone-500 font-handwritten">
             Enter a specific topic or subject area for your quiz questions
           </p>
           <div className="relative">
@@ -32,23 +31,20 @@ export default function QuizConfigForm({ onGenerate, loading }) {
               placeholder="e.g., Machine Learning Basics, World War 2, Python Functions..."
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              className="w-full px-4 py-4 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-gray-900 placeholder-gray-400 bg-white"
+              className="w-full px-4 py-3.5 text-sm border-2 border-stone-900 rounded-2xl focus:outline-none focus:border-stone-950 transition-all duration-200 text-stone-900 placeholder-stone-400 bg-white font-serif-cormorant font-bold"
               disabled={loading}
               required
             />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-              <FiBook className="w-5 h-5 text-gray-400" />
-            </div>
           </div>
         </div>
 
         {/* Number of Questions Input */}
         <div className="space-y-2">
-          <label htmlFor="numQuestions" className="flex items-center text-base font-semibold text-gray-900">
-            <FiHash className="w-4 h-4 mr-2 text-purple-600" />
+          <label htmlFor="numQuestions" className="flex items-center text-sm font-bold text-stone-900 uppercase tracking-wider">
+            <FiHash className="w-4.5 h-4.5 mr-2 text-[#D9866B]" />
             How many questions do you want?
           </label>
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-xs text-stone-500 font-handwritten">
             Enter the number of questions for your quiz (1-50)
           </p>
           <div className="relative">
@@ -60,36 +56,33 @@ export default function QuizConfigForm({ onGenerate, loading }) {
               placeholder="Enter number of questions (e.g., 10)"
               value={numQuestions}
               onChange={(e) => setNumQuestions(e.target.value)}
-              className="w-full px-4 py-4 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-gray-900 placeholder-gray-400 bg-white"
+              className="w-full px-4 py-3.5 text-sm border-2 border-stone-900 rounded-2xl focus:outline-none focus:border-stone-950 transition-all duration-200 text-stone-900 placeholder-stone-400 bg-white font-serif-cormorant font-bold"
               disabled={loading}
               required
             />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-              <FiHash className="w-5 h-5 text-gray-400" />
-            </div>
           </div>
         </div>
 
-        {/* Generate Button - No loading state, just disabled */}
+        {/* Generate Button */}
         <div className="pt-4">
           <button
             type="submit"
             disabled={loading || !topic.trim() || !numQuestions}
-            className={`w-full py-4 px-6 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center space-x-3 ${
+            className={`w-full py-4 px-6 rounded-2xl font-extrabold text-xs uppercase tracking-widest transition-all duration-200 flex items-center justify-center space-x-3 border-2 border-stone-900 ${
               loading || !topic.trim() || !numQuestions
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-gradient-to-r from-purple-600 to-black text-white hover:from-purple-700 hover:to-gray-800 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl'
+                ? 'bg-stone-200 text-stone-400 cursor-not-allowed border-stone-300'
+                : 'bg-[#F26430] text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
             }`}
           >
-            <FiPlay className="w-5 h-5" />
+            <FiPlay className="w-5 h-5 fill-white/10" />
             <span>Generate My Quiz</span>
           </button>
         </div>
 
         {/* Quick Topics */}
         {!loading && !topic && (
-          <div className="pt-4 border-t border-gray-100">
-            <p className="text-sm font-medium text-gray-700 mb-3 text-center">
+          <div className="pt-4 border-t border-stone-200">
+            <p className="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-3 text-center">
               💡 Quick Topic Suggestions
             </p>
             <div className="flex flex-wrap gap-2 justify-center">
@@ -105,22 +98,13 @@ export default function QuizConfigForm({ onGenerate, loading }) {
                   key={quickTopic}
                   type="button"
                   onClick={() => setTopic(quickTopic)}
-                  className="px-3 py-1.5 text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-full transition-colors duration-200 border border-purple-200 hover:border-purple-300"
+                  className="px-3.5 py-1.5 text-xs bg-white border border-stone-250 hover:bg-stone-900 hover:text-stone-100 hover:border-stone-900 active:scale-95 rounded-full transition-all duration-200 shadow-sm"
                   disabled={loading}
                 >
                   {quickTopic}
                 </button>
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Form Validation */}
-        {(!topic.trim() || !numQuestions) && !loading && (
-          <div className="text-center">
-            <p className="text-sm text-gray-500">
-              Please fill in all fields to generate your quiz
-            </p>
           </div>
         )}
       </form>

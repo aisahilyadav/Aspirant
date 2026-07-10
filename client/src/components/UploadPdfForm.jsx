@@ -36,39 +36,39 @@ export default function UploadPdfForm({ onUpload, loading }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-left">
       {/* Dropzone */}
       <div
         {...getRootProps()}
         className={`
-          relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200
+          relative border-2 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all duration-200 select-none
           ${isDragActive 
-            ? 'border-blue-400 bg-blue-50' 
+            ? 'border-stone-900 bg-stone-50' 
             : loading 
-            ? 'border-gray-200 bg-gray-50 cursor-not-allowed'
-            : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+            ? 'border-stone-200 bg-stone-100 cursor-not-allowed'
+            : 'border-stone-400 hover:border-stone-900 hover:bg-stone-50/40'
           }
         `}
       >
         <input {...getInputProps()} />
         
         <div className="flex flex-col items-center space-y-4">
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
-            isDragActive ? 'bg-blue-100' : 'bg-gray-100'
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center border border-stone-250 shadow-sm ${
+            isDragActive ? 'bg-stone-200' : 'bg-stone-50'
           }`}>
             <FiUpload className={`w-8 h-8 ${
-              isDragActive ? 'text-blue-600' : 'text-gray-600'
+              isDragActive ? 'text-stone-900' : 'text-stone-750'
             }`} />
           </div>
           
           <div>
-            <p className="text-lg font-semibold text-gray-900 mb-2">
+            <p className="text-lg font-serif-cormorant font-bold text-stone-950 mb-2">
               {isDragActive ? 'Drop your PDF here' : 'Upload PDF Document'}
             </p>
-            <p className="text-gray-600 text-sm">
-              Drag and drop your PDF file here, or click to browse
+            <p className="text-stone-605 text-xs">
+              Drag and drop your study PDF file here, or click to browse
             </p>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-[10px] text-stone-400 font-mono mt-2 uppercase tracking-widest">
               Supports PDF files up to 10MB
             </p>
           </div>
@@ -76,7 +76,7 @@ export default function UploadPdfForm({ onUpload, loading }) {
           {!loading && (
             <button
               type="button"
-              className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors duration-200"
+              className="px-6 py-2.5 bg-stone-850 hover:bg-stone-950 text-white font-extrabold text-xs uppercase tracking-widest border border-stone-900 rounded-xl transition-all shadow-sm"
             >
               Choose File
             </button>
@@ -86,35 +86,34 @@ export default function UploadPdfForm({ onUpload, loading }) {
 
       {/* Error Message */}
       {error && (
-        <div className="flex items-center p-3 bg-red-50 border border-red-200 rounded-lg">
-          <FiX className="w-5 h-5 text-red-600 mr-2" />
-          <span className="text-sm text-red-700">{error}</span>
+        <div className="flex items-center p-3.5 bg-red-50 border border-red-200 rounded-xl">
+          <FiX className="w-5 h-5 text-red-650 mr-2" />
+          <span className="text-xs font-semibold text-red-750">{error}</span>
         </div>
       )}
 
       {/* Uploaded File Display */}
       {uploadedFile && !loading && (
-        <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="flex items-center justify-between p-4 bg-stone-50/50 border-2 border-stone-900 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
           <div className="flex items-center">
-            <FiFile className="w-5 h-5 text-blue-600 mr-3" />
-            <div>
-              <p className="text-sm font-medium text-blue-900">
+            <FiFile className="w-5 h-5 text-stone-800 mr-3 flex-shrink-0" />
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-stone-900 truncate max-w-[200px] sm:max-w-xs font-serif-cormorant">
                 {uploadedFile.name}
               </p>
-              <p className="text-xs text-blue-600">
+              <p className="text-[10px] text-stone-500 font-mono">
                 {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB
               </p>
             </div>
           </div>
           <button
             onClick={removeFile}
-            className="text-blue-600 hover:text-blue-800 transition-colors"
+            className="text-stone-500 hover:text-stone-900 p-1 rounded-full hover:bg-stone-100 transition-colors"
           >
-            <FiX className="w-5 h-5" />
+            <FiX className="w-4 h-4" />
           </button>
         </div>
       )}
     </div>
   );
 }
-
