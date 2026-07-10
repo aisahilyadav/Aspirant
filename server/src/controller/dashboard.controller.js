@@ -153,11 +153,17 @@ export const getDashboardData = async (req, res) => {
     let aiRecommendation = `Focus on active recall and spaced repetition for your studying today. Break your subjects into 25-minute Pomodoro sessions.`;
     
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 1200);
+
       const aiRes = await fetch(`${RAG_SERVICE_URL}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic: topicOfInterest })
+        body: JSON.stringify({ topic: topicOfInterest }),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
+
       if (aiRes.ok) {
         const body = await aiRes.json();
         aiRecommendation = body.recommendation;
