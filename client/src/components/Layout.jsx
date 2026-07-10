@@ -59,16 +59,18 @@ const Layout = ({ children }) => {
             : 'ml-[80px]'  // Account for collapsed sidebar width
           : 'ml-0'
       } transition-all duration-300`}>
-        {/* Top Navigation */}
-        <RegularNavbar
-          isLoggedIn={isLoggedIn}
-          user={user}
-          isMenuOpen={isMenuOpen}
-          toggleMenu={toggleMenu}
-          handleLogout={handleLogout}
-          setIsMenuOpen={setIsMenuOpen}
-          sidebarItems={sidebarItems}
-        />
+        {/* Top Navigation - Public Only */}
+        {!isLoggedIn && (
+          <RegularNavbar
+            isLoggedIn={isLoggedIn}
+            user={user}
+            isMenuOpen={isMenuOpen}
+            toggleMenu={toggleMenu}
+            handleLogout={handleLogout}
+            setIsMenuOpen={setIsMenuOpen}
+            sidebarItems={sidebarItems}
+          />
+        )}
 
         {/* Page Content with proper top margin */}
         <main className="flex-1 overflow-auto pt-0">

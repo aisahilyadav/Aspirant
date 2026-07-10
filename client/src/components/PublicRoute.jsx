@@ -7,7 +7,7 @@ const PublicRoute = ({ children }) => {
 
     // If user is already logged in, redirect to home page
     if (isLoggedIn) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/home" replace />;
     }
 
     // If user is not logged in, render the public component (login/register)
