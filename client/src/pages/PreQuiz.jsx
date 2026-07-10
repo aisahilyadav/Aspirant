@@ -81,10 +81,10 @@ export default function PreQuiz() {
         
         {/* Header Section */}
         <div className="text-center space-y-3 pb-4">
-          <span className="font-handwritten text-lg text-stone-500 block rotate-[-1deg]">
+          <span className="text-[10px] font-mono font-bold tracking-widest text-stone-500 uppercase block rotate-[-1deg]">
             [ active recall generator ]
           </span>
-          <h1 className="text-4xl sm:text-5xl font-serif-cormorant font-bold text-stone-950 tracking-tight leading-none">
+          <h1 className="text-4xl sm:text-5xl font-sans font-black text-stone-950 tracking-tight leading-none">
             Create AI Study Quiz
           </h1>
           <p className="text-xs sm:text-sm text-stone-605 max-w-xl mx-auto">
@@ -165,8 +165,8 @@ export default function PreQuiz() {
                     <FiUpload className="w-6 h-6 text-stone-850" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-serif-cormorant font-bold text-stone-950">Select Document</h3>
-                    <p className="text-xs text-stone-750 font-bold font-serif-cormorant">Pick a PDF to feed the recall generator</p>
+                    <h3 className="text-lg font-sans font-bold text-stone-950">Select Document</h3>
+                    <p className="text-xs text-stone-750 font-bold font-sans">Pick a PDF to feed the recall generator</p>
                   </div>
                 </div>
                 
@@ -224,13 +224,12 @@ export default function PreQuiz() {
                 )}
               </div>
 
-              {/* Upload Tips: Yellow Sticky Notepad */}
               <div 
                 className="bg-[#FEF5D1] border-2 border-stone-900 rounded-3xl p-6 shadow-[5px_5px_0px_0px_rgba(28,25,23,1)]"
                 style={{ filter: 'url(#handdrawn)' }}
               >
-                <h4 className="font-serif-cormorant font-bold text-stone-950 text-lg mb-3">Study Tips</h4>
-                <ul className="space-y-2 text-xs text-stone-850 font-medium font-serif-cormorant">
+                <h4 className="font-sans font-bold text-stone-950 text-base mb-3">Study Tips</h4>
+                <ul className="space-y-2 text-xs text-stone-850 font-semibold font-sans">
                   <li className="flex items-start">
                     <span className="w-1.5 h-1.5 bg-stone-900 rounded-full mt-1.5 mr-3 flex-shrink-0"></span>
                     <span>Use scanned books or academic papers with clear text formatting for accurate parsing.</span>
@@ -271,8 +270,8 @@ export default function PreQuiz() {
                     <FiFileText className="w-6 h-6 text-stone-850" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-serif-cormorant font-bold text-stone-950">Quiz Config</h3>
-                    <p className="text-xs text-stone-500">Pick parameters to compile questions</p>
+                    <h3 className="text-lg font-sans font-bold text-stone-950">Quiz Config</h3>
+                    <p className="text-xs text-stone-600 font-medium font-sans">Pick parameters to compile questions</p>
                   </div>
                 </div>
                 
@@ -323,10 +322,10 @@ export default function PreQuiz() {
               <div className="flex justify-center mb-4">
                 <FiLoader className="w-10 h-10 animate-spin text-stone-900" />
               </div>
-              <h3 className="text-xl font-serif-cormorant font-bold text-stone-950 mb-2">
+              <h3 className="text-xl font-sans font-bold text-stone-950 mb-2">
                 Compiling Quiz...
               </h3>
-              <p className="text-xs text-stone-605 leading-relaxed">
+              <p className="text-xs text-stone-850 font-medium leading-relaxed font-sans">
                 Gemini is parsing your PDF text stream and writing multiple-choice questions.
               </p>
             </div>

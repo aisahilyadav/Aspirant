@@ -292,7 +292,7 @@ export default function Notes() {
       >
         <div className="p-5 border-b border-stone-200 flex items-center justify-between">
           <div className="space-y-0.5 text-left">
-            <span className="font-handwritten text-xs text-stone-500 block rotate-[-1deg]">[ Index ]</span>
+            <span className="text-[10px] font-mono font-bold tracking-widest text-stone-500 uppercase block rotate-[-1deg]">[ Index ]</span>
             <h2 className="text-sm font-bold uppercase tracking-wider text-stone-950">Study Journal</h2>
           </div>
           <button 
@@ -313,7 +313,7 @@ export default function Notes() {
               placeholder="Search journals..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white border-2 border-stone-900 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-900 placeholder-stone-400 font-serif-cormorant font-bold transition-colors shadow-sm"
+              className="w-full bg-white border-2 border-stone-900 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-900 placeholder-stone-400 font-sans font-semibold transition-colors shadow-sm"
             />
           </div>
         </div>
@@ -321,7 +321,7 @@ export default function Notes() {
         {/* List of notes */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
           {filteredNotes.length === 0 ? (
-            <div className="text-center py-8 text-stone-450 text-xs font-handwritten font-bold">
+            <div className="text-center py-8 text-stone-450 text-xs font-sans font-bold">
               * No journals found
             </div>
           ) : (
@@ -351,7 +351,7 @@ export default function Notes() {
                   }`}
                 >
                   <div className="flex-1 min-w-0 pr-2 text-left">
-                    <h3 className={`font-serif-cormorant font-bold text-sm truncate ${isSelected ? 'text-stone-950' : 'text-stone-850'}`}>
+                    <h3 className={`font-sans font-bold text-sm truncate ${isSelected ? 'text-stone-950' : 'text-stone-850'}`}>
                       {note.title || 'Untitled Note'}
                     </h3>
                     <p className={`text-[10px] mt-1 truncate ${isSelected ? 'text-stone-750 font-medium' : 'text-stone-450 font-medium'}`}>
@@ -593,20 +593,19 @@ export default function Notes() {
               </div>
             </div>
 
-            {/* Editing Canvas */}
             <div className="flex-1 flex flex-col p-8 overflow-y-auto space-y-4">
               <input
                 type="text"
                 placeholder="Journal Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full text-3xl font-serif-cormorant font-bold border-none outline-none focus:ring-0 bg-transparent text-stone-950 placeholder-stone-350"
+                className="w-full text-3xl font-sans font-black border-none outline-none focus:ring-0 bg-transparent text-stone-950 placeholder-stone-350"
               />
               <div
                 ref={editorRef}
                 contentEditable
                 onInput={(e) => setContent(e.currentTarget.innerHTML)}
-                className="w-full flex-1 border-none outline-none focus:ring-0 text-stone-900 font-serif-cormorant font-bold leading-relaxed text-lg rich-editor min-h-[300px]"
+                className="w-full flex-1 border-none outline-none focus:ring-0 text-stone-900 font-sans font-semibold leading-relaxed text-base rich-editor min-h-[300px]"
                 data-placeholder="Write your study notes here..."
               />
             </div>
@@ -614,7 +613,7 @@ export default function Notes() {
             <style>{`
               .rich-editor h1 {
                 font-size: 1.875rem;
-                font-family: Cormorant Garamond, serif;
+                font-family: Inter, sans-serif;
                 font-weight: 800;
                 margin-top: 1.5rem;
                 margin-bottom: 0.5rem;
@@ -622,7 +621,7 @@ export default function Notes() {
               }
               .rich-editor h2 {
                 font-size: 1.5rem;
-                font-family: Cormorant Garamond, serif;
+                font-family: Inter, sans-serif;
                 font-weight: 700;
                 margin-top: 1.25rem;
                 margin-bottom: 0.5rem;
@@ -667,8 +666,8 @@ export default function Notes() {
             <div className="w-16 h-16 bg-white border border-stone-200 rounded-full flex items-center justify-center mb-4 text-stone-400 shadow-sm">
               <FiFileText className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-serif-cormorant font-bold text-stone-900 mb-2">No Note Selected</h3>
-            <p className="text-xs text-stone-500 max-w-xs">
+            <h3 className="text-lg font-sans font-black text-stone-900 mb-2">No Note Selected</h3>
+            <p className="text-xs text-stone-600 font-medium">
               Choose a journal folder from the directory list or hit the plus button to create a new page.
             </p>
           </div>
@@ -697,11 +696,11 @@ export default function Notes() {
             {/* If no PDF attached */}
             {!selectedNote.pdfId ? (
               <div className="flex-1 p-6 flex flex-col justify-center items-center text-center">
-                <div className="w-14 h-14 bg-stone-50 text-stone-800 border-2 border-stone-900 rounded-2xl flex items-center justify-center mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <div className="w-14 h-14 bg-stone-50 text-stone-850 border-2 border-stone-900 rounded-2xl flex items-center justify-center mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   <FiUpload className="w-6 h-6 animate-bounce" />
                 </div>
-                <h4 className="font-serif-cormorant font-bold text-stone-950 text-lg mb-1">Attach Study PDF</h4>
-                <p className="text-xs text-stone-500 mb-6 max-w-xs leading-normal">
+                <h4 className="font-sans font-black text-stone-950 text-lg mb-1">Attach Study PDF</h4>
+                <p className="text-xs text-stone-600 mb-6 max-w-xs font-medium leading-normal">
                   Upload a PDF outline or lecture slides to summarize and vectors-query the contents.
                 </p>
 
@@ -733,7 +732,7 @@ export default function Notes() {
                 <div className="p-3.5 bg-stone-50 border-b border-stone-200 flex items-center justify-between text-stone-850">
                   <div className="flex items-center min-w-0 pr-2">
                     <FiFileText className="text-[#D9866B] w-4.5 h-4.5 mr-2 flex-shrink-0" />
-                    <span className="text-xs font-bold font-serif-cormorant truncate">
+                    <span className="text-xs font-mono font-bold truncate">
                       {selectedNote.pdfId.filename}
                     </span>
                   </div>
@@ -805,8 +804,8 @@ export default function Notes() {
                           <div className="w-12 h-12 bg-white border border-stone-200 rounded-full flex items-center justify-center mb-3 shadow-sm">
                             <FiBookOpen className="w-5 h-5 text-stone-700" />
                           </div>
-                          <h5 className="font-serif-cormorant font-bold text-stone-950 text-base mb-1">Generate PDF Outline</h5>
-                          <p className="text-xs text-stone-450 mb-6 max-w-xs font-handwritten">
+                          <h5 className="font-sans font-black text-stone-950 text-base mb-1">Generate PDF Outline</h5>
+                          <p className="text-xs text-stone-600 mb-6 max-w-xs font-medium">
                             Create a study outline covering key concepts and summaries.
                           </p>
                           <button
@@ -835,9 +834,9 @@ export default function Notes() {
                       {/* Chat Messages */}
                       <div className="flex-1 overflow-y-auto p-4 space-y-3">
                         {activeChat.length === 0 ? (
-                          <div className="text-center py-12 text-stone-400 text-xs font-handwritten font-bold">
+                          <div className="text-center py-12 text-stone-500 text-xs font-sans font-bold">
                             * Ask me anything about the content of <br />
-                            <span className="font-serif-cormorant text-stone-650 underline">{selectedNote.pdfId.filename}</span>.
+                            <span className="font-mono text-stone-850 underline">{selectedNote.pdfId.filename}</span>.
                           </div>
                         ) : (
                           activeChat.map((msg, index) => {
@@ -852,7 +851,7 @@ export default function Notes() {
                                     {msg.content}
                                   </div>
                                 ) : (
-                                  <div className="max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed bg-[#FEF5D1] text-stone-950 border-2 border-stone-900 rounded-tl-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-serif-cormorant font-bold">
+                                  <div className="max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed bg-[#FEF5D1] text-stone-950 border-2 border-stone-900 rounded-tl-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] font-sans font-semibold">
                                     {msg.content}
                                   </div>
                                 )}
@@ -862,7 +861,7 @@ export default function Notes() {
                         )}
                         {chatLoading && (
                           <div className="flex justify-start">
-                            <div className="bg-stone-50 border border-stone-200 rounded-2xl rounded-tl-none p-3 text-xs flex items-center space-x-2 text-stone-500 shadow-sm font-handwritten font-bold">
+                            <div className="bg-stone-50 border border-stone-200 rounded-2xl rounded-tl-none p-3 text-xs flex items-center space-x-2 text-stone-550 shadow-sm font-sans font-bold">
                               <FiLoader className="animate-spin w-3.5 h-3.5 text-stone-850" />
                               <span>Thinking...</span>
                             </div>
@@ -882,7 +881,7 @@ export default function Notes() {
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           disabled={chatLoading}
-                          className="flex-1 bg-white border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-stone-950 font-serif-cormorant font-bold shadow-sm"
+                          className="flex-1 bg-white border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-stone-950 font-sans font-semibold shadow-sm"
                         />
                         <button
                           type="submit"

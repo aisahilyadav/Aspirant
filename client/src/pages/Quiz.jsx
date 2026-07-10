@@ -93,7 +93,7 @@ export default function Quiz() {
       <div className="min-h-screen bg-[#FAF9F6] flex items-center justify-center pt-16 select-none font-sans">
         <div className="flex flex-col items-center space-y-4">
           <FiLoader className="animate-spin text-stone-900 w-8 h-8" />
-          <span className="text-stone-850 text-sm font-handwritten font-bold">loading quiz outline...</span>
+          <span className="text-stone-850 text-xs font-mono font-bold uppercase tracking-widest animate-pulse">loading quiz outline...</span>
         </div>
       </div>
     );
@@ -128,8 +128,8 @@ export default function Quiz() {
               {/* Header Info */}
               <div className="space-y-4 flex-shrink-0">
                 <div className="border-b border-stone-200 pb-3">
-                  <span className="font-handwritten text-sm text-stone-500 block rotate-[-1deg]">[ Active Recall ]</span>
-                  <h1 className="text-lg font-serif-cormorant font-bold text-stone-950">Quiz Session</h1>
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-stone-500 uppercase block rotate-[-1deg]">[ Active Recall ]</span>
+                  <h1 className="text-lg font-sans font-black text-stone-950">Quiz Session</h1>
                 </div>
                 
                 {/* Stats indicators */}

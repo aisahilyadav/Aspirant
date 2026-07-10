@@ -21,7 +21,7 @@ export default function QuizConfigForm({ onGenerate, loading }) {
             <FiBook className="w-4.5 h-4.5 mr-2 text-[#D9866B]" />
             What topic should the quiz focus on?
           </label>
-          <p className="text-xs text-stone-500 font-handwritten">
+          <p className="text-xs text-stone-600 font-medium">
             Enter a specific topic or subject area for your quiz questions
           </p>
           <div className="relative">
@@ -31,7 +31,7 @@ export default function QuizConfigForm({ onGenerate, loading }) {
               placeholder="e.g., Machine Learning Basics, World War 2, Python Functions..."
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              className="w-full px-4 py-3.5 text-sm border-2 border-stone-900 rounded-2xl focus:outline-none focus:border-stone-950 transition-all duration-200 text-stone-900 placeholder-stone-400 bg-white font-serif-cormorant font-bold"
+              className="w-full px-4 py-3.5 text-sm border-2 border-stone-900 rounded-2xl focus:outline-none focus:border-stone-950 transition-all duration-200 text-stone-900 placeholder-stone-400 bg-white font-sans font-semibold"
               disabled={loading}
               required
             />
@@ -44,7 +44,7 @@ export default function QuizConfigForm({ onGenerate, loading }) {
             <FiHash className="w-4.5 h-4.5 mr-2 text-[#D9866B]" />
             How many questions do you want?
           </label>
-          <p className="text-xs text-stone-500 font-handwritten">
+          <p className="text-xs text-stone-600 font-medium">
             Enter the number of questions for your quiz (1-50)
           </p>
           <div className="relative">
@@ -56,7 +56,7 @@ export default function QuizConfigForm({ onGenerate, loading }) {
               placeholder="Enter number of questions (e.g., 10)"
               value={numQuestions}
               onChange={(e) => setNumQuestions(e.target.value)}
-              className="w-full px-4 py-3.5 text-sm border-2 border-stone-900 rounded-2xl focus:outline-none focus:border-stone-950 transition-all duration-200 text-stone-900 placeholder-stone-400 bg-white font-serif-cormorant font-bold"
+              className="w-full px-4 py-3.5 text-sm border-2 border-stone-900 rounded-2xl focus:outline-none focus:border-stone-950 transition-all duration-200 text-stone-900 placeholder-stone-400 bg-white font-sans font-semibold"
               disabled={loading}
               required
             />
@@ -98,7 +98,7 @@ export default function QuizConfigForm({ onGenerate, loading }) {
                   key={quickTopic}
                   type="button"
                   onClick={() => setTopic(quickTopic)}
-                  className="px-3.5 py-1.5 text-xs bg-white border border-stone-250 hover:bg-stone-900 hover:text-stone-100 hover:border-stone-900 active:scale-95 rounded-full transition-all duration-200 shadow-sm"
+                  className="px-3.5 py-1.5 text-xs bg-white border border-stone-250 hover:bg-stone-900 hover:text-stone-100 hover:border-stone-900 active:scale-95 rounded-full transition-all duration-200 shadow-sm font-sans"
                   disabled={loading}
                 >
                   {quickTopic}
