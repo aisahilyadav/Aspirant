@@ -62,28 +62,38 @@ const Signup = () => {
       {/* Background Subtle Grid Pattern */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
 
-      <div className="max-w-5xl w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      {/* Handdrawn filter SVG */}
+      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
+        <defs>
+          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
+      <div className="max-w-5xl w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start py-8">
         
-        {/* Left Side: Evening Study Room illustration (6 cols) */}
-        <div className="lg:col-span-6 hidden lg:flex justify-center">
+        {/* Left Side: Custom Stacked Books illustration (6 cols) */}
+        <div className="lg:col-span-6 hidden lg:flex justify-center pt-10">
           <div 
             className="relative w-full max-w-sm aspect-square bg-white border border-stone-200 rounded-3xl p-3 shadow-md hover:scale-[1.01] transition-transform duration-500"
             style={{ filter: 'url(#handdrawn)' }}
           >
             <img 
-              src="/lofi_study_night.png" 
-              alt="Evening Study Room" 
+              src="/signup_books.png" 
+              alt="Custom Signup Books" 
               className="w-full h-full object-cover rounded-2xl border border-stone-150"
             />
             {/* Overlay tag */}
             <div className="absolute -bottom-4 -left-2 bg-[#D9866B] text-stone-900 border border-stone-400 font-handwritten text-xs py-1.5 px-3 rounded-xl rotate-[-3deg] shadow-sm">
-              [ setup study desk ]
+              [ setup study journal ]
             </div>
           </div>
         </div>
 
-        {/* Right Side: Form Container (6 cols) */}
-        <div className="lg:col-span-6 space-y-8 text-left">
+        {/* Right Side: Form Container & Onboarding checklist (6 cols) */}
+        <div className="lg:col-span-6 space-y-6 text-left">
           
           <div className="space-y-3">
             <span className="font-handwritten text-lg text-stone-500 block rotate-[1deg]">
@@ -176,7 +186,7 @@ const Signup = () => {
                     autoComplete="new-password"
                     value={user.password}
                     onChange={handleInput}
-                    className="w-full bg-stone-50/40 border border-stone-250 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant text-stone-850"
+                    className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant text-stone-850"
                   />
                   <FiLock className="absolute left-3.5 top-3.5 text-stone-400 w-4 h-4" />
                 </div>
@@ -189,10 +199,10 @@ const Signup = () => {
                 className="w-full py-3.5 bg-stone-850 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl hover:bg-stone-950 transition-colors flex items-center justify-center shadow-sm"
               >
                 {isLoading ? (
-                  <>
-                    <FiLoader className="animate-spin mr-2 w-4 h-4" />
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                     <span>Creating Account...</span>
-                  </>
+                  </div>
                 ) : (
                   <span>Create Account</span>
                 )}
@@ -212,6 +222,30 @@ const Signup = () => {
               </p>
             </div>
 
+          </div>
+
+          {/* Setup / Onboarding checklist to fill space */}
+          <div 
+            className="bg-white/60 border border-stone-200/50 rounded-3xl p-5 flex flex-col gap-3"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
+            <h4 className="text-[9px] font-mono font-extrabold uppercase tracking-widest text-stone-500 border-b border-stone-150 pb-2">
+              Setup Milestones
+            </h4>
+            <div className="space-y-2.5 font-handwritten text-xs text-stone-600">
+              <div className="flex items-center gap-2.5">
+                <div className="w-3.5 h-3.5 rounded border border-stone-400" />
+                <span>Choose daily timetable objectives</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-3.5 h-3.5 rounded border border-stone-400" />
+                <span>Upload first study PDF document</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-3.5 h-3.5 rounded border border-stone-400" />
+                <span>Verify recall score calibration</span>
+              </div>
+            </div>
           </div>
 
         </div>
