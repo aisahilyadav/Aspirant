@@ -811,11 +811,11 @@ export default function Notes() {
                           <button
                             onClick={handleSummarizePdf}
                             disabled={summarizing}
-                            className="bg-stone-850 hover:bg-stone-950 text-white font-extrabold text-xs uppercase tracking-widest py-3 px-5 rounded-xl transition-all shadow-sm flex items-center"
+                            className="px-5 py-3 bg-[#F8C537] hover:bg-[#F26430] hover:text-white text-stone-950 border-2 border-stone-900 font-extrabold text-xs uppercase tracking-widest rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center"
                           >
                             {summarizing ? (
                               <>
-                                <FiLoader className="animate-spin mr-2 w-3.5 h-3.5" />
+                                <FiLoader className="animate-spin mr-2 w-3.5 h-3.5 stroke-[2.5]" />
                                 <span>Generating Summary...</span>
                               </>
                             ) : (

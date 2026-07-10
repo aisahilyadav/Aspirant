@@ -14,7 +14,7 @@ import { getSettings, updateSettings, updateProfile } from '../api/settingsApi';
 import { useAuth } from '../store/auth';
 
 export default function Settings() {
-  const { user, storeTokenInLS } = useAuth();
+  const { user } = useAuth();
   
   // Settings state
   const [username, setUsername] = useState('');
@@ -27,14 +27,13 @@ export default function Settings() {
   const [confirmPassword, setConfirmPassword] = useState('');
   
   // Preferences states
-  const [defaultModel, setDefaultModel] = useState('gemini-2.5-flash');
+  const [defaultModel, setDefaultModel] = useState('gemini-2.0-flash');
   const [studyMode, setStudyMode] = useState('pomodoro');
   const [defaultQuizQuestions, setDefaultQuizQuestions] = useState(10);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [theme, setTheme] = useState('light');
   
   // Loading & UI States
-  const [loading, setLoading] = useState(true);
   const [profileSaving, setProfileSaving] = useState(false);
   const [prefSaving, setPrefSaving] = useState(false);
   const [profileMessage, setProfileMessage] = useState(null);
@@ -46,14 +45,13 @@ export default function Settings() {
 
   const fetchSettings = async () => {
     try {
-      setLoading(true);
       const res = await getSettings();
-      setUsername(res.username);
-      setEmail(res.email);
-      setAuthProvider(res.authProvider);
+      setUsername(res.username || '');
+      setEmail(res.email || '');
+      setAuthProvider(res.authProvider || 'local');
       
       if (res.studySettings) {
-        setDefaultModel(res.studySettings.defaultModel || 'gemini-2.5-flash');
+        setDefaultModel(res.studySettings.defaultModel || 'gemini-2.0-flash');
         setStudyMode(res.studySettings.studyMode || 'pomodoro');
         setDefaultQuizQuestions(res.studySettings.defaultQuizQuestions || 10);
         setEmailNotifications(res.studySettings.emailNotifications !== undefined ? res.studySettings.emailNotifications : true);
@@ -61,8 +59,6 @@ export default function Settings() {
       }
     } catch (err) {
       console.error('Fetch settings error:', err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -120,7 +116,7 @@ export default function Settings() {
       const res = await updateSettings({
         defaultModel,
         studyMode,
-        defaultQuizQuestions,
+        defaultQuizQuestions: parseInt(defaultQuizQuestions),
         emailNotifications,
         theme
       });
@@ -133,19 +129,8 @@ export default function Settings() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#FAF9F6] text-stone-850 flex items-center justify-center pt-16 select-none font-sans">
-        <div className="flex flex-col items-center space-y-4">
-          <FiLoader className="animate-spin text-stone-850 w-8 h-8" />
-          <span className="text-stone-500 text-sm font-handwritten">loading study preferences...</span>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-850 pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none">
+    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none">
       
       {/* Background Subtle Grid Pattern */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
@@ -163,15 +148,15 @@ export default function Settings() {
       <div className="max-w-6xl mx-auto relative z-10 space-y-8">
         
         {/* Header */}
-        <div className="border-b border-stone-200 pb-6 text-left">
-          <span className="font-handwritten text-lg text-stone-500 block mb-2 rotate-[-1deg]">
-            [ system configurations ]
+        <div className="border-b-2 border-stone-900 pb-6 text-left">
+          <span className="text-xs font-mono font-extrabold uppercase tracking-widest text-[#D9866B] block mb-2">
+            [ System Configurations ]
           </span>
-          <h1 className="text-4xl font-serif-cormorant font-bold text-stone-900 tracking-tight leading-none flex items-center">
-            <FiSettings className="mr-3 w-8 h-8 text-stone-800" />
+          <h1 className="text-4xl font-sans font-black text-stone-950 tracking-tight leading-none uppercase flex items-center">
+            <FiSettings className="mr-3 w-8 h-8 text-stone-950 stroke-[2.5]" />
             Study Preferences
           </h1>
-          <p className="text-xs sm:text-sm text-stone-605 mt-1">
+          <p className="text-xs sm:text-sm text-stone-600 mt-1 font-bold">
             Manage your account credentials, AI companion model selection, and daily learning parameters.
           </p>
         </div>
@@ -181,21 +166,21 @@ export default function Settings() {
           
           {/* Column 1: Profile & Password */}
           <div 
-            className="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 flex flex-col justify-between shadow-sm"
+            className="bg-white rounded-3xl border-2 border-stone-900 p-6 sm:p-8 flex flex-col justify-between shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             style={{ filter: 'url(#handdrawn)' }}
           >
             <form onSubmit={handleUpdateProfile} className="space-y-6">
-              <div className="flex items-center space-x-2.5 text-stone-900 border-b border-stone-150 pb-4">
-                <FiUser className="w-5 h-5 text-stone-500" />
-                <h3 className="text-xs font-bold uppercase tracking-wider">Profile Credentials</h3>
+              <div className="flex items-center space-x-2.5 text-stone-950 border-b-2 border-stone-900 pb-4 font-mono">
+                <FiUser className="w-5 h-5 text-stone-900 stroke-[2.5]" />
+                <h3 className="text-xs font-black uppercase tracking-wider">Profile Credentials</h3>
               </div>
 
               {/* Message */}
               {profileMessage && (
-                <div className={`p-4 rounded-xl text-xs font-semibold ${
+                <div className={`p-4 rounded-xl text-xs font-bold border-2 border-stone-900 ${
                   profileMessage.type === 'success' 
-                    ? 'bg-stone-50 border border-stone-200 text-stone-850' 
-                    : 'bg-red-50 border border-red-200 text-red-700'
+                    ? 'bg-stone-50 text-stone-850' 
+                    : 'bg-[#FFD2D2] text-red-900'
                 }`}>
                   {profileMessage.text}
                 </div>
@@ -210,7 +195,7 @@ export default function Settings() {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full bg-stone-50/40 border border-stone-250 rounded-xl px-4 py-2.5 text-xs text-stone-800 focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant font-bold"
+                  className="w-full bg-stone-50/40 border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-800 focus:outline-none focus:border-stone-950 transition-colors font-sans font-bold shadow-sm"
                   required
                 />
               </div>
@@ -224,24 +209,24 @@ export default function Settings() {
                   type="email"
                   value={email}
                   disabled
-                  className="w-full bg-stone-100/50 border border-stone-200 text-stone-450 rounded-xl px-4 py-2.5 text-xs cursor-not-allowed font-serif-cormorant"
+                  className="w-full bg-stone-100 border border-stone-300 text-stone-450 rounded-xl px-4 py-2.5 text-xs cursor-not-allowed font-sans font-bold"
                 />
-                <span className="text-[8px] text-stone-450 block font-mono mt-1">
+                <span className="text-[8px] text-stone-450 block font-mono mt-1 font-bold">
                   LINKED VIA {authProvider === 'google' ? 'GOOGLE AUTHENTICATION' : 'LOCAL EMAIL SIGN-IN'}.
                 </span>
               </div>
 
               {/* Password Section (Only if local user) */}
               {authProvider === 'local' && (
-                <div className="space-y-4 pt-4 border-t border-stone-150">
-                  <div className="flex items-center space-x-2 text-stone-900 mb-2">
-                    <FiLock className="w-4 h-4 text-stone-500" />
-                    <h4 className="text-[9px] font-extrabold uppercase tracking-widest font-mono">Change Password</h4>
+                <div className="space-y-4 pt-4 border-t-2 border-stone-900">
+                  <div className="flex items-center space-x-2 text-stone-950 mb-2 font-mono">
+                    <FiLock className="w-4 h-4 text-stone-900 stroke-[2.5]" />
+                    <h4 className="text-[9px] font-extrabold uppercase tracking-widest">Change Password</h4>
                   </div>
 
                   {/* Current Password */}
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-stone-605 block font-serif-cormorant">
+                    <label className="text-xs font-extrabold text-stone-705 block font-mono uppercase tracking-wider">
                       Current Password
                     </label>
                     <input
@@ -249,14 +234,14 @@ export default function Settings() {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-stone-50/40 border border-stone-250 rounded-xl px-4 py-2.5 text-xs text-stone-800 focus:outline-none focus:border-stone-800 transition-colors"
+                      className="w-full bg-[#FAF9F6] border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-805 focus:outline-none focus:border-stone-950 transition-all"
                       required={!!newPassword}
                     />
                   </div>
 
                   {/* New Password */}
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-stone-605 block font-serif-cormorant">
+                    <label className="text-xs font-extrabold text-stone-705 block font-mono uppercase tracking-wider">
                       New Password
                     </label>
                     <input
@@ -264,13 +249,13 @@ export default function Settings() {
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-stone-50/40 border border-stone-250 rounded-xl px-4 py-2.5 text-xs text-stone-800 focus:outline-none focus:border-stone-800 transition-colors"
+                      className="w-full bg-[#FAF9F6] border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-805 focus:outline-none focus:border-stone-950 transition-all"
                     />
                   </div>
 
                   {/* Confirm New Password */}
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-stone-605 block font-serif-cormorant">
+                    <label className="text-xs font-extrabold text-stone-705 block font-mono uppercase tracking-wider">
                       Confirm New Password
                     </label>
                     <input
@@ -278,7 +263,7 @@ export default function Settings() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-stone-50/40 border border-stone-250 rounded-xl px-4 py-2.5 text-xs text-stone-800 focus:outline-none focus:border-stone-800 transition-colors"
+                      className="w-full bg-[#FAF9F6] border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-805 focus:outline-none focus:border-stone-950 transition-all"
                     />
                   </div>
                 </div>
@@ -287,11 +272,11 @@ export default function Settings() {
               <button
                 type="submit"
                 disabled={profileSaving}
-                className="w-full py-3.5 bg-stone-850 hover:bg-stone-950 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl shadow-sm transition-colors flex items-center justify-center"
+                className="w-full py-3.5 bg-[#F26430] hover:bg-orange-700 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all flex items-center justify-center"
               >
                 {profileSaving ? (
                   <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <FiLoader className="animate-spin mr-2 w-4 h-4" />
                     <span>Saving Profile...</span>
                   </div>
                 ) : (
@@ -303,21 +288,21 @@ export default function Settings() {
 
           {/* Column 2: Preferences */}
           <div 
-            className="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 flex flex-col justify-between shadow-sm"
+            className="bg-white rounded-3xl border-2 border-stone-900 p-6 sm:p-8 flex flex-col justify-between shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             style={{ filter: 'url(#handdrawn)' }}
           >
             <form onSubmit={handleUpdatePreferences} className="space-y-6">
-              <div className="flex items-center space-x-2.5 text-stone-900 border-b border-stone-150 pb-4">
-                <FiSliders className="w-5 h-5 text-stone-500" />
-                <h3 className="text-xs font-bold uppercase tracking-wider">Study Parameters</h3>
+              <div className="flex items-center space-x-2.5 text-stone-950 border-b-2 border-stone-900 pb-4 font-mono">
+                <FiSliders className="w-5 h-5 text-stone-900 stroke-[2.5]" />
+                <h3 className="text-xs font-black uppercase tracking-wider">Study Parameters</h3>
               </div>
 
               {/* Message */}
               {prefMessage && (
-                <div className={`p-4 rounded-xl text-xs font-semibold ${
+                <div className={`p-4 rounded-xl text-xs font-bold border-2 border-stone-900 ${
                   prefMessage.type === 'success' 
-                    ? 'bg-stone-50 border border-stone-200 text-stone-850' 
-                    : 'bg-red-55 border border-red-200 text-red-700'
+                    ? 'bg-stone-50 text-stone-850' 
+                    : 'bg-[#FFD2D2] text-red-900'
                 }`}>
                   {prefMessage.text}
                 </div>
@@ -326,17 +311,17 @@ export default function Settings() {
               {/* Preferred AI Companion Model */}
               <div className="space-y-1">
                 <label className="text-[9px] font-extrabold text-stone-500 uppercase tracking-widest flex items-center gap-1.5 font-mono">
-                  <FiCpu className="w-3.5 h-3.5 text-stone-450" />
+                  <FiCpu className="w-3.5 h-3.5 text-stone-900 stroke-[2.5]" />
                   Default AI Model
                 </label>
                 <select
                   value={defaultModel}
                   onChange={(e) => setDefaultModel(e.target.value)}
-                  className="w-full bg-stone-50/40 border border-stone-250 rounded-xl px-4 py-2.5 text-xs text-stone-800 focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant font-bold"
+                  className="w-full bg-white border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-stone-950 transition-colors font-sans font-bold shadow-sm"
                 >
-                  <option value="gemini-2.5-flash" className="bg-[#FDFBF6]">Gemini 2.5 Flash (Recommended - Fast Outline RAG)</option>
-                  <option value="gemini-2.5-pro" className="bg-[#FDFBF6]">Gemini 2.5 Pro (Deep reasoning quiz generation)</option>
-                  <option value="gemini-3.5-flash" className="bg-[#FDFBF6]">Gemini 3.5 Flash (Experimental RAG)</option>
+                  <option value="gemini-2.0-flash" className="bg-[#FAF9F6]">Gemini 2.0 Flash (Recommended - Fast RAG)</option>
+                  <option value="gemini-1.5-flash" className="bg-[#FAF9F6]">Gemini 1.5 Flash (Standard - Reliable)</option>
+                  <option value="gemini-2.5-pro" className="bg-[#FAF9F6]">Gemini 2.5 Pro (Deep reasoning)</option>
                 </select>
               </div>
 
@@ -348,11 +333,11 @@ export default function Settings() {
                 <select
                   value={studyMode}
                   onChange={(e) => setStudyMode(e.target.value)}
-                  className="w-full bg-stone-50/40 border border-stone-250 rounded-xl px-4 py-2.5 text-xs text-stone-800 focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant font-bold"
+                  className="w-full bg-white border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-stone-950 transition-colors font-sans font-bold shadow-sm"
                 >
-                  <option value="pomodoro" className="bg-[#FDFBF6]">Pomodoro (25m study / 5m break log)</option>
-                  <option value="intensive" className="bg-[#FDFBF6]">Intensive (50m study / 10m break log)</option>
-                  <option value="custom" className="bg-[#FDFBF6]">Self-Paced / Open objectives</option>
+                  <option value="pomodoro" className="bg-[#FAF9F6]">Pomodoro (25m study / 5m break log)</option>
+                  <option value="intensive" className="bg-[#FAF9F6]">Intensive (50m study / 10m break log)</option>
+                  <option value="custom" className="bg-[#FAF9F6]">Self-Paced / Open objectives</option>
                 </select>
               </div>
 
@@ -367,20 +352,20 @@ export default function Settings() {
                   max="20"
                   value={defaultQuizQuestions}
                   onChange={(e) => setDefaultQuizQuestions(e.target.value)}
-                  className="w-full bg-stone-50/40 border border-stone-250 rounded-xl px-4 py-2.5 text-xs text-stone-800 focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant font-bold"
+                  className="w-full bg-white border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-stone-950 transition-colors font-sans font-bold shadow-sm"
                 />
               </div>
 
               {/* Email Notifications Toggle */}
-              <div className="flex items-center justify-between p-3.5 bg-stone-50/20 border border-stone-200 rounded-xl">
+              <div className="flex items-center justify-between p-3.5 bg-[#FEF5D1] border-2 border-stone-900 rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                 <div className="flex items-center space-x-3">
-                  <FiBell className="text-stone-450 w-4 h-4" />
+                  <FiBell className="text-stone-950 w-4 h-4 stroke-[2.5]" />
                   <div>
-                    <label className="text-xs font-bold text-stone-900 block font-serif-cormorant">
+                    <label className="text-xs font-black text-stone-950 block uppercase tracking-wider font-mono">
                       Email Notifications
                     </label>
-                    <span className="text-[8px] text-stone-500 block font-mono">
-                      RECEIVE TIMETABLE OUTLINE REMINDERS
+                    <span className="text-[8px] text-stone-600 block font-mono font-bold uppercase tracking-wider mt-0.5">
+                      Receive timetable outline reminders
                     </span>
                   </div>
                 </div>
@@ -388,34 +373,34 @@ export default function Settings() {
                   type="checkbox"
                   checked={emailNotifications}
                   onChange={(e) => setEmailNotifications(e.target.checked)}
-                  className="h-4 w-4 text-stone-900 bg-white border-stone-300 rounded focus:ring-stone-800"
+                  className="h-4 w-4 text-stone-900 bg-white border-2 border-stone-900 rounded focus:ring-0 cursor-pointer"
                 />
               </div>
 
               {/* UI Theme Selection */}
               <div className="space-y-1">
                 <label className="text-[9px] font-extrabold text-stone-500 uppercase tracking-widest flex items-center gap-1.5 font-mono">
-                  <FiMonitor className="w-3.5 h-3.5 text-stone-450" />
+                  <FiMonitor className="w-3.5 h-3.5 text-stone-900 stroke-[2.5]" />
                   Appearance Theme
                 </label>
                 <select
                   value={theme}
                   onChange={(e) => setTheme(e.target.value)}
-                  className="w-full bg-stone-50/40 border border-stone-250 rounded-xl px-4 py-2.5 text-xs text-stone-805 focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant font-bold"
+                  className="w-full bg-white border-2 border-stone-900 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-stone-950 transition-colors font-sans font-bold shadow-sm"
                 >
-                  <option value="light" className="bg-[#FDFBF6]">Stationery Light (Recommended)</option>
-                  <option value="dark" className="bg-[#FDFBF6]">Midnight Journal (Experimental)</option>
+                  <option value="light" className="bg-[#FAF9F6]">Stationery Light (Recommended)</option>
+                  <option value="dark" className="bg-[#FAF9F6]">Midnight Journal (Experimental)</option>
                 </select>
               </div>
 
               <button
                 type="submit"
                 disabled={prefSaving}
-                className="w-full py-3.5 bg-stone-850 hover:bg-stone-950 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl shadow-sm transition-colors flex items-center justify-center"
+                className="w-full py-3.5 bg-[#2C5EFA] hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all flex items-center justify-center"
               >
                 {prefSaving ? (
                   <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <FiLoader className="animate-spin mr-2 w-4 h-4" />
                     <span>Saving Preferences...</span>
                   </div>
                 ) : (
