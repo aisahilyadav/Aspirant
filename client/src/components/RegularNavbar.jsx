@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiX } from "react-icons/fi";
 
 const RegularNavbar = ({ 
@@ -11,6 +11,35 @@ const RegularNavbar = ({
   setIsMenuOpen,
   sidebarItems 
 }) => {
+  const navigate = useNavigate();
+
+  // Helper for scroll navigation across pages
+  const handleNavClick = (id) => {
+    setIsMenuOpen(false);
+    if (window.location.pathname === '/') {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(`/#${id}`);
+      // Give a tiny timeout for route change before scrolling
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  };
+
+  const navLinks = [
+    { label: 'Features', id: 'features' },
+    { label: 'About Us', id: 'about' },
+    { label: 'Contact Us', id: 'contact' },
+    { label: 'Contribute', id: 'contribute' }
+  ];
+
   return (
     <nav className={`fixed top-4 left-4 right-4 z-50 transition-all duration-300 max-w-4xl mx-auto rounded-full ${
       isLoggedIn 
@@ -25,26 +54,26 @@ const RegularNavbar = ({
             <div className="text-lg font-serif-cormorant font-bold tracking-wider text-stone-900">
               Aspirant
             </div>
-            <span className="font-handwritten text-[10px] text-stone-450 ml-1.5 rotate-[-2deg] hidden sm:inline">
+            <span className="font-handwritten text-[10px] text-stone-455 ml-1.5 rotate-[-2deg] hidden sm:inline">
               [ study journal ]
             </span>
           </Link>
         </div>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links (Smooth Scrolls) */}
         {!isLoggedIn && (
           <div className="hidden md:block">
             <div className="flex items-center space-x-6">
-              {['Product', 'Explore', 'Docs', 'About', 'Contact'].map((item) => (
-                <Link
-                  key={item}
-                  to={`/${item.toLowerCase()}`}
+              {navLinks.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
                   className="relative text-[11px] font-bold uppercase tracking-wider text-stone-600 hover:text-stone-900 transition-colors duration-200 group py-1"
                 >
-                  {item}
-                  {/* Subtle underline indicator */}
+                  {item.label}
+                  {/* Underline hover animation */}
                   <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-stone-800 transition-all duration-300 group-hover:w-full" />
-                </Link>
+                </button>
               ))}
             </div>
           </div>
@@ -109,15 +138,14 @@ const RegularNavbar = ({
       {!isLoggedIn && (
         <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden bg-[#FDFBF6]/95 backdrop-blur-md border border-stone-200/60 rounded-3xl mt-2 mx-1 p-3 shadow-md absolute left-0 right-0 top-14`}>
           <div className="space-y-1">
-            {['Product', 'Explore', 'Docs', 'About', 'Contact'].map((item) => (
-              <Link
-                key={item}
-                to={`/${item.toLowerCase()}`}
-                className="text-[11px] font-bold uppercase tracking-wider text-stone-605 hover:text-stone-950 block px-3 py-2 transition-colors duration-200 rounded-xl hover:bg-stone-50"
-                onClick={() => setIsMenuOpen(false)}
+            {navLinks.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                className="w-full text-left text-[11px] font-bold uppercase tracking-wider text-stone-605 hover:text-stone-950 block px-3 py-2 transition-colors duration-200 rounded-xl hover:bg-stone-50"
               >
-                {item}
-              </Link>
+                {item.label}
+              </button>
             ))}
           </div>
           

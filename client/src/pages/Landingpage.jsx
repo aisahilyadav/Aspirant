@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import MorningScene from '../components/landing/MorningScene';
-import DeskScene from '../components/landing/DeskScene';
-import PlanningScene from '../components/landing/PlanningScene';
-import ReadingScene from '../components/landing/ReadingScene';
-import QuizScene from '../components/landing/QuizScene';
-import AISection from '../components/landing/AISection';
-import ProgressScene from '../components/landing/ProgressScene';
+import FeaturesSection from '../components/landing/FeaturesSection';
+import ContributeSection from '../components/landing/ContributeSection';
 import FooterScene from '../components/landing/FooterScene';
+import Contact from './Contact';
+import About from './About';
 
 export default function LandingPage() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -23,7 +21,18 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Soft smooth background transition depending on the scroll progress
+  // Smooth scroll to hash anchor on mount
+  useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 300);
+      }
+    }
+  }, []);
+
+  // Soft background transitions based on scroll progress
   let currentBg = 'bg-[#FDFBF6]'; // Default morning paper
   let textColor = 'text-stone-850';
 
@@ -49,7 +58,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className={`relative min-h-screen ${currentBg} ${textColor} transition-colors duration-1000 overflow-x-hidden`}>
+    <div className={`relative min-h-screen ${currentBg} ${textColor} transition-colors duration-1000 overflow-x-hidden pt-0`}>
       
       {/* SVG Handdrawn Rough Line Filter */}
       <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
@@ -81,31 +90,23 @@ export default function LandingPage() {
       <div className="relative z-10">
         
         <div id="morning">
-          <MorningScene onCtaClick={() => scrollToSection('desk')} />
+          <MorningScene onCtaClick={() => scrollToSection('features')} />
         </div>
 
-        <div id="desk">
-          <DeskScene />
+        <div id="features">
+          <FeaturesSection />
         </div>
 
-        <div id="planner">
-          <PlanningScene />
+        <div id="about">
+          <About />
         </div>
 
-        <div id="notes">
-          <ReadingScene />
+        <div id="contact">
+          <Contact />
         </div>
 
-        <div id="quiz">
-          <QuizScene />
-        </div>
-
-        <div id="ai">
-          <AISection />
-        </div>
-
-        <div id="progress">
-          <ProgressScene />
+        <div id="contribute">
+          <ContributeSection />
         </div>
 
         <div id="ending">

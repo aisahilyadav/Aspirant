@@ -1,88 +1,82 @@
 import React from 'react';
-import { FiAward, FiUsers, FiTarget, FiStar } from 'react-icons/fi';
+import { FiStar } from 'react-icons/fi';
 
 export default function About() {
-  const cards = [
+  const principles = [
     {
-      icon: <FiTarget className="w-5 h-5 text-stone-600" />,
-      title: "Our Mission",
-      desc: "To empower students and professionals to master complex topics through personalized, AI-driven study pathways. We believe active recall and retrieval practice are the building blocks of rapid comprehension."
+      title: "Self-Paced Focus",
+      desc: "True understanding requires uninterrupted focus. We build spaces that eliminate noise and prompt cycles that wait for your click."
     },
     {
-      icon: <FiUsers className="w-5 h-5 text-stone-600" />,
-      desc: "We build intuitive tools at the intersection of design and cognitive science. Aspirant is created to automate boring organization tasks, letting you focus on true understanding.",
-      title: "The Approach"
+      title: "Retrieval First",
+      desc: "エンドレス reading creates the illusion of learning. Aspirant prioritizes recall testing, practice exams, and index review loops."
     },
     {
-      icon: <FiAward className="w-5 h-5 text-stone-600" />,
-      title: "Google Gemini Driven",
-      desc: "Our platform leverages rate-limit-compliant, highly-capable generative models to structure accurate outline summaries, construct practice quizzes, and run semantic PDF inquiries."
+      title: "Local Privacy",
+      desc: "Your thoughts and notes belong to you. We store indices and databases locally to respect boundaries and ensure data security."
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-850 pt-24 pb-16 font-sans overflow-x-hidden relative">
+    <div className="relative min-h-screen flex items-center justify-center bg-[#FAF9F6] text-stone-850 px-6 py-24 overflow-hidden select-none">
       
-      {/* SVG Handdrawn Rough Line Filter */}
-      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
-        <defs>
-          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
-
       {/* Background paper grid pattern */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-5xl w-full mx-auto relative z-10 space-y-16">
         
-        {/* Header Block */}
-        <div className="border-b border-stone-200 pb-12 mb-16">
-          <span className="font-handwritten text-lg text-stone-500 block mb-2 rotate-[-1deg] flex items-center gap-1.5">
-            <FiStar />
-            [ about aspirant ]
-          </span>
-          <h1 className="text-4xl md:text-5xl font-serif-book font-extrabold tracking-tight text-stone-900 leading-tight mb-4">
-            Pioneering the <span className="underline decoration-stone-400 decoration-wavy decoration-2">Next Gen</span> of Learning.
-          </h1>
-          <p className="text-xs sm:text-sm text-stone-605 max-w-2xl leading-relaxed font-serif-book">
-            Aspirant was created by builders who believe studying shouldn't be about endless reading, but about active challenging and smart feedback.
-          </p>
-        </div>
-
-        {/* Mission grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          {cards.map((card, i) => (
+        {/* Split Editorial Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column: Image Illustration with float animation (5 cols) */}
+          <div className="lg:col-span-5 flex justify-center">
             <div 
-              key={i} 
-              className="p-8 rounded-3xl border border-stone-300 bg-white shadow-sm flex flex-col justify-between min-h-[240px] hover:shadow-md transition-shadow"
+              className="relative w-full max-w-sm aspect-square bg-white border border-stone-200 rounded-3xl p-3 shadow-md group hover:scale-[1.01] transition-transform duration-500"
               style={{ filter: 'url(#handdrawn)' }}
             >
-              <div className="p-2.5 bg-stone-50 border border-stone-200 rounded-xl w-fit mb-6">
-                {card.icon}
-              </div>
-              <div>
-                <h3 className="text-base font-extrabold text-stone-900 uppercase tracking-wider mb-2">
-                  {card.title}
-                </h3>
-                <p className="text-xs text-stone-500 leading-relaxed font-serif-book">
-                  {card.desc}
-                </p>
+              <img 
+                src="/about_philosophy.png" 
+                alt="Study Desk Philosophy" 
+                className="w-full h-full object-cover rounded-2xl border border-stone-150"
+              />
+              {/* Overlay sticker decoration */}
+              <div className="absolute -bottom-4 -right-4 bg-[#A9C5A0] text-stone-900 border border-stone-400 font-handwritten text-xs py-1.5 px-3 rounded-xl rotate-[4deg] shadow-sm">
+                [ organic study desk ]
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Team Callout */}
-        <div className="border border-stone-300 rounded-3xl p-10 bg-white" style={{ filter: 'url(#handdrawn)' }}>
-          <h2 className="text-xl font-serif-book font-extrabold text-stone-900 mb-3">
-            Built for Students, by Students
-          </h2>
-          <p className="text-xs text-stone-500 leading-relaxed font-serif-book">
-            Aspirant is an open, community-oriented study platform. Our goal is to expand operations into advanced tools, offline-first syncing, and collaborative index cards to make modern learning open and structured for independent minds.
-          </p>
+          {/* Right Column: Mission Content (7 cols) */}
+          <div className="lg:col-span-7 space-y-8 text-left">
+            <div className="space-y-4">
+              <span className="font-handwritten text-lg text-stone-500 block rotate-[-1deg] flex items-center gap-1.5">
+                <FiStar />
+                [ our philosophy ]
+              </span>
+              <h2 className="text-4xl sm:text-5xl font-serif-cormorant font-bold text-stone-900 tracking-tight leading-tight">
+                Pioneering the next gen of learning.
+              </h2>
+              <p className="text-xs sm:text-sm text-stone-605 leading-relaxed font-sans-inter max-w-xl">
+                Aspirant was created by builders who believe studying shouldn't be about compiling long, unread PDFs, but about active recall challenges, smart summarization, and clean feedback logs.
+              </p>
+            </div>
+
+            {/* Principles list */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-stone-200 pt-8">
+              {principles.map((pr, idx) => (
+                <div key={idx} className="space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-950 font-sans-inter">
+                    {pr.title}
+                  </h4>
+                  <p className="text-xs text-stone-550 leading-relaxed font-serif-cormorant">
+                    {pr.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+          </div>
+
         </div>
 
       </div>
