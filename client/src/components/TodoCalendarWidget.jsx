@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiChevronLeft, FiChevronRight, FiCalendar } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiCalendar, FiLoader } from 'react-icons/fi';
 import { getCalendarTodos } from '../api/todoApi';
 
 export default function TodoCalendarWidget() {
@@ -22,19 +22,16 @@ export default function TodoCalendarWidget() {
       
       const response = await getCalendarTodos(startDate, endDate);
       
-      // Process the data to group by date
       const processedData = {};
       response.todos?.forEach(todo => {
         const createdDate = new Date(todo.createdAt).toDateString();
         const dueDate = todo.dueDate ? new Date(todo.dueDate).toDateString() : null;
         
-        // Count created todos
         if (!processedData[createdDate]) {
           processedData[createdDate] = { created: 0, due: 0, completed: 0 };
         }
         processedData[createdDate].created += 1;
         
-        // Count due todos
         if (dueDate) {
           if (!processedData[dueDate]) {
             processedData[dueDate] = { created: 0, due: 0, completed: 0 };
@@ -64,17 +61,12 @@ export default function TodoCalendarWidget() {
     const startingDayOfWeek = firstDay.getDay();
 
     const days = [];
-    
-    // Add empty cells for days before the first day of the month
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
-    
-    // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
-    
     return days;
   };
 
@@ -102,15 +94,13 @@ export default function TodoCalendarWidget() {
     const total = dayData.created + dayData.due;
     if (total === 0) return null;
     
-    // Show different colors based on activity
     if (dayData.completed === dayData.due && dayData.due > 0) {
-      return 'bg-green-500'; // All due todos completed
+      return 'bg-[#2ECC71]';
     } else if (dayData.due > 0) {
-      return 'bg-yellow-500'; // Has due todos
+      return 'bg-[#F8C537]';
     } else if (dayData.created > 0) {
-      return 'bg-blue-500'; // Created todos
+      return 'bg-[#2C5EFA]';
     }
-    
     return null;
   };
 
@@ -124,42 +114,40 @@ export default function TodoCalendarWidget() {
   const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div className="bg-white rounded-2xl p-4 text-stone-900 relative">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-gray-900 flex items-center">
-          <FiCalendar className="w-4 h-4 mr-2" />
-          Todo Calendar
+      <div className="flex items-center justify-between mb-4 border-b border-stone-150 pb-2">
+        <h3 className="text-xs font-extrabold text-stone-950 uppercase tracking-widest flex items-center font-mono">
+          <FiCalendar className="w-4 h-4 mr-1.5 text-[#D9866B] stroke-[2.5]" />
+          Calendar
         </h3>
         <div className="flex items-center space-x-1">
           <button
             onClick={() => navigateMonth(-1)}
-            className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+            className="p-1 hover:bg-stone-50 border border-stone-200 rounded transition-all active:scale-95"
           >
-            <FiChevronLeft className="w-4 h-4" />
+            <FiChevronLeft className="w-3.5 h-3.5 text-stone-850" />
           </button>
-          <span className="text-sm font-medium text-gray-900 min-w-[80px] text-center">
+          <span className="text-xs font-extrabold text-stone-950 min-w-[70px] text-center font-mono">
             {formatMonth(currentDate)}
           </span>
           <button
             onClick={() => navigateMonth(1)}
-            className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
+            className="p-1 hover:bg-stone-50 border border-stone-200 rounded transition-all active:scale-95"
           >
-            <FiChevronRight className="w-4 h-4" />
+            <FiChevronRight className="w-3.5 h-3.5 text-stone-850" />
           </button>
         </div>
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-1 text-center">
-        {/* Week day headers */}
+      <div className="grid grid-cols-7 gap-1 text-center font-sans font-bold">
         {weekDays.map(day => (
-          <div key={day} className="text-xs font-medium text-gray-500 py-1">
+          <div key={day} className="text-[10px] font-extrabold text-stone-500 py-1 uppercase tracking-wider font-mono">
             {day}
           </div>
         ))}
         
-        {/* Calendar days */}
         {days.map((date, index) => {
           const dayData = getDayData(date);
           const indicator = getDayIndicator(dayData);
@@ -168,10 +156,12 @@ export default function TodoCalendarWidget() {
           return (
             <div
               key={index}
-              className={`relative h-8 flex items-center justify-center text-xs transition-colors ${
+              className={`relative h-7 flex items-center justify-center text-xs transition-all border border-transparent rounded-lg ${
                 date 
-                  ? `cursor-pointer hover:bg-gray-100 ${
-                      today ? 'bg-black text-white rounded' : 'text-gray-700'
+                  ? `cursor-pointer hover:bg-stone-50 ${
+                      today 
+                        ? 'bg-[#FEF5D1] border-stone-900 text-stone-950 font-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]' 
+                        : 'text-stone-800'
                     }`
                   : ''
               }`}
@@ -182,12 +172,12 @@ export default function TodoCalendarWidget() {
             >
               {date && (
                 <>
-                  <span className={today ? 'font-bold' : ''}>{date.getDate()}</span>
+                  <span className={today ? 'font-black' : ''}>{date.getDate()}</span>
                   {indicator && !today && (
-                    <div className={`absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full ${indicator}`} />
+                    <div className={`absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full border border-stone-950/40 ${indicator}`} />
                   )}
                   {indicator && today && (
-                    <div className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ${indicator} border border-white`} />
+                    <div className={`absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full border border-stone-950/40 ${indicator}`} />
                   )}
                 </>
               )}
@@ -197,28 +187,26 @@ export default function TodoCalendarWidget() {
       </div>
 
       {/* Legend */}
-      <div className="mt-3 pt-3 border-t border-gray-100">
-        <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-1" />
-              <span className="text-gray-600">Created</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full mr-1" />
-              <span className="text-gray-600">Due</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-1" />
-              <span className="text-gray-600">Done</span>
-            </div>
+      <div className="mt-3 pt-3 border-t border-stone-150">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-[9px] font-extrabold uppercase font-mono tracking-wider">
+          <div className="flex items-center">
+            <div className="w-2 h-2 bg-[#2C5EFA] border border-stone-950/40 rounded-full mr-1" />
+            <span className="text-stone-550">Created</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-2 h-2 bg-[#F8C537] border border-stone-950/40 rounded-full mr-1" />
+            <span className="text-stone-550">Due</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-2 h-2 bg-[#2ECC71] border border-stone-950/40 rounded-full mr-1" />
+            <span className="text-stone-550">Done</span>
           </div>
         </div>
       </div>
 
       {loading && (
-        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-xl">
-          <div className="w-4 h-4 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
+        <div className="absolute inset-0 bg-[#FAF9F6]/80 flex items-center justify-center rounded-2xl z-20">
+          <FiLoader className="w-4.5 h-4.5 text-stone-950 animate-spin" />
         </div>
       )}
     </div>
