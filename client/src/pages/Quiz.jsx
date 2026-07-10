@@ -184,7 +184,7 @@ export default function Quiz() {
                               ? 'bg-[#F8C537] text-stone-950 font-black'
                               : isAnswered
                               ? 'bg-[#A9C5A0] text-stone-900 border-stone-900'
-                              : 'bg-white text-stone-705'
+                              : 'bg-white text-stone-900'
                           }`}
                         >
                           {idx + 1}
@@ -197,11 +197,11 @@ export default function Quiz() {
                   <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-stone-150">
                     <div className="bg-[#EAF5E5] border border-stone-200 rounded-xl p-2 text-center">
                       <div className="text-sm font-bold text-stone-900">{answeredCount}</div>
-                      <div className="text-[9px] font-mono text-stone-605 uppercase">Done</div>
+                      <div className="text-[9px] font-mono text-stone-950 font-bold uppercase">Done</div>
                     </div>
                     <div className="bg-stone-50 border border-stone-200 rounded-xl p-2 text-center">
                       <div className="text-sm font-bold text-stone-900">{quiz.length - answeredCount}</div>
-                      <div className="text-[9px] font-mono text-stone-605 uppercase">Left</div>
+                      <div className="text-[9px] font-mono text-stone-950 font-bold uppercase">Left</div>
                     </div>
                   </div>
                 </div>
@@ -248,7 +248,7 @@ export default function Quiz() {
                   </button>
 
                   <div className="flex items-center space-x-3">
-                    <span className="text-[10px] text-stone-550 bg-stone-50 border border-stone-200 px-3 py-1.5 rounded-lg font-mono">
+                    <span className="text-[10px] text-stone-900 bg-stone-50 border border-stone-200 px-3 py-1.5 rounded-lg font-mono font-bold">
                       {currentQuestion + 1} OF {quiz.length}
                     </span>
                     

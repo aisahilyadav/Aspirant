@@ -114,15 +114,15 @@ export default function PreQuiz() {
                 currentStep === 1
                   ? 'text-stone-950'
                   : pdfData
-                  ? 'text-[#28A745]'
-                  : 'text-stone-450'
+                  ? 'text-[#1e6128]'
+                  : 'text-stone-600'
               }`}>
                 Upload PDF
               </span>
             </div>
 
             {/* Arrow */}
-            <FiArrowRight className={`w-5 h-5 ${pdfData ? 'text-[#28A745]' : 'text-stone-305'}`} />
+            <FiArrowRight className={`w-5 h-5 ${pdfData ? 'text-[#1e6128]' : 'text-stone-400'}`} />
 
             {/* Step 2 */}
             <div className="flex items-center">
@@ -134,7 +134,7 @@ export default function PreQuiz() {
                     ? 'bg-[#F8C537] text-stone-950'
                     : pdfData
                     ? 'bg-white text-stone-600'
-                    : 'bg-stone-200 text-stone-400 cursor-not-allowed border-stone-300'
+                    : 'bg-stone-200 text-stone-500 cursor-not-allowed border-stone-300'
                 }`}
               >
                 2
@@ -142,7 +142,7 @@ export default function PreQuiz() {
               <span className={`ml-3 text-xs uppercase tracking-widest font-extrabold font-mono ${
                 currentStep === 2
                   ? 'text-stone-950'
-                  : 'text-stone-450'
+                  : 'text-stone-600'
               }`}>
                 Configure Quiz
               </span>
@@ -166,7 +166,7 @@ export default function PreQuiz() {
                   </div>
                   <div>
                     <h3 className="text-lg font-serif-cormorant font-bold text-stone-950">Select Document</h3>
-                    <p className="text-xs text-stone-500">Pick a PDF to feed the recall generator</p>
+                    <p className="text-xs text-stone-750 font-bold font-serif-cormorant">Pick a PDF to feed the recall generator</p>
                   </div>
                 </div>
                 
@@ -182,7 +182,7 @@ export default function PreQuiz() {
                           <p className="text-xs font-bold text-stone-900 uppercase tracking-wide">
                             PDF Uploaded Successfully!
                           </p>
-                          <p className="text-[10px] text-stone-605">
+                          <p className="text-[10px] text-stone-850 font-bold">
                             Outline parsed and cached. Ready to run generative prompts.
                           </p>
                         </div>
