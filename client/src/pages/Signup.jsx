@@ -1,8 +1,8 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../store/auth";
 import GoogleLoginComponent from '../components/GoogleLogin';
+import { FiMail, FiLock, FiUser, FiLoader } from 'react-icons/fi';
 
 const Signup = () => {
   const [user, setUser] = useState({
@@ -57,127 +57,167 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8 animate-fade-in-up">
-          <h1 className="text-3xl font-bold text-black mb-2">Join ASPIRANT</h1>
-          <p className="text-gray-600">Create your account and start learning</p>
-        </div>
+    <div className="min-h-screen bg-[#FAF9F6] flex items-center justify-center p-6 relative overflow-hidden select-none">
+      
+      {/* Background Subtle Grid Pattern */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
 
-        {/* Main Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 space-y-6 animate-slide-up">
-          
-          {/* Google Login */}
-          <div className="space-y-4">
-            <GoogleLoginComponent />
-            
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-200" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-4 text-gray-500 font-medium">Or continue with email</span>
-              </div>
+      <div className="max-w-5xl w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        {/* Left Side: Evening Study Room illustration (6 cols) */}
+        <div className="lg:col-span-6 hidden lg:flex justify-center">
+          <div 
+            className="relative w-full max-w-sm aspect-square bg-white border border-stone-200 rounded-3xl p-3 shadow-md hover:scale-[1.01] transition-transform duration-500"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
+            <img 
+              src="/lofi_study_night.png" 
+              alt="Evening Study Room" 
+              className="w-full h-full object-cover rounded-2xl border border-stone-150"
+            />
+            {/* Overlay tag */}
+            <div className="absolute -bottom-4 -left-2 bg-[#D9866B] text-stone-900 border border-stone-400 font-handwritten text-xs py-1.5 px-3 rounded-xl rotate-[-3deg] shadow-sm">
+              [ setup study desk ]
             </div>
           </div>
+        </div>
 
-          {/* Regular Email Signup */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <label htmlFor="username" className="block text-sm font-semibold text-gray-700">
-                Username
-              </label>
-              <input
-                type="text"
-                name="username"
-                placeholder="Enter your username"
-                id="username"
-                required
-                autoComplete="username"
-                value={user.username}
-                onChange={handleInput}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                id="email"
-                required
-                autoComplete="email"
-                value={user.email}
-                onChange={handleInput}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Create a strong password"
-                id="password"
-                required
-                autoComplete="new-password"
-                value={user.password}
-                onChange={handleInput}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-3 px-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Creating Account...
-                </div>
-              ) : (
-                "Create Account"
-              )}
-            </button>
-          </form>
+        {/* Right Side: Form Container (6 cols) */}
+        <div className="lg:col-span-6 space-y-8 text-left">
           
-          <div className="text-center pt-4 border-t border-gray-100">
-            <p className="text-gray-600">
-              Already have an account?{' '}
-              <NavLink 
-                to="/login" 
-                className="text-black font-semibold hover:text-gray-700 transition-colors duration-200 underline-offset-4 hover:underline"
-              >
-                Sign in
-              </NavLink>
+          <div className="space-y-3">
+            <span className="font-handwritten text-lg text-stone-500 block rotate-[1deg]">
+              [ register your journal ]
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-serif-cormorant font-bold text-stone-900 tracking-tight leading-none">
+              Join Aspirant.
+            </h1>
+            <p className="text-xs sm:text-sm text-stone-605 leading-relaxed font-sans-inter">
+              Create an account to start cataloging study roadmaps, custom RAG indexes, and flashcard recall scores.
             </p>
           </div>
+
+          {/* Form Card */}
+          <div 
+            className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6"
+            style={{ filter: 'url(#handdrawn)' }}
+          >
+            {/* Google Authentication */}
+            <div className="space-y-4">
+              <GoogleLoginComponent />
+              
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-stone-200" />
+                </div>
+                <div className="relative flex justify-center text-[10px] uppercase tracking-widest font-bold">
+                  <span className="bg-white px-4 text-stone-450 font-sans-inter">Or use email</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Email form */}
+            <form onSubmit={handleSubmit} className="space-y-4 font-sans-inter">
+              
+              {/* Username */}
+              <div className="space-y-1">
+                <label htmlFor="username" className="text-[10px] font-extrabold text-stone-500 uppercase tracking-widest block">
+                  Username
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter your username"
+                    id="username"
+                    required
+                    autoComplete="username"
+                    value={user.username}
+                    onChange={handleInput}
+                    className="w-full bg-stone-50/40 border border-stone-250 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant text-stone-805"
+                  />
+                  <FiUser className="absolute left-3.5 top-3.5 text-stone-400 w-4 h-4" />
+                </div>
+              </div>
+
+              {/* Email Address */}
+              <div className="space-y-1">
+                <label htmlFor="email" className="text-[10px] font-extrabold text-stone-500 uppercase tracking-widest block">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="student@university.edu"
+                    id="email"
+                    required
+                    autoComplete="email"
+                    value={user.email}
+                    onChange={handleInput}
+                    className="w-full bg-stone-50/40 border border-stone-250 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant text-stone-805"
+                  />
+                  <FiMail className="absolute left-3.5 top-3.5 text-stone-400 w-4 h-4" />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className="space-y-1">
+                <label htmlFor="password" className="text-[10px] font-extrabold text-stone-500 uppercase tracking-widest block">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Create password"
+                    id="password"
+                    required
+                    autoComplete="new-password"
+                    value={user.password}
+                    onChange={handleInput}
+                    className="w-full bg-stone-50/40 border border-stone-250 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant text-stone-850"
+                  />
+                  <FiLock className="absolute left-3.5 top-3.5 text-stone-400 w-4 h-4" />
+                </div>
+              </div>
+
+              {/* Submit CTA */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-3.5 bg-stone-850 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl hover:bg-stone-950 transition-colors flex items-center justify-center shadow-sm"
+              >
+                {isLoading ? (
+                  <>
+                    <FiLoader className="animate-spin mr-2 w-4 h-4" />
+                    <span>Creating Account...</span>
+                  </>
+                ) : (
+                  <span>Create Account</span>
+                )}
+              </button>
+
+            </form>
+
+            <div className="text-center pt-4 border-t border-stone-150">
+              <p className="text-xs text-stone-605">
+                Already have an account?{' '}
+                <NavLink 
+                  to="/login" 
+                  className="text-stone-900 font-extrabold uppercase tracking-wider hover:underline"
+                >
+                  Sign in
+                </NavLink>
+              </p>
+            </div>
+
+          </div>
+
         </div>
 
-        {/* Footer */}
-        <div className="text-center mt-8 animate-fade-in-up animation-delay-300">
-          <p className="text-sm text-gray-500">
-            By creating an account, you agree to our{' '}
-            <a href="#" className="text-gray-700 hover:text-black transition-colors duration-200">
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href="#" className="text-gray-700 hover:text-black transition-colors duration-200">
-              Privacy Policy
-            </a>
-          </p>
-        </div>
       </div>
+
     </div>
   );
 };
