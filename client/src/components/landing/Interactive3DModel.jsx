@@ -61,9 +61,9 @@ export default function Interactive3DModel() {
     const particles = [];
     for (let i = 0; i < 20; i++) {
       particles.push({
-        x: (Math.random() - 0.5) * 300,
-        y: (Math.random() - 0.5) * 300,
-        z: (Math.random() - 0.5) * 300,
+        x: (Math.random() - 0.5) * 350,
+        y: (Math.random() - 0.5) * 350,
+        z: (Math.random() - 0.5) * 350,
         size: Math.random() * 1.5 + 1,
         speed: Math.random() * 0.01 + 0.002,
         angle: Math.random() * Math.PI * 2
@@ -92,8 +92,8 @@ export default function Interactive3DModel() {
       let minDist = Infinity;
 
       // Scan page mesh bounding coordinates to locate closest projection
-      for (let px = -55; px <= 55; px += 2) {
-        for (let pz = -42; pz <= 42; pz += 2) {
+      for (let px = -80; px <= 80; px += 2.5) {
+        for (let pz = -60; pz <= 60; pz += 2.5) {
           const s = projectPoint(px, pz);
           const dist = Math.hypot(s.x - mx, s.y - my);
           if (dist < minDist) {
@@ -165,15 +165,15 @@ export default function Interactive3DModel() {
         ctx.fill();
       });
 
-      // --- 3D SPIRAL NOTEBOOK ASSEMBLY ---
+      // --- 3D SPIRAL NOTEBOOK ASSEMBLY (SCALED UP BY ~45%) ---
 
       // 1. Back Cover Shadow Layer (tilted card board)
       const coverY = pageY + 6;
       const coverPts = [
-        { x: -58, y: coverY, z: -46 },
-        { x: 58, y: coverY, z: -46 },
-        { x: 58, y: coverY, z: 46 },
-        { x: -58, y: coverY, z: 46 }
+        { x: -84, y: coverY, z: -64 },
+        { x: 84, y: coverY, z: -64 },
+        { x: 84, y: coverY, z: 64 },
+        { x: -84, y: coverY, z: 64 }
       ];
 
       ctx.beginPath();
@@ -193,10 +193,10 @@ export default function Interactive3DModel() {
       // 2. Paper Stack Layers (to represent thickness)
       for (let stackY = pageY + 4; stackY >= pageY; stackY -= 2) {
         const stackPts = [
-          { x: -55, y: stackY, z: -43 },
-          { x: 55, y: stackY, z: -43 },
-          { x: 55, y: stackY, z: 43 },
-          { x: -55, y: stackY, z: 43 }
+          { x: -80, y: stackY, z: -60 },
+          { x: 80, y: stackY, z: -60 },
+          { x: 80, y: stackY, z: 60 },
+          { x: -80, y: stackY, z: 60 }
         ];
 
         ctx.beginPath();
@@ -215,14 +215,14 @@ export default function Interactive3DModel() {
       }
 
       // 3. Middle binder seam line
-      draw3DLine({ x: 0, y: pageY - 0.5, z: -43 }, { x: 0, y: pageY - 0.5, z: 43 }, 'rgba(28, 25, 23, 0.25)', 1.5);
+      draw3DLine({ x: 0, y: pageY - 0.5, z: -60 }, { x: 0, y: pageY - 0.5, z: 60 }, 'rgba(28, 25, 23, 0.25)', 1.5);
 
       // 4. Notebook Spiral Binder Rings
-      for (let zRing = -35; zRing <= 35; zRing += 10) {
+      for (let zRing = -50; zRing <= 50; zRing += 10) {
         const ringPts = [];
         // Draw circular rings looping from left page to right page
         for (let a = 0; a <= Math.PI; a += 0.3) {
-          const rad = 6;
+          const rad = 8;
           const yOffset = Math.sin(a) * -rad;
           const xOffset = Math.cos(a) * rad;
           ringPts.push({ x: xOffset, y: pageY - 1 + yOffset, z: zRing });
@@ -234,7 +234,7 @@ export default function Interactive3DModel() {
           const s = project(pt);
           ctx.lineTo(s.x, s.y);
         });
-        ctx.strokeStyle = '#F26430'; // orange spiral binder rings!
+        ctx.strokeStyle = '#F26430'; // orange spiral binder rings
         ctx.lineWidth = 2;
         ctx.stroke();
       }
@@ -273,10 +273,10 @@ export default function Interactive3DModel() {
       } else {
         // Ambient pen hover float state
         const floatY = Math.sin(time * 0.015) * 5;
-        penTip = { x: 30, y: pageY - 20 + floatY, z: 20 };
+        penTip = { x: 45, y: pageY - 20 + floatY, z: 30 };
       }
 
-      // Pen shaft coordinate: tilts upward and back 35px
+      // Pen shaft coordinate
       const penShaft = {
         x: penTip.x + 12,
         y: penTip.y - (isPenWriting ? 28 : 34),
@@ -354,8 +354,8 @@ export default function Interactive3DModel() {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', resize);
-      canvas.removeEventListener('mousedown', handleMouseDown);
-      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.addEventListener('mousedown', handleMouseDown);
+      canvas.addEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [mode, activeColor, isHovered]);
@@ -363,14 +363,14 @@ export default function Interactive3DModel() {
   return (
     <div className="flex flex-col w-full h-full">
       {/* 3D Journal Toolbar controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-800 pb-3 mb-2 px-1 text-xs select-none">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-850 pb-3 mb-2 px-1 text-xs select-none">
         
         {/* Toggle Mode: Write vs Orbit */}
         <div className="flex border-2 border-stone-950 rounded-lg overflow-hidden text-[9px] font-mono font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
           <button
             onClick={() => setMode('draw')}
             className={`px-3 py-1.5 flex items-center gap-1.5 transition-colors uppercase ${
-              mode === 'draw' ? 'bg-[#F26430] text-white' : 'bg-stone-800 text-stone-400'
+              mode === 'draw' ? 'bg-[#F26430] text-white' : 'bg-stone-805 text-stone-400'
             }`}
           >
             <FiEdit3 className="w-3.5 h-3.5" />
@@ -379,7 +379,7 @@ export default function Interactive3DModel() {
           <button
             onClick={() => setMode('rotate')}
             className={`px-3 py-1.5 flex items-center gap-1.5 transition-colors uppercase border-l-2 border-stone-950 ${
-              mode === 'rotate' ? 'bg-[#F8C537] text-stone-950' : 'bg-stone-800 text-stone-400'
+              mode === 'rotate' ? 'bg-[#F8C537] text-stone-950' : 'bg-stone-805 text-stone-400'
             }`}
           >
             <FiMove className="w-3.5 h-3.5" />
@@ -390,7 +390,7 @@ export default function Interactive3DModel() {
         {/* Ink Colors & Clear Action */}
         <div className="flex items-center gap-2">
           {mode === 'draw' && (
-            <div className="flex items-center gap-1 bg-stone-800 border-2 border-stone-950 rounded-lg p-1">
+            <div className="flex items-center gap-1 bg-stone-850 border border-stone-800 rounded-lg p-1">
               {colors.map(c => (
                 <button
                   key={c.value}
