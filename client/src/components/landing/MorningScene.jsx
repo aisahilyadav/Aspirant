@@ -81,7 +81,7 @@ export default function MorningScene({ onCtaClick }) {
 
           {/* Right Side: Hero 3D Interactive Model (5 columns) */}
           <div className="lg:col-span-5 flex justify-center">
-            <div className="w-full max-w-md bg-white border-2 border-stone-900 rounded-3xl p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all duration-300">
+            <div className="w-full max-w-md bg-stone-900 border-2 border-stone-900 rounded-3xl p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all duration-300">
               <Interactive3DModel />
             </div>
           </div>
