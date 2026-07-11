@@ -192,7 +192,7 @@ def answer_question(question, file_hash):
 
     print("[answer_question] Initializing LLM...")
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         temperature=0.3
         )
 
@@ -286,7 +286,7 @@ Context:
 
     # LLM
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         temperature=0.3
         )
 
@@ -376,7 +376,7 @@ Summary:
 
     # LLM
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         temperature=0.3
     )
 
@@ -403,8 +403,8 @@ async def recommend(req: RecommendRequest):
     prompt = f"Provide a brief, motivating study recommendation and practical learning tip (2-3 sentences max) for a student studying the topic: '{req.topic}'."
     
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
-        temperature=0.7
+        model="gemini-2.5-flash",
+        temperature=0.3
     )
     
     print("[recommend] Generating recommendation...")

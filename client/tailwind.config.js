@@ -17,10 +17,14 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-         sans: ['Inter', 'system-ui', 'sans-serif'], // Option 1
-         nav: ['manrope', 'sans-serif'], // Option 2
+         sans: ['Inter', 'system-ui', 'sans-serif'],
+         nav: ['manrope', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
-        heading: ['Space Grotesk', 'sans-serif'],
+        heading: ['Inter', 'sans-serif'],
+        serif: ['Inter', 'sans-serif'],
+        'serif-book': ['Inter', 'sans-serif'],
+        'serif-cormorant': ['Inter', 'sans-serif'],
+        handwritten: ['Inter', 'sans-serif'],
       },
       fontSize: {
         '8xl': '6rem',
