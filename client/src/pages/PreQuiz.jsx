@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { uploadPdf, generateQuiz } from '../api/quizApi';
 import UploadPdfForm from '../components/UploadPdfForm';
 import QuizConfigForm from '../components/QuizConfigForm';
-import { FiUpload, FiFileText, FiArrowRight, FiCheck, FiArrowLeft, FiLoader } from 'react-icons/fi';
+import { FiUpload, FiArrowRight, FiCheck, FiLoader } from 'react-icons/fi';
 
 export default function PreQuiz() {
   const [pdfData, setPdfData] = useState(null);
@@ -62,87 +62,81 @@ export default function PreQuiz() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none text-left">
+    <div className="min-h-screen bg-[#050408] text-stone-200 pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none text-left">
       
-      {/* Background Subtle Grid Pattern */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
+      {/* Background Glowing Blobs */}
+      <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-purple-500/10 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[90px] pointer-events-none" />
 
-      {/* Handdrawn filter SVG */}
-      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
-        <defs>
-          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
+      {/* Grid Pattern overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 [background-size:40px_40px] [background-image:linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)]" />
 
       <div className="max-w-4xl mx-auto relative z-10 space-y-8">
         
         {/* Header Section */}
         <div className="text-center space-y-3 pb-4">
-          <span className="text-[10px] font-mono font-bold tracking-widest text-stone-500 uppercase block rotate-[-1deg]">
-            [ active recall generator ]
+          <span className="text-[10px] font-mono font-black tracking-widest text-[#F8C537] uppercase bg-stone-900 border-2 border-stone-800 px-3.5 py-1.5 rounded-lg inline-block">
+            [ Active Recall Generator ]
           </span>
-          <h1 className="text-4xl sm:text-5xl font-sans font-black text-stone-950 tracking-tight leading-none">
-            Create AI Study Quiz
+          <h1 className="text-4xl sm:text-5xl font-sans font-black text-white tracking-tight leading-none uppercase">
+            Create AI <span className="text-[#c084fc]">Study Quiz</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-605 max-w-xl mx-auto">
+          <p className="text-xs sm:text-sm text-stone-400 font-bold max-w-xl mx-auto leading-relaxed mt-2">
             Upload your lecture notes, textbook chapters, or reference PDFs and watch AI output challenging recall quizzes.
           </p>
         </div>
 
         {/* Neo-brutalist Progress Steps */}
-        <div className="flex items-center justify-center py-4">
+        <div className="flex items-center justify-center py-4 select-none">
           <div className="flex items-center space-x-6">
             
             {/* Step 1 */}
             <div className="flex items-center">
               <button
                 onClick={() => goToStep(1)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none text-xs font-bold ${
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 border-2 border-stone-950 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.15)] active:translate-x-[1px] active:translate-y-[1px] text-xs font-black ${
                   currentStep === 1
                     ? 'bg-[#F8C537] text-stone-950'
                     : pdfData
-                    ? 'bg-[#2ECC71] text-stone-950'
-                    : 'bg-white text-stone-600'
+                    ? 'bg-[#22c55e] text-stone-950'
+                    : 'bg-stone-900 text-stone-400'
                 }`}
               >
-                {pdfData ? <FiCheck className="w-5 h-5" /> : '1'}
+                {pdfData ? <FiCheck className="w-5 h-5 stroke-[3]" /> : '1'}
               </button>
-              <span className={`ml-3 text-xs uppercase tracking-widest font-extrabold font-mono ${
+              <span className={`ml-3 text-xs uppercase tracking-widest font-black font-mono ${
                 currentStep === 1
-                  ? 'text-stone-950'
+                  ? 'text-white'
                   : pdfData
-                  ? 'text-[#1e6128]'
-                  : 'text-stone-600'
+                  ? 'text-[#22c55e]'
+                  : 'text-stone-500'
               }`}>
                 Upload PDF
               </span>
             </div>
 
             {/* Arrow */}
-            <FiArrowRight className={`w-5 h-5 ${pdfData ? 'text-[#1e6128]' : 'text-stone-400'}`} />
+            <FiArrowRight className={`w-5 h-5 ${pdfData ? 'text-[#22c55e]' : 'text-stone-600'}`} />
 
             {/* Step 2 */}
             <div className="flex items-center">
               <button
                 onClick={() => goToStep(2)}
                 disabled={!pdfData}
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none text-xs font-bold ${
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 border-2 border-stone-950 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.15)] active:translate-x-[1px] active:translate-y-[1px] text-xs font-black ${
                   currentStep === 2
                     ? 'bg-[#F8C537] text-stone-950'
                     : pdfData
-                    ? 'bg-white text-stone-600'
-                    : 'bg-stone-200 text-stone-500 cursor-not-allowed border-stone-300'
+                    ? 'bg-stone-900 text-stone-400'
+                    : 'bg-stone-950 text-stone-600 cursor-not-allowed border-stone-850'
                 }`}
               >
                 2
               </button>
-              <span className={`ml-3 text-xs uppercase tracking-widest font-extrabold font-mono ${
+              <span className={`ml-3 text-xs uppercase tracking-widest font-black font-mono ${
                 currentStep === 2
-                  ? 'text-stone-950'
-                  : 'text-stone-600'
+                  ? 'text-white'
+                  : 'text-stone-500'
               }`}>
                 Configure Quiz
               </span>
@@ -156,17 +150,14 @@ export default function PreQuiz() {
           {/* Step 1: Upload PDF */}
           {currentStep === 1 && (
             <div className="space-y-6 animate-fade-in">
-              <div 
-                className="bg-white rounded-3xl border border-stone-200 p-8 shadow-sm"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
+              <div className="bg-[#FAF9F6] text-stone-950 rounded-3xl border-3 border-stone-900 p-8 shadow-[6px_6px_0px_0px_#60a5fa]">
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-stone-50 border border-stone-200 rounded-2xl flex items-center justify-center mr-4">
-                    <FiUpload className="w-6 h-6 text-stone-850" />
+                  <div className="w-12 h-12 bg-white border-2 border-stone-900 rounded-2xl flex items-center justify-center mr-4 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]">
+                    <FiUpload className="w-6 h-6 text-stone-950" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-sans font-bold text-stone-950">Select Document</h3>
-                    <p className="text-xs text-stone-750 font-bold font-sans">Pick a PDF to feed the recall generator</p>
+                    <h3 className="text-lg font-sans font-black text-stone-950 uppercase tracking-tight leading-none">Select Document</h3>
+                    <p className="text-xs text-stone-600 font-bold font-sans mt-1">Pick a PDF to feed the recall generator</p>
                   </div>
                 </div>
                 
@@ -174,32 +165,32 @@ export default function PreQuiz() {
                 
                 {/* PDF Upload Success */}
                 {pdfData && !loading && (
-                  <div className="mt-6 p-4 bg-[#EAF5E5] border-2 border-stone-900 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                  <div className="mt-6 p-4 bg-[#d3ffd0] border-2 border-stone-900 rounded-2xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <div className="flex items-center">
-                        <FiCheck className="w-5 h-5 text-green-700 mr-3 flex-shrink-0" />
+                        <FiCheck className="w-5 h-5 text-green-800 mr-3 flex-shrink-0 stroke-[3]" />
                         <div>
-                          <p className="text-xs font-bold text-stone-900 uppercase tracking-wide">
+                          <p className="text-xs font-black text-stone-950 uppercase tracking-wide">
                             PDF Uploaded Successfully!
                           </p>
-                          <p className="text-[10px] text-stone-850 font-bold">
+                          <p className="text-[10px] text-stone-800 font-bold">
                             Outline parsed and cached. Ready to run generative prompts.
                           </p>
                         </div>
                       </div>
-                      <div className="flex space-x-2 w-full sm:w-auto">
+                      <div className="flex space-x-2 w-full sm:w-auto font-mono text-[10px] font-black uppercase tracking-wider">
                         <button
                           onClick={resetUpload}
-                          className="flex-1 sm:flex-none text-xs bg-white border-2 border-stone-900 text-stone-900 px-3 py-1.5 rounded-xl hover:translate-y-[-1px] active:translate-y-[1px] transition-all font-bold uppercase tracking-wider"
+                          className="flex-1 sm:flex-none bg-white border-2 border-stone-900 text-stone-950 px-3 py-1.5 rounded-xl hover:translate-y-[-1px] active:translate-y-[1px] transition-all"
                         >
                           Change File
                         </button>
                         <button
                           onClick={() => setCurrentStep(2)}
-                          className="flex-1 sm:flex-none text-xs bg-stone-900 text-white border-2 border-stone-900 px-4 py-1.5 rounded-xl hover:translate-y-[-1px] active:translate-y-[1px] transition-all font-bold uppercase tracking-wider flex items-center justify-center"
+                          className="flex-1 sm:flex-none bg-stone-900 text-white border-2 border-stone-950 px-4 py-1.5 rounded-xl hover:translate-y-[-1px] active:translate-y-[1px] transition-all flex items-center justify-center"
                         >
                           Next
-                          <FiArrowRight className="w-4 h-4 ml-1" />
+                          <FiArrowRight className="w-4 h-4 ml-1 stroke-[3]" />
                         </button>
                       </div>
                     </div>
@@ -208,14 +199,14 @@ export default function PreQuiz() {
 
                 {/* Loading State */}
                 {loading && (
-                  <div className="mt-6 p-6 bg-stone-50 border-2 border-dashed border-stone-400 rounded-2xl">
+                  <div className="mt-6 p-6 bg-white border-2 border-dashed border-stone-400 rounded-2xl">
                     <div className="flex items-center justify-center space-x-4">
-                      <FiLoader className="animate-spin text-stone-850 w-6 h-6" />
+                      <FiLoader className="animate-spin text-stone-950 w-6 h-6" />
                       <div>
-                        <p className="text-xs font-bold text-stone-900 uppercase tracking-wide">
+                        <p className="text-xs font-black text-stone-950 uppercase tracking-wide">
                           Processing your PDF...
                         </p>
-                        <p className="text-[10px] text-stone-550 mt-0.5">
+                        <p className="text-[10px] text-stone-500 font-bold mt-0.5">
                           Parsing file stream and indexing text embeddings.
                         </p>
                       </div>
@@ -224,12 +215,9 @@ export default function PreQuiz() {
                 )}
               </div>
 
-              <div 
-                className="bg-[#FEF5D1] border-2 border-stone-900 rounded-3xl p-6 shadow-[5px_5px_0px_0px_rgba(28,25,23,1)]"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
-                <h4 className="font-sans font-bold text-stone-950 text-base mb-3">Study Tips</h4>
-                <ul className="space-y-2 text-xs text-stone-850 font-semibold font-sans">
+              <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-6 shadow-[6px_6px_0px_0px_#FFE066]">
+                <h4 className="font-mono font-black text-stone-950 text-base mb-3 uppercase tracking-wider">Study Tips</h4>
+                <ul className="space-y-2 text-xs text-stone-800 font-bold font-sans">
                   <li className="flex items-start">
                     <span className="w-1.5 h-1.5 bg-stone-900 rounded-full mt-1.5 mr-3 flex-shrink-0"></span>
                     <span>Use scanned books or academic papers with clear text formatting for accurate parsing.</span>
@@ -248,106 +236,17 @@ export default function PreQuiz() {
           )}
 
           {/* Step 2: Configure Quiz */}
-          {currentStep === 2 && pdfData && (
-            <div className="space-y-6 animate-fade-in">
-              {/* Back Button */}
-              <div className="flex items-center">
-                <button
-                  onClick={() => setCurrentStep(1)}
-                  className="flex items-center text-xs font-extrabold uppercase tracking-widest text-stone-605 hover:text-stone-900 transition-colors group"
-                >
-                  <FiArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-0.5 transition-transform" />
-                  Back to Upload
-                </button>
-              </div>
-
-              <div 
-                className="bg-white rounded-3xl border border-stone-200 p-8 shadow-sm"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
-                <div className="flex items-center mb-6 border-b border-stone-150 pb-4">
-                  <div className="w-12 h-12 bg-stone-50 border border-stone-200 rounded-2xl flex items-center justify-center mr-4">
-                    <FiFileText className="w-6 h-6 text-stone-850" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-sans font-bold text-stone-950">Quiz Config</h3>
-                    <p className="text-xs text-stone-600 font-medium font-sans">Pick parameters to compile questions</p>
-                  </div>
-                </div>
-                
-                {/* PDF Status */}
-                <div className="mb-6 p-3 bg-[#EAF5E5] border border-stone-250 rounded-xl flex items-center text-xs text-green-800 font-bold uppercase tracking-wide">
-                  <FiCheck className="w-4 h-4 text-green-700 mr-2" />
-                  <span>PDF indexed and ready</span>
-                </div>
-                
-                <QuizConfigForm onGenerate={handleGenerateQuiz} loading={loading} />
-              </div>
-
-              {/* What's Included Card: Dark notebook folder */}
-              <div 
-                className="bg-stone-900 text-stone-100 border-2 border-stone-950 rounded-3xl p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
-                <h4 className="font-bold text-xs uppercase tracking-widest mb-4 flex items-center">
-                  <FiCheck className="w-4.5 h-4.5 mr-2 text-[#2ECC71]" />
-                  Generative Features
-                </h4>
-                <ul className="space-y-3 text-xs text-stone-300 font-medium">
-                  <li className="flex items-center">
-                    <span className="w-1.5 h-1.5 bg-[#F8C537] rounded-full mr-3"></span>
-                    <span>Outputs 3 to 20 custom questions from your specific pages.</span>
-                  </li>
-                  <li className="flex items-center">
-                    <span className="w-1.5 h-1.5 bg-[#F8C537] rounded-full mr-3"></span>
-                    <span>Appends instant scorecards and detailed AI explanations for options.</span>
-                  </li>
-                  <li className="flex items-center">
-                    <span className="w-1.5 h-1.5 bg-[#F8C537] rounded-full mr-3"></span>
-                    <span>Caches questions locally so you can retry and index milestones.</span>
-                  </li>
-                </ul>
+          {currentStep === 2 && (
+            <div className="animate-fade-in">
+              <div className="bg-[#FAF9F6] text-stone-950 rounded-3xl border-3 border-stone-900 p-8 shadow-[6px_6px_0px_0px_#c084fc]">
+                <QuizConfigForm onSubmit={handleGenerateQuiz} loading={loading} />
               </div>
             </div>
           )}
+
         </div>
 
-        {/* Global Loading Overlay */}
-        {loading && currentStep === 2 && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 backdrop-blur-sm">
-            <div 
-              className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center border-2 border-stone-950 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
-              style={{ filter: 'url(#handdrawn)' }}
-            >
-              <div className="flex justify-center mb-4">
-                <FiLoader className="w-10 h-10 animate-spin text-stone-900" />
-              </div>
-              <h3 className="text-xl font-sans font-bold text-stone-950 mb-2">
-                Compiling Quiz...
-              </h3>
-              <p className="text-xs text-stone-850 font-medium leading-relaxed font-sans">
-                Gemini is parsing your PDF text stream and writing multiple-choice questions.
-              </p>
-            </div>
-          </div>
-        )}
       </div>
-
-      <style>{`
-        .animate-fade-in {
-          animation: fadeIn 0.25s ease-out forwards;
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(6px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }
