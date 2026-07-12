@@ -17,25 +17,25 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
   const getPriorityStyles = (priority) => {
     switch (priority) {
       case 'high': 
-        return 'bg-[#FF6B6B] text-stone-950 border-2 border-stone-900 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
+        return 'bg-[#FF6B6B] text-stone-950 border-2 border-stone-950 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
       case 'medium': 
-        return 'bg-[#F8C537] text-stone-950 border-2 border-stone-900 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
+        return 'bg-[#F8C537] text-stone-950 border-2 border-stone-950 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
       case 'low': 
-        return 'bg-[#2ECC71] text-stone-950 border-2 border-stone-900 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
+        return 'bg-[#22c55e] text-stone-950 border-2 border-stone-950 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
       default: 
-        return 'bg-stone-100 text-stone-800 border-2 border-stone-900 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
+        return 'bg-stone-100 text-stone-850 border-2 border-stone-950 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
     }
   };
 
   const getStatusStyles = (status) => {
     switch (status) {
       case 'completed': 
-        return 'bg-[#EAF5E5] text-green-800 border border-green-300';
+        return 'bg-[#d3ffd0] text-[#1e6128] border-2 border-stone-950 font-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
       case 'in-progress': 
-        return 'bg-[#E3F2FD] text-blue-800 border border-blue-300';
+        return 'bg-[#dbe4ff] text-blue-900 border-2 border-stone-950 font-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
       case 'not-started': 
       default: 
-        return 'bg-stone-100 text-stone-605 border border-stone-250';
+        return 'bg-white text-stone-605 border-2 border-stone-950 font-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]';
     }
   };
 
@@ -79,8 +79,7 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
 
   return (
     <div 
-      className="bg-white border-2 border-stone-900 rounded-3xl p-5 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(28,25,23,1)] transition-all flex flex-col justify-between text-stone-900"
-      style={{ filter: 'url(#handdrawn)' }}
+      className="bg-[#FAF9F6] border-3 border-stone-950 rounded-3xl p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col justify-between text-stone-950"
     >
       <div>
         {/* Header Title and Actions */}
@@ -91,21 +90,21 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
               className="mt-1 flex-shrink-0 transition-transform active:scale-90"
             >
               {todo.status === 'completed' ? (
-                <div className="w-5 h-5 bg-[#2ECC71] border-2 border-stone-900 rounded-md flex items-center justify-center">
+                <div className="w-5 h-5 bg-[#22c55e] border-2 border-stone-950 rounded-md flex items-center justify-center">
                   <FiCheck className="w-3.5 h-3.5 text-stone-950 stroke-[3]" />
                 </div>
               ) : (
-                <div className="w-5 h-5 bg-white border-2 border-stone-900 rounded-md hover:bg-stone-50" />
+                <div className="w-5 h-5 bg-white border-2 border-stone-950 rounded-md hover:bg-stone-50" />
               )}
             </button>
             <div className="text-left">
               <h3 className={`font-sans font-black text-base text-stone-950 ${
-                todo.status === 'completed' ? 'line-through text-stone-400' : ''
+                todo.status === 'completed' ? 'line-through text-stone-450' : ''
               }`}>
                 {todo.title}
               </h3>
               {todo.description && (
-                <p className="text-xs text-stone-700 mt-1.5 leading-relaxed font-sans font-medium">
+                <p className="text-xs text-stone-700 mt-1.5 leading-relaxed font-sans font-bold">
                   {todo.description}
                 </p>
               )}
@@ -115,14 +114,14 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
           <div className="flex items-center space-x-2 flex-shrink-0">
             <button
               onClick={() => onEdit(todo)}
-              className="p-1.5 text-stone-700 hover:text-stone-950 border border-transparent hover:border-stone-900 hover:bg-stone-50 rounded-lg transition-all"
+              className="p-1.5 text-stone-700 hover:text-stone-950 border-2 border-transparent hover:border-stone-950 hover:bg-white rounded-lg transition-all"
               title="Edit Task"
             >
               <FiEdit3 className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => onDelete(todo._id)}
-              className="p-1.5 text-stone-700 hover:text-red-600 border border-transparent hover:border-stone-900 hover:bg-red-50 rounded-lg transition-all"
+              className="p-1.5 text-stone-700 hover:text-[#FF6B6B] border-2 border-transparent hover:border-stone-950 hover:bg-[#FFD2D2] rounded-lg transition-all"
               title="Delete Task"
             >
               <FiTrash2 className="w-3.5 h-3.5" />
@@ -130,18 +129,18 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
           </div>
         </div>
 
-        {/* Detailed Feature: Interactive Subtasks Checklist */}
+        {/* Interactive Subtasks Checklist */}
         {totalSubtasks > 0 && (
-          <div className="mt-4 mb-4 border-t border-stone-200 pt-3 text-left">
-            <div className="flex items-center justify-between text-[10px] font-bold text-stone-850 uppercase tracking-wider mb-2 font-mono">
+          <div className="mt-4 mb-4 border-t-2 border-stone-200 pt-3 text-left">
+            <div className="flex items-center justify-between text-[9px] font-mono font-black text-stone-950 uppercase tracking-wider mb-2">
               <span>Subtasks Progress</span>
               <span>{completedSubtasks}/{totalSubtasks}</span>
             </div>
             
             {/* Subtasks Progress Bar */}
-            <div className="w-full bg-stone-100 border-2 border-stone-900 rounded-full h-2.5 overflow-hidden mb-3">
+            <div className="w-full bg-stone-200 border-2 border-stone-950 rounded-full h-3 overflow-hidden mb-3">
               <div
-                className="bg-[#2C5EFA] h-full transition-all duration-300"
+                className="bg-[#60a5fa] h-full transition-all duration-300"
                 style={{ width: `${(completedSubtasks / totalSubtasks) * 100}%` }}
               />
             </div>
@@ -154,7 +153,7 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
                 return (
                   <div 
                     key={subtaskId} 
-                    className="flex items-center space-x-2.5 py-1 px-2 hover:bg-stone-50 rounded-lg transition-colors cursor-pointer"
+                    className="flex items-center space-x-2.5 py-1 px-2 hover:bg-white border border-transparent hover:border-stone-200 rounded-lg transition-colors cursor-pointer"
                     onClick={() => handleSubtaskCheckboxClick(subtaskId, subtask.completed)}
                   >
                     <button
@@ -163,17 +162,17 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
                       className="flex-shrink-0 focus:outline-none"
                     >
                       {isToggling ? (
-                        <FiLoader className="w-4.5 h-4.5 text-stone-850 animate-spin" />
+                        <FiLoader className="w-4.5 h-4.5 text-stone-950 animate-spin" />
                       ) : subtask.completed ? (
-                        <div className="w-4 h-4 bg-[#2ECC71] border border-stone-900 rounded flex items-center justify-center">
+                        <div className="w-4 h-4 bg-[#22c55e] border border-stone-950 rounded flex items-center justify-center">
                           <FiCheck className="w-3 h-3 text-stone-950 stroke-[3]" />
                         </div>
                       ) : (
-                        <div className="w-4 h-4 bg-white border border-stone-900 rounded hover:bg-stone-100" />
+                        <div className="w-4 h-4 bg-white border border-stone-950 rounded hover:bg-stone-100" />
                       )}
                     </button>
-                    <span className={`text-xs font-sans font-medium ${
-                      subtask.completed ? 'line-through text-stone-400' : 'text-stone-800'
+                    <span className={`text-xs font-sans font-bold ${
+                      subtask.completed ? 'line-through text-stone-400' : 'text-stone-850'
                     }`}>
                       {subtask.title}
                     </span>
@@ -189,9 +188,9 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
       <div className="flex flex-wrap items-center justify-between mt-4 pt-3 border-t border-stone-200 gap-2">
         <div className="flex items-center space-x-2">
           {/* Category */}
-          <span className="text-xs font-sans font-bold flex items-center bg-stone-100/80 px-2 py-0.5 rounded-full border border-stone-250">
+          <span className="text-[10px] font-sans font-black flex items-center bg-white px-2 py-0.5 rounded-full border-2 border-stone-950">
             <span className="mr-1">{getCategoryIcon(todo.category)}</span>
-            <span className="text-stone-750 capitalize">{todo.category}</span>
+            <span className="text-stone-950 capitalize">{todo.category}</span>
           </span>
 
           {/* Priority */}
@@ -200,14 +199,14 @@ export default function TodoCard({ todo, onToggleStatus, onEdit, onDelete, onSub
           </span>
         </div>
 
-        <div className="flex items-center space-x-3 text-xs font-sans font-bold">
+        <div className="flex items-center space-x-3 text-[10px] font-sans font-black">
           {/* Due Date */}
           {todo.dueDate && (
             <span className={`flex items-center space-x-1 ${
-              isOverdue ? 'text-[#FF6B6B]' : 'text-stone-600'
+              isOverdue ? 'text-[#FF6B6B]' : 'text-stone-605'
             }`}>
               <FiCalendar className="w-3.5 h-3.5" />
-              <span>{formatDate(todo.dueDate)}</span>
+              <span className="font-mono">{formatDate(todo.dueDate)}</span>
             </span>
           )}
 

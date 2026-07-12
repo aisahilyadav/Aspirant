@@ -5,16 +5,15 @@ import {
   FiPlus, 
   FiCalendar, 
   FiClock, 
-  FiFlag, 
   FiCheckCircle,
-  FiCircle,
   FiX,
   FiEdit3,
   FiTrash2,
   FiLoader,
   FiBell,
   FiGrid,
-  FiList
+  FiList,
+  FiChevronRight as FiChevronRightIcon
 } from 'react-icons/fi';
 import { getCalendarTodos, createTodo, updateTodo, deleteTodo } from '../api/todoApi';
 import TodoForm from '../components/TodoForm';
@@ -48,7 +47,6 @@ export default function TodoCalendar() {
     }
   }, [selectedDate, calendarData, filterStatus, filterCategory]);
 
-  // Handle escape key
   useEffect(() => {
     const handleEscapeKey = (event) => {
       if (event.key === 'Escape') {
@@ -65,7 +63,6 @@ export default function TodoCalendar() {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
       
-      // Load range covering previous and next month buffer
       const startDate = new Date(year, month - 1, 20);
       const endDate = new Date(year, month + 2, 10);
       
@@ -143,7 +140,6 @@ export default function TodoCalendar() {
     setShowTodoDetails(false);
   };
 
-  // Helper for generating monthly grid days
   const getDaysInMonth = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -180,11 +176,10 @@ export default function TodoCalendar() {
     return days;
   };
 
-  // Helper for generating weekly view days
   const getDaysInWeek = () => {
     const startOfWeek = new Date(currentDate);
     const day = startOfWeek.getDay();
-    const diff = startOfWeek.getDate() - day; // Adjust to Sunday
+    const diff = startOfWeek.getDate() - day;
     startOfWeek.setDate(diff);
 
     const days = [];
@@ -280,6 +275,10 @@ export default function TodoCalendar() {
     }
   };
 
+  const handleTodoEdit = () => {
+    setShowForm(true);
+  };
+
   const handleUpdateTodo = async (todoData) => {
     try {
       await updateTodo(selectedTodo._id, todoData);
@@ -296,53 +295,47 @@ export default function TodoCalendar() {
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 pt-20 pb-8 px-4 sm:px-6 lg:px-8 font-sans relative overflow-x-hidden select-none">
+    <div className="min-h-screen bg-[#050408] text-stone-200 pt-20 pb-8 px-4 sm:px-6 lg:px-8 font-sans relative overflow-x-hidden select-none">
       
-      {/* Background ruling pattern */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
+      {/* Background Glowing Blobs */}
+      <div className="absolute top-[10%] left-[10%] w-[350px] h-[350px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[10%] w-[350px] h-[350px] bg-green-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* Handdrawn filter SVG */}
-      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
-        <defs>
-          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
+      {/* Grid Pattern overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 [background-size:40px_40px] [background-image:linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)]" />
 
       <div className="relative z-10 max-w-7xl mx-auto py-8 space-y-8">
         
         {/* Header Controls */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b-2 border-stone-900 pb-6 gap-4">
-          <div className="text-left">
-            <span className="text-[10px] font-mono font-bold tracking-widest text-stone-500 uppercase block rotate-[-1deg]">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b-2 border-stone-850 pb-6 gap-4">
+          <div className="text-left font-sans">
+            <span className="text-[9px] font-mono font-black tracking-widest text-[#F26430] uppercase block rotate-[-1deg]">
               [ calendar planner ]
             </span>
-            <h1 className="text-4xl font-sans font-black text-stone-950 tracking-tight leading-none mt-1">Calendar Agenda</h1>
-            <p className="text-xs text-stone-605 font-medium mt-1.5">Schedule tasks, set reminders, and log sessions</p>
+            <h1 className="text-4xl font-sans font-black text-white tracking-tight leading-none mt-1 uppercase">Calendar Agenda</h1>
+            <p className="text-xs text-stone-400 font-bold mt-1.5 leading-relaxed">Schedule tasks, set reminders, and log sessions</p>
           </div>
 
           {/* View Toggles & Filters */}
           <div className="flex flex-wrap items-center gap-3">
             {/* View Mode Toggle */}
-            <div className="flex border-2 border-stone-900 rounded-xl overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <div className="flex border-2 border-stone-950 rounded-xl overflow-hidden shadow-[2px_2px_0px_0px_rgba(255,255,255,0.1)]">
               <button
                 onClick={() => setViewMode('month')}
-                className={`px-3 py-1.5 text-xs font-bold uppercase transition-colors flex items-center space-x-1.5 ${
-                  viewMode === 'month' ? 'bg-[#F8C537] text-stone-950' : 'bg-white hover:bg-stone-50'
+                className={`px-3 py-1.5 text-xs font-black uppercase transition-colors flex items-center space-x-1.5 ${
+                  viewMode === 'month' ? 'bg-[#F8C537] text-stone-950' : 'bg-white text-stone-950 hover:bg-stone-50'
                 }`}
               >
-                <FiGrid className="w-3.5 h-3.5" />
+                <FiGrid className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Month</span>
               </button>
               <button
                 onClick={() => setViewMode('week')}
-                className={`px-3 py-1.5 text-xs font-bold uppercase border-l-2 border-stone-900 transition-colors flex items-center space-x-1.5 ${
-                  viewMode === 'week' ? 'bg-[#F8C537] text-stone-950' : 'bg-white hover:bg-stone-50'
+                className={`px-3 py-1.5 text-xs font-black uppercase border-l-2 border-stone-950 transition-colors flex items-center space-x-1.5 ${
+                  viewMode === 'week' ? 'bg-[#F8C537] text-stone-950' : 'bg-white text-stone-950 hover:bg-stone-50'
                 }`}
               >
-                <FiList className="w-3.5 h-3.5" />
+                <FiList className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Week</span>
               </button>
             </div>
@@ -351,7 +344,7 @@ export default function TodoCalendar() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="bg-white border-2 border-stone-900 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-stone-950 text-stone-900 font-sans font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+              className="bg-white border-2 border-stone-950 rounded-xl px-3 py-1.5 text-xs focus:outline-none text-stone-950 font-sans font-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.1)]"
             >
               <option value="all">All Status</option>
               <option value="not-started">Not Started</option>
@@ -362,7 +355,7 @@ export default function TodoCalendar() {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="bg-white border-2 border-stone-900 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-stone-950 text-stone-900 font-sans font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+              className="bg-white border-2 border-stone-950 rounded-xl px-3 py-1.5 text-xs focus:outline-none text-stone-950 font-sans font-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.1)]"
             >
               <option value="all">All Categories</option>
               <option value="study">Study</option>
@@ -380,7 +373,7 @@ export default function TodoCalendar() {
                 setShowForm(true);
                 setCreateType('todo');
               }}
-              className="flex items-center space-x-1.5 px-4 py-2 bg-[#F26430] text-white border-2 border-stone-900 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-none transition-all"
+              className="flex items-center space-x-1.5 px-4 py-2 bg-[#F26430] text-white border-2 border-stone-950 font-black text-xs uppercase tracking-wider rounded-xl shadow-[3px_3px_0px_0px_rgba(255,255,255,0.15)] hover:translate-x-[-1px] hover:translate-y-[-1px] active:translate-x-[1.5px] active:translate-y-[1.5px] transition-all"
             >
               <FiPlus className="w-4 h-4 stroke-[3]" />
               <span>Add Event</span>
@@ -391,24 +384,21 @@ export default function TodoCalendar() {
         {/* Main Content Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           
-          {/* Calendar Body */}
+          {/* Calendar Month/Week Grid Column */}
           <div className="lg:col-span-3">
-            <div 
-              className="bg-white border-2 border-stone-900 rounded-3xl overflow-hidden shadow-[4px_4px_0px_0px_rgba(28,25,23,1)] relative"
-              style={{ filter: 'url(#handdrawn)' }}
-            >
+            <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl overflow-hidden shadow-[6px_6px_0px_0px_#60a5fa] relative">
               
-              {/* Month/Week Navigation bar */}
-              <div className="flex items-center justify-between p-5 border-b-2 border-stone-900 bg-stone-50/50">
+              {/* Navigation Bar */}
+              <div className="flex items-center justify-between p-5 border-b-3 border-stone-900 bg-stone-100/50">
                 <div className="flex items-center space-x-3 text-left">
                   <button
                     onClick={() => navigateTime(-1)}
                     className="p-2 border-2 border-stone-900 bg-white hover:bg-stone-50 rounded-xl transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
                   >
-                    <FiChevronLeft className="w-4 h-4 text-stone-950 stroke-[2.5]" />
+                    <FiChevronLeft className="w-4 h-4 text-stone-950 stroke-[3]" />
                   </button>
                   
-                  <h2 className="text-xl font-sans font-black text-stone-950 tracking-tight leading-none select-none">
+                  <h2 className="text-xl font-sans font-black text-stone-950 tracking-tight leading-none uppercase">
                     {viewMode === 'month' 
                       ? currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
                       : `Week of ${getDaysInWeek()[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
@@ -419,27 +409,27 @@ export default function TodoCalendar() {
                     onClick={() => navigateTime(1)}
                     className="p-2 border-2 border-stone-900 bg-white hover:bg-stone-50 rounded-xl transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
                   >
-                    <FiChevronRight className="w-4 h-4 text-stone-950 stroke-[2.5]" />
+                    <FiChevronRight className="w-4 h-4 text-stone-950 stroke-[3]" />
                   </button>
                 </div>
 
                 <button
                   onClick={() => setCurrentDate(new Date())}
-                  className="px-4 py-2 text-xs font-extrabold uppercase border-2 border-stone-900 bg-white hover:bg-stone-50 rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
+                  className="px-4 py-2 text-xs font-black uppercase border-2 border-stone-900 bg-white hover:bg-stone-50 rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
                 >
                   Today
                 </button>
               </div>
 
-              {/* Grid Wrapper */}
-              <div className="p-5">
+              {/* Grid Days Area */}
+              <div className="p-5 bg-[#FAF9F6]">
                 {viewMode === 'month' ? (
-                  /* --- MONTH VIEW --- */
+                  /* MONTH */
                   <>
                     <div className="grid grid-cols-7 gap-2 mb-2">
                       {weekDays.map(day => (
                         <div key={day} className="text-center py-2">
-                          <span className="text-xs font-extrabold uppercase tracking-widest text-stone-500 font-mono">{day}</span>
+                          <span className="text-xs font-black uppercase tracking-widest text-stone-500 font-mono">{day}</span>
                         </div>
                       ))}
                     </div>
@@ -455,40 +445,40 @@ export default function TodoCalendar() {
                             key={index}
                             onClick={() => handleDateClick(date)}
                             className={`min-h-[110px] p-2 border-2 border-stone-900 rounded-2xl cursor-pointer transition-all ${
-                              !isCurrentMonth ? 'bg-stone-50/55 text-stone-400 opacity-60' : 'bg-white hover:bg-stone-50/80 hover:translate-y-[-1px]'
+                              !isCurrentMonth ? 'bg-stone-200/40 text-stone-400 opacity-60' : 'bg-white hover:bg-stone-50 hover:translate-y-[-1px]'
                             } ${
-                              today ? 'bg-[#FEF5D1] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : ''
+                              today ? 'bg-[#FFE066] shadow-[2.5px_2.5px_0px_0px_rgba(0,0,0,1)]' : ''
                             } ${
-                              selected ? 'ring-2 ring-[#2C5EFA] border-[#2C5EFA]' : ''
+                              selected ? 'bg-[#c084fc]/20 border-[#bd00ff] ring-2 ring-[#bd00ff]' : ''
                             }`}
                           >
                             <div className="flex items-center justify-between mb-1.5">
                               <span className={`text-xs font-mono font-black ${
-                                today ? 'text-[#F26430]' : 'text-stone-850'
+                                today ? 'text-[#F26430]' : 'text-stone-950'
                               }`}>
                                 {date.getDate()}
                               </span>
                               {dayData.todos.length > 0 && (
-                                <span className="text-[9px] font-bold bg-stone-900 text-stone-100 px-1.5 py-0.5 rounded-full">
+                                <span className="text-[8px] font-mono font-black bg-stone-900 text-stone-100 px-1.5 py-0.5 rounded-full">
                                   {dayData.todos.length}
                                 </span>
                               )}
                             </div>
 
-                            {/* Color Tag dots */}
+                            {/* Color priority dots */}
                             <div className="flex space-x-1 mb-2">
                               {dayData.todos.slice(0, 3).map((todo, i) => (
                                 <div 
                                   key={i} 
                                   className={`w-1.5 h-1.5 rounded-full border border-stone-900 ${
-                                    todo.status === 'completed' ? 'bg-[#2ECC71]' :
+                                    todo.status === 'completed' ? 'bg-[#22c55e]' :
                                     todo.priority === 'high' ? 'bg-[#FF6B6B]' : 'bg-[#F8C537]'
                                   }`} 
                                 />
                               ))}
                             </div>
 
-                            {/* Todos mini block previews */}
+                            {/* Previews */}
                             <div className="space-y-1 overflow-hidden">
                               {dayData.todos.slice(0, 2).map((todo) => (
                                 <div
@@ -496,21 +486,15 @@ export default function TodoCalendar() {
                                   onClick={(e) => handleTodoClick(todo, e)}
                                   className={`text-[9px] px-1.5 py-0.5 border border-stone-900 rounded truncate hover:opacity-85 font-sans font-bold leading-tight ${
                                     todo.status === 'completed' 
-                                      ? 'bg-green-50 text-stone-400 line-through' 
+                                      ? 'bg-[#d3ffd0]/60 text-stone-500 line-through' 
                                       : todo.priority === 'high' 
-                                      ? 'bg-[#FFD2D2] text-red-900'
-                                      : 'bg-[#E3F2FD] text-blue-900'
+                                      ? 'bg-[#FFD2D2] text-[#FF6B6B]' 
+                                      : 'bg-[#FEF5D1] text-stone-850'
                                   }`}
-                                  title={todo.title}
                                 >
                                   {todo.title}
                                 </div>
                               ))}
-                              {dayData.todos.length > 2 && (
-                                <div className="text-[8px] font-mono text-stone-500 text-left font-bold pl-1">
-                                  +{dayData.todos.length - 2} more
-                                </div>
-                              )}
                             </div>
                           </div>
                         );
@@ -518,9 +502,9 @@ export default function TodoCalendar() {
                     </div>
                   </>
                 ) : (
-                  /* --- WEEK VIEW --- */
-                  <div className="grid grid-cols-1 md:grid-cols-7 gap-3 min-h-[400px]">
-                    {days.map((date, index) => {
+                  /* WEEK */
+                  <div className="grid grid-cols-7 gap-3">
+                    {getDaysInWeek().map((date, index) => {
                       const dayData = getDayData(date);
                       const today = date.toDateString() === new Date().toDateString();
                       const selected = selectedDate && date.toDateString() === selectedDate.toDateString();
@@ -529,47 +513,42 @@ export default function TodoCalendar() {
                         <div
                           key={index}
                           onClick={() => handleDateClick(date)}
-                          className={`flex flex-col border-2 border-stone-900 rounded-2xl p-3 text-left transition-all hover:bg-stone-50/50 ${
-                            today ? 'bg-[#FEF5D1]' : 'bg-white'
+                          className={`min-h-[300px] p-3 border-2 border-stone-900 rounded-2xl cursor-pointer transition-all bg-white hover:bg-stone-50/80 ${
+                            today ? 'bg-[#FFE066] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : ''
                           } ${
-                            selected ? 'ring-2 ring-[#2C5EFA]' : ''
+                            selected ? 'bg-[#c084fc]/20 border-[#bd00ff] ring-2 ring-[#bd00ff]' : ''
                           }`}
                         >
-                          {/* Day Header */}
-                          <div className="border-b border-stone-250 pb-2 mb-3">
-                            <span className="text-[9px] font-mono font-bold tracking-widest text-stone-450 uppercase block">
+                          <div className="border-b border-stone-200 pb-2 mb-3 text-left">
+                            <span className="text-[10px] font-mono font-black text-stone-500 uppercase tracking-widest block">
                               {weekDays[date.getDay()]}
                             </span>
-                            <span className="text-lg font-sans font-black text-stone-950">
+                            <span className={`text-lg font-mono font-black ${
+                              today ? 'text-[#F26430]' : 'text-stone-950'
+                            }`}>
                               {date.getDate()}
                             </span>
                           </div>
 
-                          {/* Todos List */}
-                          <div className="flex-1 space-y-2 overflow-y-auto max-h-[300px]">
+                          <div className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
                             {dayData.todos.map((todo) => (
                               <div
                                 key={todo._id}
                                 onClick={(e) => handleTodoClick(todo, e)}
-                                className={`p-2 border border-stone-900 rounded-xl cursor-pointer hover:translate-y-[-1px] transition-all shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] ${
+                                className={`p-2.5 border-2 border-stone-900 rounded-xl shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-1px] text-left transition-all ${
                                   todo.status === 'completed'
-                                    ? 'bg-green-50/70 opacity-60 text-stone-400 line-through'
+                                    ? 'bg-[#d3ffd0]/60 text-stone-500 line-through'
                                     : todo.priority === 'high'
-                                    ? 'bg-[#FFD2D2]'
-                                    : 'bg-white'
+                                    ? 'bg-[#FFD2D2] text-stone-950 font-bold'
+                                    : 'bg-[#FEF5D1] text-stone-950 font-bold'
                                 }`}
                               >
-                                <p className="text-[10px] font-bold truncate text-stone-900">{todo.title}</p>
-                                <span className="text-[8px] font-mono text-stone-500 capitalize block mt-1">
+                                <p className="text-[10px] font-black leading-snug truncate">{todo.title}</p>
+                                <span className="text-[7.5px] font-mono font-black text-stone-500 uppercase tracking-wider block mt-1">
                                   {todo.category}
                                 </span>
                               </div>
                             ))}
-                            {dayData.todos.length === 0 && (
-                              <div className="h-full flex items-center justify-center py-8">
-                                <span className="text-[10px] font-mono text-stone-400 italic">No events</span>
-                              </div>
-                            )}
                           </div>
                         </div>
                       );
@@ -577,38 +556,36 @@ export default function TodoCalendar() {
                   </div>
                 )}
               </div>
+
             </div>
           </div>
 
-          {/* Right Sidebar - Event Details or Selected Date summary */}
+          {/* Right Column details */}
           <div className="lg:col-span-1 space-y-6 text-left">
             
-            {/* Event Details Card */}
             {showTodoDetails && selectedTodo ? (
-              <div 
-                className="bg-white border-2 border-stone-900 rounded-3xl p-5 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)]"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
-                <div className="flex items-center justify-between border-b border-stone-200 pb-3 mb-4">
-                  <h3 className="text-sm font-black uppercase tracking-wider text-stone-950">Details</h3>
+              /* Todo Info details card */
+              <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-5 shadow-[6px_6px_0px_0px_#FFE066]">
+                <div className="flex items-center justify-between border-b-2 border-stone-250 pb-3 mb-4">
+                  <h3 className="text-sm font-sans font-black uppercase tracking-tight">Task Details</h3>
                   <div className="flex items-center space-x-1.5">
                     <button
-                      onClick={() => handleEditTodo(selectedTodo)}
-                      className="p-1 hover:bg-stone-50 border border-transparent hover:border-stone-900 rounded-lg transition-all"
-                      title="Edit"
+                      onClick={handleTodoEdit}
+                      className="p-1 hover:bg-stone-200 border border-stone-305 rounded-md"
+                      title="Edit Task"
                     >
-                      <FiEdit3 className="w-3.5 h-3.5" />
+                      <FiEdit3 className="w-3.5 h-3.5 text-stone-850" />
                     </button>
                     <button
                       onClick={() => handleDeleteTodo(selectedTodo._id)}
-                      className="p-1 hover:bg-red-50 hover:text-red-650 border border-transparent hover:border-stone-900 rounded-lg transition-all"
-                      title="Delete"
+                      className="p-1 hover:bg-[#FFD2D2] hover:text-[#FF6B6B] border border-stone-305 rounded-md"
+                      title="Delete Task"
                     >
                       <FiTrash2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => setShowTodoDetails(false)}
-                      className="p-1 hover:bg-stone-50 rounded-lg"
+                      className="p-1 hover:bg-stone-200 border border-stone-305 rounded-md"
                     >
                       <FiX className="w-3.5 h-3.5" />
                     </button>
@@ -616,50 +593,26 @@ export default function TodoCalendar() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex items-start space-x-2">
-                    <button 
-                      onClick={() => handleTodoToggle(selectedTodo._id)}
-                      className="mt-0.5 transition-transform active:scale-90"
-                    >
-                      {selectedTodo.status === 'completed' ? (
-                        <div className="w-4 h-4 bg-[#2ECC71] border-2 border-stone-900 rounded flex items-center justify-center">
-                          <FiCheckCircle className="w-3 h-3 text-stone-950 stroke-[3]" />
-                        </div>
-                      ) : (
-                        <div className="w-4 h-4 bg-white border-2 border-stone-900 rounded hover:bg-stone-50" />
-                      )}
-                    </button>
-                    <h4 className={`text-base font-black text-stone-950 leading-tight ${
-                      selectedTodo.status === 'completed' ? 'line-through text-stone-400' : ''
-                    }`}>
-                      {selectedTodo.title}
-                    </h4>
+                  <div>
+                    <h4 className="text-sm font-black text-stone-950 leading-tight">{selectedTodo.title}</h4>
+                    {selectedTodo.description && (
+                      <p className="text-xs text-stone-705 font-bold mt-2 leading-relaxed">{selectedTodo.description}</p>
+                    )}
                   </div>
 
-                  {selectedTodo.description && (
-                    <p className="text-xs text-stone-705 leading-relaxed font-sans font-semibold bg-stone-50 p-2.5 rounded-xl border border-stone-200">
-                      {selectedTodo.description}
-                    </p>
-                  )}
-
-                  {/* Priority, Category, Status */}
-                  <div className="space-y-2 text-xs font-sans font-bold">
-                    <div className="flex justify-between">
-                      <span className="text-stone-500">Priority:</span>
-                      <span className="capitalize text-stone-850">{selectedTodo.priority}</span>
-                    </div>
+                  <div className="border-t border-stone-200 pt-3.5 space-y-2.5 text-xs font-sans font-bold">
                     <div className="flex justify-between">
                       <span className="text-stone-500">Category:</span>
-                      <span className="capitalize text-stone-850">{selectedTodo.category}</span>
+                      <span className="capitalize text-stone-950">{selectedTodo.category}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-stone-500">Status:</span>
-                      <span className="capitalize text-stone-850">{selectedTodo.status.replace('-', ' ')}</span>
+                      <span className="capitalize text-stone-950">{selectedTodo.status.replace('-', ' ')}</span>
                     </div>
                     {selectedTodo.dueDate && (
                       <div className="flex justify-between">
                         <span className="text-stone-500">Due Date:</span>
-                        <span className="text-stone-850 font-mono">
+                        <span className="text-stone-950 font-mono font-black">
                           {new Date(selectedTodo.dueDate).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
@@ -673,12 +626,9 @@ export default function TodoCalendar() {
                 </div>
               </div>
             ) : (
-              /* Selected Date Summary */
-              <div 
-                className="bg-white border-2 border-stone-900 rounded-3xl p-5 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)]"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
-                <h3 className="text-sm font-black uppercase tracking-wider text-stone-950 border-b border-stone-200 pb-3 mb-4">
+              /* Selected Date list of tasks card */
+              <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-5 shadow-[6px_6px_0px_0px_#22c55e]">
+                <h3 className="text-sm font-sans font-black uppercase tracking-tight border-b-2 border-stone-250 pb-3 mb-4">
                   {selectedDate ? selectedDate.toLocaleDateString('en-US', {
                     weekday: 'short',
                     month: 'short',
@@ -687,17 +637,17 @@ export default function TodoCalendar() {
                 </h3>
 
                 {todosForSelectedDate.length === 0 ? (
-                  <div className="py-8 text-center">
-                    <FiCalendar className="w-10 h-10 text-stone-400 mx-auto mb-2" />
-                    <p className="text-xs text-stone-600 font-medium">No tasks scheduled for this day.</p>
+                  <div className="py-8 text-center flex flex-col items-center">
+                    <FiCalendar className="w-10 h-10 text-stone-400 mb-2 stroke-[2.2]" />
+                    <p className="text-xs text-stone-500 font-bold">No tasks scheduled for this day.</p>
                   </div>
                 ) : (
-                  <div className="space-y-2.5 max-h-96 overflow-y-auto">
+                  <div className="space-y-2.5 max-h-96 overflow-y-auto pr-0.5">
                     {todosForSelectedDate.map((todo) => (
                       <div
                         key={todo._id}
                         onClick={(e) => handleTodoClick(todo, e)}
-                        className="p-3 border border-stone-900 bg-white hover:bg-stone-50 hover:translate-y-[-1px] rounded-2xl cursor-pointer transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-start space-x-2.5"
+                        className="p-3 border-2 border-stone-900 bg-white hover:bg-stone-50 hover:translate-y-[-1px] rounded-2xl cursor-pointer transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-start space-x-2.5"
                       >
                         <button
                           onClick={(e) => {
@@ -707,7 +657,7 @@ export default function TodoCalendar() {
                           className="mt-0.5 flex-shrink-0"
                         >
                           {todo.status === 'completed' ? (
-                            <div className="w-3.5 h-3.5 bg-[#2ECC71] border border-stone-900 rounded flex items-center justify-center">
+                            <div className="w-3.5 h-3.5 bg-[#22c55e] border border-stone-900 rounded flex items-center justify-center">
                               <FiCheckCircle className="w-2.5 h-2.5 text-stone-950 stroke-[3]" />
                             </div>
                           ) : (
@@ -715,10 +665,10 @@ export default function TodoCalendar() {
                           )}
                         </button>
                         <div className="text-left min-w-0 flex-1">
-                          <p className={`text-xs font-bold text-stone-900 truncate ${todo.status === 'completed' ? 'line-through text-stone-400' : ''}`}>
+                          <p className={`text-xs font-black text-stone-950 truncate ${todo.status === 'completed' ? 'line-through text-stone-400' : ''}`}>
                             {todo.title}
                           </p>
-                          <span className="text-[9px] font-mono font-bold text-stone-450 uppercase tracking-widest block mt-0.5">
+                          <span className="text-[8.5px] font-mono font-black text-stone-500 uppercase tracking-widest block mt-0.5">
                             {todo.category}
                           </span>
                         </div>
@@ -730,27 +680,24 @@ export default function TodoCalendar() {
             )}
 
             {/* Legend Card */}
-            <div 
-              className="bg-white border-2 border-stone-900 rounded-3xl p-5 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)]"
-              style={{ filter: 'url(#handdrawn)' }}
-            >
-              <h4 className="text-xs font-extrabold uppercase tracking-widest text-stone-950 mb-3 font-mono">[ Legend ]</h4>
+            <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-5 shadow-[4px_4px_0px_0px_#F26430]">
+              <h4 className="text-[9px] font-mono font-black uppercase tracking-widest text-stone-500 mb-3">[ Legend ]</h4>
               <div className="space-y-2 text-xs font-bold font-sans">
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-[#FF6B6B] border border-stone-900 rounded-full" />
-                  <span className="text-stone-700">High Priority</span>
+                  <span className="text-stone-850">High Priority</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-[#F8C537] border border-stone-900 rounded-full" />
-                  <span className="text-stone-700">Medium Priority</span>
+                  <span className="text-stone-850">Medium Priority</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-[#2ECC71] border border-stone-900 rounded-full" />
-                  <span className="text-stone-700">Completed</span>
+                  <div className="w-3 h-3 bg-[#22c55e] border border-stone-900 rounded-full" />
+                  <span className="text-stone-850">Completed</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-[#FEF5D1] border border-stone-900 rounded-full" />
-                  <span className="text-stone-700">Current Day</span>
+                  <div className="w-3 h-3 bg-[#FFE066] border border-stone-900 rounded-full" />
+                  <span className="text-stone-850">Current Day</span>
                 </div>
               </div>
             </div>
@@ -760,17 +707,14 @@ export default function TodoCalendar() {
         {/* Create Overlay Modal */}
         {showCreateOverlay && selectedDate && (
           <div className="fixed inset-0 bg-stone-950/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div 
-              className="bg-white border-2 border-stone-900 rounded-3xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] max-w-sm w-full p-6 text-left"
-              style={{ filter: 'url(#handdrawn)' }}
-            >
-              <div className="flex items-center justify-between border-b border-stone-200 pb-3 mb-4">
+            <div className="bg-white border-2 border-stone-900 rounded-3xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] max-w-sm w-full p-6 text-left">
+              <div className="flex items-center justify-between border-b-2 border-stone-200 pb-3 mb-4">
                 <h3 className="text-base font-black text-stone-950 uppercase">
                   Schedule Event
                 </h3>
                 <button
                   onClick={() => setShowCreateOverlay(false)}
-                  className="p-1 hover:bg-stone-50 rounded-lg"
+                  className="p-1 hover:bg-stone-50 border border-stone-200 rounded-lg"
                 >
                   <FiX className="w-4 h-4 text-stone-800" />
                 </button>
@@ -794,7 +738,7 @@ export default function TodoCalendar() {
                       <p className="text-[10px] text-stone-500 font-medium">Create a checklist item</p>
                     </div>
                   </div>
-                  <FiChevronRight className="w-4 h-4 text-stone-500" />
+                  <FiChevronRightIcon className="w-4 h-4 text-stone-500" />
                 </button>
 
                 <button
@@ -803,14 +747,14 @@ export default function TodoCalendar() {
                 >
                   <div className="flex items-center space-x-3">
                     <div className="w-9 h-9 bg-yellow-100 border border-yellow-350 rounded-xl flex items-center justify-center">
-                      <FiBell className="w-4.5 h-4.5 text-yellow-700" />
+                      <FiBell className="w-4.5 h-4.5 text-yellow-700 font-bold" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-stone-900">Reminder</p>
                       <p className="text-[10px] text-stone-500 font-medium">Set alerts for deadlines</p>
                     </div>
                   </div>
-                  <FiChevronRight className="w-4 h-4 text-stone-500" />
+                  <FiChevronRightIcon className="w-4 h-4 text-stone-500" />
                 </button>
 
                 <button
@@ -826,7 +770,7 @@ export default function TodoCalendar() {
                       <p className="text-[10px] text-stone-500 font-medium">Create a timeline block</p>
                     </div>
                   </div>
-                  <FiChevronRight className="w-4 h-4 text-stone-500" />
+                  <FiChevronRightIcon className="w-4 h-4 text-stone-500" />
                 </button>
               </div>
             </div>

@@ -5,7 +5,6 @@ import {
   FiCheckCircle,
   FiClock,
   FiSearch,
-  FiFilter,
   FiLoader
 } from 'react-icons/fi';
 import TodoCard from '../components/TodoCard';
@@ -16,7 +15,6 @@ import {
   createTodo, 
   updateTodo, 
   deleteTodo, 
-  getDashboardStats, 
   toggleSubtask 
 } from '../api/todoApi';
 
@@ -95,7 +93,6 @@ export default function TodoDashboard() {
     }
   };
 
-  // Detailed Feature: Toggle Subtask Callback
   const handleSubtaskToggle = async (todoId, subtaskId, completed) => {
     try {
       await toggleSubtask(todoId, subtaskId, completed);
@@ -122,69 +119,60 @@ export default function TodoDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 pt-20 pb-8 px-4 sm:px-6 lg:px-8 font-sans relative overflow-x-hidden select-none">
+    <div className="min-h-screen bg-[#050408] text-stone-200 pt-20 pb-8 px-4 sm:px-6 lg:px-8 font-sans relative overflow-x-hidden select-none">
       
-      {/* Background Ruling Pattern */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
+      {/* Background Glowing Blobs */}
+      <div className="absolute top-[10%] right-[10%] w-[350px] h-[350px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[10%] left-[10%] w-[350px] h-[350px] bg-green-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* Handdrawn filter SVG */}
-      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
-        <defs>
-          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
+      {/* Grid Pattern overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 [background-size:40px_40px] [background-image:linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)]" />
 
       <div className="relative z-10 max-w-7xl mx-auto py-8 space-y-8">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b-2 border-stone-900 pb-6 gap-4">
-          <div className="text-left">
-            <span className="text-[10px] font-mono font-bold tracking-widest text-stone-500 uppercase block rotate-[-1deg]">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b-2 border-stone-850 pb-6 gap-4">
+          <div className="text-left font-sans">
+            <span className="text-[9px] font-mono font-black tracking-widest text-[#F26430] uppercase block rotate-[-1deg]">
               [ study task planner ]
             </span>
-            <h1 className="text-4xl font-sans font-black text-stone-950 tracking-tight leading-none mt-1">Todo Dashboard</h1>
-            <p className="text-xs text-stone-600 font-medium mt-1.5">Manage your milestones, assignments, and tasks</p>
+            <h1 className="text-4xl font-sans font-black text-white tracking-tight leading-none mt-1 uppercase">Todo Dashboard</h1>
+            <p className="text-xs text-stone-400 font-bold mt-1.5 leading-relaxed">Manage your milestones, assignments, and study tasks</p>
           </div>
           
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center space-x-2 px-5 py-3.5 bg-[#F8C537] text-stone-950 border-2 border-stone-900 font-extrabold text-xs uppercase tracking-wider rounded-2xl hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] self-start md:self-center"
+            className="flex items-center space-x-2 px-5 py-3.5 bg-[#F8C537] text-stone-950 border-2 border-stone-950 font-black text-xs uppercase tracking-wider rounded-2xl hover:translate-x-[-1px] hover:translate-y-[-1px] active:translate-x-[2px] active:translate-y-[2px] transition-all shadow-[2.5px_2.5px_0px_0px_rgba(255,255,255,0.15)] self-start md:self-center"
           >
             <FiPlus className="w-4.5 h-4.5 text-stone-950 stroke-[3]" />
             <span>New Todo</span>
           </button>
         </div>
 
-        {/* Detailed Feature: Filter & Search Tray */}
-        <div 
-          className="bg-white border-2 border-stone-900 rounded-3xl p-5 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)] grid grid-cols-1 md:grid-cols-4 gap-4 text-left"
-          style={{ filter: 'url(#handdrawn)' }}
-        >
+        {/* Filter & Search Tray */}
+        <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-5 shadow-[6px_6px_0px_0px_#60a5fa] grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
           {/* Search bar */}
           <div className="md:col-span-1 space-y-1">
-            <label className="text-[10px] font-bold text-stone-950 uppercase tracking-wider font-sans">Search Tasks</label>
+            <label className="text-[9px] font-mono font-black text-stone-950 uppercase tracking-wider">Search Tasks</label>
             <div className="relative">
-              <FiSearch className="absolute left-3 top-3 text-stone-450 w-4.5 h-4.5" />
+              <FiSearch className="absolute left-3 top-3 text-stone-400 w-4.5 h-4.5" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white border-2 border-stone-900 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-900 placeholder-stone-400 font-sans font-semibold shadow-sm"
+                className="w-full bg-white border-2 border-stone-900 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-950 placeholder-stone-400 font-sans font-bold shadow-sm"
               />
             </div>
           </div>
 
           {/* Status filter */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-stone-950 uppercase tracking-wider font-sans">Status</label>
+            <label className="text-[9px] font-mono font-black text-stone-950 uppercase tracking-wider">Status</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full bg-white border-2 border-stone-900 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-900 font-sans font-bold shadow-sm"
+              className="w-full bg-white border-2 border-stone-900 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-950 font-sans font-bold shadow-sm"
             >
               <option value="all">All Statuses</option>
               <option value="not-started">Not Started</option>
@@ -195,11 +183,11 @@ export default function TodoDashboard() {
 
           {/* Priority filter */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-stone-950 uppercase tracking-wider font-sans">Priority</label>
+            <label className="text-[9px] font-mono font-black text-stone-950 uppercase tracking-wider">Priority</label>
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="w-full bg-white border-2 border-stone-900 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-900 font-sans font-bold shadow-sm"
+              className="w-full bg-white border-2 border-stone-900 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-950 font-sans font-bold shadow-sm"
             >
               <option value="all">All Priorities</option>
               <option value="high">High Importance</option>
@@ -210,11 +198,11 @@ export default function TodoDashboard() {
 
           {/* Category filter */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-stone-950 uppercase tracking-wider font-sans">Category</label>
+            <label className="text-[9px] font-mono font-black text-stone-950 uppercase tracking-wider">Category</label>
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full bg-white border-2 border-stone-900 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-900 font-sans font-bold shadow-sm"
+              className="w-full bg-white border-2 border-stone-900 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-stone-950 text-stone-950 font-sans font-bold shadow-sm"
             >
               <option value="all">All Categories</option>
               <option value="study">Study</option>
@@ -240,63 +228,51 @@ export default function TodoDashboard() {
             <div className="grid grid-cols-1 gap-4">
               
               {/* Total Tasks */}
-              <div 
-                className="bg-white border-2 border-stone-900 rounded-3xl p-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
+              <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-4 shadow-[4px_4px_0px_0px_#FFE066] hover:translate-y-[-1px] transition-all">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[9px] font-extrabold text-stone-500 uppercase tracking-widest font-mono">[ Total Tasks ]</p>
+                    <p className="text-[9px] font-mono font-black text-stone-500 uppercase tracking-wider">[ Total Tasks ]</p>
                     <p className="text-2xl font-black text-stone-950 mt-1">{filteredTodos.length}</p>
                   </div>
-                  <div className="w-10 h-10 bg-stone-50 border-2 border-stone-900 rounded-xl flex items-center justify-center text-stone-950 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
+                  <div className="w-10 h-10 bg-white border-2 border-stone-900 rounded-xl flex items-center justify-center text-stone-950 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
                     <FiList className="w-5 h-5 stroke-[2.5]" />
                   </div>
                 </div>
               </div>
 
               {/* In Progress */}
-              <div 
-                className="bg-[#E3F2FD] border-2 border-stone-900 rounded-3xl p-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
+              <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-4 shadow-[4px_4px_0px_0px_#60a5fa] hover:translate-y-[-1px] transition-all">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[9px] font-extrabold text-blue-700 uppercase tracking-widest font-mono">[ In Progress ]</p>
-                    <p className="text-2xl font-black text-blue-900 mt-1 font-sans">
+                    <p className="text-[9px] font-mono font-black text-stone-500 uppercase tracking-wider">[ In Progress ]</p>
+                    <p className="text-2xl font-black text-stone-950 mt-1 font-sans">
                       {filteredTodos.filter(t => t.status === 'in-progress').length}
                     </p>
                   </div>
-                  <div className="w-10 h-10 bg-white border-2 border-stone-900 rounded-xl flex items-center justify-center text-blue-700 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
+                  <div className="w-10 h-10 bg-[#dbe4ff] border-2 border-stone-900 rounded-xl flex items-center justify-center text-[#2C5EFA] shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
                     <FiClock className="w-5 h-5 stroke-[2.5]" />
                   </div>
                 </div>
               </div>
 
               {/* Completed */}
-              <div 
-                className="bg-[#EAF5E5] border-2 border-stone-900 rounded-3xl p-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
+              <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-4 shadow-[4px_4px_0px_0px_#22c55e] hover:translate-y-[-1px] transition-all">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[9px] font-extrabold text-green-700 uppercase tracking-widest font-mono">[ Completed ]</p>
-                    <p className="text-2xl font-black text-green-900 mt-1 font-sans">
+                    <p className="text-[9px] font-mono font-black text-stone-500 uppercase tracking-wider">[ Completed ]</p>
+                    <p className="text-2xl font-black text-stone-950 mt-1 font-sans">
                       {filteredTodos.filter(t => t.status === 'completed').length}
                     </p>
                   </div>
-                  <div className="w-10 h-10 bg-white border-2 border-stone-900 rounded-xl flex items-center justify-center text-green-700 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
+                  <div className="w-10 h-10 bg-[#d3ffd0] border-2 border-stone-900 rounded-xl flex items-center justify-center text-[#22c55e] shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">
                     <FiCheckCircle className="w-5 h-5 stroke-[2.5]" />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Calendar Widget */}
-            <div 
-              className="bg-white border-2 border-stone-900 rounded-3xl p-2 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)]"
-              style={{ filter: 'url(#handdrawn)' }}
-            >
+            {/* Calendar Widget wrapper card */}
+            <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-2 shadow-[4px_4px_0px_0px_#c084fc]">
               <TodoCalendarWidget />
             </div>
           </div>
@@ -304,20 +280,17 @@ export default function TodoDashboard() {
           {/* Right Column - Todo Cards Grid */}
           <div className="lg:col-span-3">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-20 bg-white border-2 border-stone-900 rounded-3xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                <FiLoader className="w-8 h-8 text-stone-950 animate-spin mb-3" />
+              <div className="flex flex-col items-center justify-center py-20 bg-stone-900/40 border border-stone-850 rounded-3xl">
+                <FiLoader className="w-8 h-8 text-[#F8C537] animate-spin mb-3" />
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Retrieving milestones...</span>
               </div>
             ) : filteredTodos.length === 0 ? (
-              <div 
-                className="text-center py-16 bg-[#FEF5D1] border-2 border-stone-900 rounded-3xl p-8 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)]"
-                style={{ filter: 'url(#handdrawn)' }}
-              >
+              <div className="text-center py-16 bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-8 shadow-[6px_6px_0px_0px_#FFE066]">
                 <div className="w-16 h-16 bg-white border-2 border-stone-900 rounded-2xl flex items-center justify-center mx-auto mb-4 text-stone-950 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   <FiList className="w-7 h-7" />
                 </div>
                 <h3 className="text-base font-black text-stone-950 mb-1 uppercase tracking-wider">No todos found</h3>
-                <p className="text-stone-750 text-xs font-bold mb-6">Create a milestone or filter by different tags</p>
+                <p className="text-stone-700 text-xs font-bold mb-6">Create a milestone or filter by different tags</p>
                 <button
                   onClick={() => setShowForm(true)}
                   className="inline-flex items-center space-x-2 px-5 py-3 bg-[#F8C537] text-stone-950 border-2 border-stone-900 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-none transition-all"
