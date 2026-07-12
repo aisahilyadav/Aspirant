@@ -157,7 +157,7 @@ export const DraggableCardBody = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "relative min-h-[320px] w-72 overflow-hidden rounded-3xl bg-[#FAF9F6] p-6 border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-grab active:cursor-grabbing transform-3d select-none",
+        "relative overflow-hidden rounded-3xl bg-[#FAF9F6] p-6 border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-grab active:cursor-grabbing transform-3d select-none",
         className,
       )}
     >
