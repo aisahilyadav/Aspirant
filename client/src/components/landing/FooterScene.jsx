@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiArrowUp, FiGithub, FiRefreshCw } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 
 export default function FooterScene({ onReset }) {
   // Game states
@@ -159,7 +160,7 @@ export default function FooterScene({ onReset }) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between pt-24 pb-16 px-6 bg-stone-900 text-stone-300 select-none overflow-hidden animate-fade-in">
+    <div className="relative min-h-screen flex flex-col justify-between pt-24 pb-16 px-6 bg-black text-stone-350 select-none overflow-hidden animate-fade-in">
       
       {/* POPPY COLOR AMBIENT BACKGROUND BLOBS */}
       <div className="absolute top-[10%] left-[10%] w-[350px] h-[350px] bg-blue-500/10 rounded-full blur-[110px] pointer-events-none" />
@@ -171,15 +172,21 @@ export default function FooterScene({ onReset }) {
       <div className="max-w-5xl w-full mx-auto relative z-10 flex-1 flex flex-col justify-center my-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
-          {/* Left Side: Header Text (5 columns) */}
-          <div className="lg:col-span-5 space-y-6 text-left">
+          {/* Left Side: Header Text (5 columns) with Scroll Reveal Effect */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="lg:col-span-5 space-y-6 text-left"
+          >
             <div className="inline-block">
-              <span className="text-[10px] font-mono font-bold tracking-widest text-[#FAF9F6] uppercase bg-stone-800 border-2 border-stone-600 px-3.5 py-1.5 rounded-lg">
+              <span className="text-[10px] font-mono font-bold tracking-widest text-[#FAF9F6] uppercase bg-stone-850 border-2 border-stone-600 px-3.5 py-1.5 rounded-lg">
                 Study Session Completed
               </span>
             </div>
             
-            <h2 className="text-4xl sm:text-5xl font-sans font-black text-stone-100 tracking-tight leading-tight uppercase">
+            <h2 className="text-3xl sm:text-5xl font-sans font-black text-stone-100 tracking-tight leading-tight uppercase">
               Rest Well.{' '}
               <br />
               <span className="relative inline-block mt-2 px-2.5">
@@ -188,13 +195,20 @@ export default function FooterScene({ onReset }) {
               </span>
             </h2>
             
-            <p className="text-xs sm:text-sm text-stone-400 leading-relaxed font-semibold max-w-md">
+            {/* Description Subtext styled in bold H2 size as requested */}
+            <h2 className="text-xl sm:text-2xl font-sans font-black text-stone-400 uppercase tracking-tight leading-snug max-w-md pt-2">
               Close the study tabs. Reset your focus with a quick board game against our study bot before calling it a day.
-            </p>
-          </div>
+            </h2>
+          </motion.div>
 
-          {/* Right Side: Interactive Tic-Tac-Toe Game Widget (7 columns) */}
-          <div className="lg:col-span-7 flex justify-center lg:justify-end">
+          {/* Right Side: Interactive Tic-Tac-Toe Game Widget (7 columns) with Scale Reveal */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: false, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+            className="lg:col-span-7 flex justify-center lg:justify-end"
+          >
             <div className="w-full max-w-sm bg-[#FAF9F6] border-2 border-stone-900 rounded-3xl p-5 shadow-[6px_6px_0px_0px_#F8C537] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_#F8C537] transition-all duration-300 space-y-5 text-stone-950">
               
               {/* Game Controls */}
@@ -290,7 +304,7 @@ export default function FooterScene({ onReset }) {
               </div>
 
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>
