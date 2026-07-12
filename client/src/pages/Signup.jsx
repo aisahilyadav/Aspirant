@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../store/auth";
 import GoogleLoginComponent from '../components/GoogleLogin';
-import { FiMail, FiLock, FiUser, FiLoader } from 'react-icons/fi';
+import { FiMail, FiLock, FiUser } from 'react-icons/fi';
 
 const Signup = () => {
   const [user, setUser] = useState({
@@ -57,36 +57,48 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] flex items-center justify-center p-6 relative overflow-hidden select-none">
+    <div className="min-h-screen bg-[#050408] text-[#FAF9F6] flex items-center justify-center p-6 relative overflow-hidden select-none">
       
-      {/* Background Subtle Grid Pattern */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-40 paper-grid" />
+      {/* Background Subtle Glowing Blobs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[300px] h-[300px] bg-orange-500/10 rounded-full blur-[90px] pointer-events-none" />
 
-      {/* Handdrawn filter SVG */}
-      <svg className="absolute w-0 h-0" aria-hidden="true" style={{ position: 'absolute', width: 0, height: 0 }}>
-        <defs>
-          <filter id="handdrawn" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
+      {/* Grid Pattern overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 [background-size:40px_40px] [background-image:linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)]" />
 
-      <div className="max-w-5xl w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start py-8">
+      <div className="max-w-5xl w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-8">
         
-        {/* Left Side: Custom Stacked Books illustration (6 cols) */}
+        {/* Left Side: Big Stacked Books & Dog Doodle (6 cols) */}
         <div className="lg:col-span-6 hidden lg:flex justify-center pt-10">
-          <div 
-            className="relative w-full max-w-sm aspect-square bg-white border border-stone-200 rounded-3xl p-3 shadow-md hover:scale-[1.01] transition-transform duration-500"
-            style={{ filter: 'url(#handdrawn)' }}
-          >
-            <img 
-              src="/signup_books.png" 
-              alt="Custom Signup Books" 
-              className="w-full h-full object-cover rounded-2xl border border-stone-150"
-            />
+          <div className="relative w-full max-w-md aspect-square bg-[#FAF9F6] border-3 border-stone-900 rounded-3xl p-6 shadow-[8px_8px_0px_0px_#F8C537] flex items-center justify-center">
+            
+            {/* Massive stacked research books and sleeping dog vector illustration */}
+            <svg className="w-full max-w-[340px] aspect-square text-stone-950 stroke-[2.2]" viewBox="0 0 120 120" fill="none" stroke="currentColor">
+              {/* Ground shelf line */}
+              <line x1="10" y1="105" x2="110" y2="105" strokeWidth="3" />
+              
+              {/* Stacked books */}
+              <path d="M 30 105 L 75 105 L 75 90 L 30 90 Z" fill="#60a5fa" /> {/* Blue book */}
+              <path d="M 32 90 L 73 90 L 73 78 L 32 78 Z" fill="#F26430" /> {/* Orange book */}
+              <path d="M 35 78 L 70 78 L 70 68 L 35 68 Z" fill="#22c55e" /> {/* Green book */}
+              <path d="M 28 68 L 77 68 L 77 56 L 28 56 Z" fill="#F8C537" /> {/* Yellow book */}
+              
+              {/* Giant open journal resting vertically next to the stack */}
+              <path d="M 75 105 L 105 105 L 98 45 L 78 45 Z" fill="#FAF9F6" />
+              <path d="M 78 45 Q 88 43, 98 45" />
+              <path d="M 88 45 L 88 75" stroke="#c084fc" strokeWidth="2" />
+              
+              {/* Cute sleeping dog curled up at the bottom */}
+              <path d="M 15 105 C 10 95, 30 95, 30 105 Z" fill="#FAF9F6" />
+              <circle cx="23" cy="101" r="0.8" fill="black" stroke="none" />
+              <path d="M 26 98 C 24 95, 22 95, 23 98" fill="#F26430" />
+              
+              {/* Stars/Sparkles around */}
+              <path d="M 20 30 L 20 25 M 17 28 L 23 28 M 95 30 L 95 25 M 92 28 L 98 28" stroke="#F8C537" />
+            </svg>
+
             {/* Overlay tag */}
-            <div className="absolute -bottom-4 -left-2 bg-[#D9866B] text-stone-900 border border-stone-400 font-handwritten text-xs py-1.5 px-3 rounded-xl rotate-[-3deg] shadow-sm">
+            <div className="absolute -bottom-4 -left-2 bg-[#F26430] text-white border-2 border-stone-900 font-mono font-black text-[9px] uppercase tracking-wider py-1.5 px-3 rounded-xl rotate-[-3deg] shadow-[2.5px_2.5px_0px_0px_rgba(0,0,0,1)]">
               [ setup study journal ]
             </div>
           </div>
@@ -96,42 +108,40 @@ const Signup = () => {
         <div className="lg:col-span-6 space-y-6 text-left">
           
           <div className="space-y-3">
-            <span className="font-handwritten text-lg text-stone-500 block rotate-[1deg]">
-              [ register your journal ]
+            <span className="font-mono text-[10px] font-black tracking-widest text-[#F8C537] uppercase bg-stone-900 border-2 border-stone-800 px-3.5 py-1.5 rounded-lg inline-block">
+              [ Onboarding Journal ]
             </span>
-            <h1 className="text-4xl sm:text-5xl font-serif-cormorant font-bold text-stone-900 tracking-tight leading-none">
-              Join Aspirant.
+            <h1 className="text-4xl sm:text-5xl font-sans font-black text-white tracking-tight leading-none uppercase">
+              Join <span className="text-[#60a5fa]">Aspirant.</span>
             </h1>
-            <p className="text-xs sm:text-sm text-stone-605 leading-relaxed font-sans-inter">
+            <p className="text-xs sm:text-sm text-stone-400 leading-relaxed font-bold">
               Create an account to start cataloging study roadmaps, custom RAG indexes, and flashcard recall scores.
             </p>
           </div>
 
-          {/* Form Card */}
-          <div 
-            className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6"
-            style={{ filter: 'url(#handdrawn)' }}
-          >
+          {/* Form Card styled in Bold Neo-Brutalism */}
+          <div className="bg-[#FAF9F6] text-stone-950 border-3 border-stone-900 rounded-3xl p-6 sm:p-8 shadow-[8px_8px_0px_0px_#60a5fa] space-y-6">
+            
             {/* Google Authentication */}
             <div className="space-y-4">
               <GoogleLoginComponent />
               
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-stone-200" />
+                  <span className="w-full border-t-2 border-stone-900" />
                 </div>
-                <div className="relative flex justify-center text-[10px] uppercase tracking-widest font-bold">
-                  <span className="bg-white px-4 text-stone-450 font-sans-inter">Or use email</span>
+                <div className="relative flex justify-center text-[9px] uppercase tracking-widest font-black">
+                  <span className="bg-[#FAF9F6] px-4 text-stone-500 font-mono">Or use email</span>
                 </div>
               </div>
             </div>
 
             {/* Email form */}
-            <form onSubmit={handleSubmit} className="space-y-4 font-sans-inter">
+            <form onSubmit={handleSubmit} className="space-y-4 font-sans">
               
               {/* Username */}
               <div className="space-y-1">
-                <label htmlFor="username" className="text-[10px] font-extrabold text-stone-500 uppercase tracking-widest block">
+                <label htmlFor="username" className="text-[9px] font-black text-stone-600 uppercase tracking-widest block">
                   Username
                 </label>
                 <div className="relative">
@@ -144,15 +154,15 @@ const Signup = () => {
                     autoComplete="username"
                     value={user.username}
                     onChange={handleInput}
-                    className="w-full bg-stone-50/40 border border-stone-250 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant text-stone-805"
+                    className="w-full bg-white border-2 border-stone-900 rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold text-stone-900 focus:outline-none focus:shadow-[2px_2px_0px_0px_#60a5fa] transition-all"
                   />
-                  <FiUser className="absolute left-3.5 top-3.5 text-stone-400 w-4 h-4" />
+                  <FiUser className="absolute left-3.5 top-3.5 text-stone-500 w-4 h-4" />
                 </div>
               </div>
 
               {/* Email Address */}
               <div className="space-y-1">
-                <label htmlFor="email" className="text-[10px] font-extrabold text-stone-500 uppercase tracking-widest block">
+                <label htmlFor="email" className="text-[9px] font-black text-stone-600 uppercase tracking-widest block">
                   Email Address
                 </label>
                 <div className="relative">
@@ -165,15 +175,15 @@ const Signup = () => {
                     autoComplete="email"
                     value={user.email}
                     onChange={handleInput}
-                    className="w-full bg-stone-50/40 border border-stone-250 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant text-stone-805"
+                    className="w-full bg-white border-2 border-stone-900 rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold text-stone-900 focus:outline-none focus:shadow-[2px_2px_0px_0px_#60a5fa] transition-all"
                   />
-                  <FiMail className="absolute left-3.5 top-3.5 text-stone-400 w-4 h-4" />
+                  <FiMail className="absolute left-3.5 top-3.5 text-stone-500 w-4 h-4" />
                 </div>
               </div>
 
               {/* Password */}
               <div className="space-y-1">
-                <label htmlFor="password" className="text-[10px] font-extrabold text-stone-500 uppercase tracking-widest block">
+                <label htmlFor="password" className="text-[9px] font-black text-stone-600 uppercase tracking-widest block">
                   Password
                 </label>
                 <div className="relative">
@@ -186,9 +196,9 @@ const Signup = () => {
                     autoComplete="new-password"
                     value={user.password}
                     onChange={handleInput}
-                    className="w-full bg-[#FAF9F6] border border-stone-250 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:border-stone-800 transition-colors font-serif-cormorant text-stone-850"
+                    className="w-full bg-white border-2 border-stone-900 rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold text-stone-900 focus:outline-none focus:shadow-[2px_2px_0px_0px_#60a5fa] transition-all"
                   />
-                  <FiLock className="absolute left-3.5 top-3.5 text-stone-400 w-4 h-4" />
+                  <FiLock className="absolute left-3.5 top-3.5 text-stone-500 w-4 h-4" />
                 </div>
               </div>
 
@@ -196,11 +206,11 @@ const Signup = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3.5 bg-stone-850 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl hover:bg-stone-950 transition-colors flex items-center justify-center shadow-sm"
+                className="w-full py-3.5 bg-[#F8C537] text-stone-950 font-black text-xs uppercase tracking-widest rounded-xl border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center justify-center"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-stone-950 mr-2"></div>
                     <span>Creating Account...</span>
                   </div>
                 ) : (
@@ -210,12 +220,12 @@ const Signup = () => {
 
             </form>
 
-            <div className="text-center pt-4 border-t border-stone-150">
-              <p className="text-xs text-stone-605">
+            <div className="text-center pt-4 border-t border-stone-200">
+              <p className="text-xs text-stone-600 font-bold">
                 Already have an account?{' '}
                 <NavLink 
                   to="/login" 
-                  className="text-stone-900 font-extrabold uppercase tracking-wider hover:underline"
+                  className="text-stone-950 font-black uppercase tracking-wider hover:underline"
                 >
                   Sign in
                 </NavLink>
@@ -224,25 +234,22 @@ const Signup = () => {
 
           </div>
 
-          {/* Setup / Onboarding checklist to fill space */}
-          <div 
-            className="bg-white/60 border border-stone-200/50 rounded-3xl p-5 flex flex-col gap-3"
-            style={{ filter: 'url(#handdrawn)' }}
-          >
-            <h4 className="text-[9px] font-mono font-extrabold uppercase tracking-widest text-stone-500 border-b border-stone-150 pb-2">
+          {/* Setup / Onboarding checklist in Neo-Brutalism */}
+          <div className="bg-[#FAF9F6] text-stone-950 border-2 border-stone-900 rounded-3xl p-5 flex flex-col gap-3 shadow-[4px_4px_0px_0px_#c084fc]">
+            <h4 className="text-[9px] font-mono font-black uppercase tracking-widest text-stone-500 border-b border-stone-200 pb-2">
               Setup Milestones
             </h4>
-            <div className="space-y-2.5 font-handwritten text-xs text-stone-600">
+            <div className="space-y-2.5 font-mono text-[10px] text-stone-800 font-black">
               <div className="flex items-center gap-2.5">
-                <div className="w-3.5 h-3.5 rounded border border-stone-400" />
+                <div className="w-3.5 h-3.5 rounded border-2 border-stone-900" />
                 <span>Choose daily timetable objectives</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <div className="w-3.5 h-3.5 rounded border border-stone-400" />
+                <div className="w-3.5 h-3.5 rounded border-2 border-stone-900" />
                 <span>Upload first study PDF document</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <div className="w-3.5 h-3.5 rounded border border-stone-400" />
+                <div className="w-3.5 h-3.5 rounded border-2 border-stone-900" />
                 <span>Verify recall score calibration</span>
               </div>
             </div>
