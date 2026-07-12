@@ -78,7 +78,7 @@ export default function PreQuiz() {
           <span className="text-[10px] font-mono font-black tracking-widest text-[#F8C537] uppercase bg-stone-900 border-2 border-stone-800 px-3.5 py-1.5 rounded-lg inline-block">
             [ Active Recall Generator ]
           </span>
-          <h1 className="text-4xl sm:text-5xl font-sans font-black text-white tracking-tight leading-none uppercase">
+          <h1 className="text-4xl sm:text-5xl font-sans font-black text-[var(--text-app)] tracking-tight leading-none uppercase">
             Create AI <span className="text-[#c084fc]">Study Quiz</span>
           </h1>
           <p className="text-xs sm:text-sm text-stone-400 font-bold max-w-xl mx-auto leading-relaxed mt-2">
@@ -106,7 +106,7 @@ export default function PreQuiz() {
               </button>
               <span className={`ml-3 text-xs uppercase tracking-widest font-black font-mono ${
                 currentStep === 1
-                  ? 'text-white'
+                  ? 'text-[var(--text-app)]'
                   : pdfData
                   ? 'text-[#22c55e]'
                   : 'text-stone-500'
@@ -135,7 +135,7 @@ export default function PreQuiz() {
               </button>
               <span className={`ml-3 text-xs uppercase tracking-widest font-black font-mono ${
                 currentStep === 2
-                  ? 'text-white'
+                  ? 'text-[var(--text-app)]'
                   : 'text-stone-500'
               }`}>
                 Configure Quiz

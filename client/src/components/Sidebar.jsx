@@ -35,7 +35,7 @@ const Sidebar = ({
         stiffness: 300,
         damping: 30,
       }}
-      className="fixed top-0 left-0 h-screen bg-[var(--bg-sidebar)] border-r-3 border-stone-950 z-50 flex flex-col select-none transition-colors duration-300"
+      className="fixed top-0 left-0 h-screen bg-[var(--bg-sidebar)] border-r-4 border-stone-950 z-50 flex flex-col select-none transition-colors duration-300"
     >
       {/* Brand logo in sidebar header */}
       <div className="p-5 border-b-2 border-[var(--border-sidebar-line)] flex items-center justify-between transition-colors duration-300">
