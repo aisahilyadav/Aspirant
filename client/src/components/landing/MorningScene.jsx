@@ -124,7 +124,7 @@ export default function MorningScene({ onCtaClick }) {
         </div>
 
         {/* Centered Centerpiece 3D Interactive Notepad */}
-        <div className="w-full max-w-2xl bg-stone-900 border-2 border-stone-900 rounded-3xl p-5 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all duration-300 mt-6 relative z-25">
+        <div className="w-full max-w-3xl bg-stone-900 border-2 border-stone-900 rounded-3xl p-5 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all duration-300 mt-6 relative z-25">
           <Interactive3DModel />
         </div>
 
