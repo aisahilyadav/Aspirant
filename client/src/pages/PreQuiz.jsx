@@ -239,7 +239,7 @@ export default function PreQuiz() {
           {currentStep === 2 && (
             <div className="animate-fade-in">
               <div className="bg-[#FAF9F6] text-stone-950 rounded-3xl border-3 border-stone-900 p-8 shadow-[6px_6px_0px_0px_#c084fc]">
-                <QuizConfigForm onSubmit={handleGenerateQuiz} loading={loading} />
+                <QuizConfigForm onGenerate={handleGenerateQuiz} loading={loading} />
               </div>
             </div>
           )}

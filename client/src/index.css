@@ -239,3 +239,37 @@ code, pre, kbd, samp, .font-mono, [class*="font-mono"] {
   font-family: 'JetBrains Mono', monospace !important;
 }
 
+/* Prevent double scrollbars by locking root overflow */
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
+}
+
+/* Stylized Sleek Neo-Brutalist scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #F8C537;
+  border: 1.5px solid #1c1917;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  border: 1.5px solid #292524;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #F26430;
+}
+

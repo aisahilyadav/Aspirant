@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiPlay, FiBook, FiHash } from 'react-icons/fi';
+import { FiPlay, FiBook, FiHash, FiLoader } from 'react-icons/fi';
 
 export default function QuizConfigForm({ onGenerate, loading }) {
   const [topic, setTopic] = useState('');
@@ -74,8 +74,17 @@ export default function QuizConfigForm({ onGenerate, loading }) {
                 : 'bg-[#F26430] text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
             }`}
           >
-            <FiPlay className="w-5 h-5 fill-white/10" />
-            <span>Generate My Quiz</span>
+            {loading ? (
+              <>
+                <FiLoader className="animate-spin w-5 h-5" />
+                <span>Generating Quiz...</span>
+              </>
+            ) : (
+              <>
+                <FiPlay className="w-5 h-5 fill-white/10" />
+                <span>Generate My Quiz</span>
+              </>
+            )}
           </button>
         </div>
 
