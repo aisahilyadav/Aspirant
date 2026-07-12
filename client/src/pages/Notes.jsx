@@ -275,17 +275,17 @@ export default function Notes() {
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
     
-    html = html.replace(/^### (.*$)/gim, '<h3 class="text-md font-bold mt-4 mb-1 text-stone-900">$1</h3>');
+    html = html.replace(/^### (.*$)/gim, '<h3 class="text-md font-bold mt-4 mb-1 text-white">$1</h3>');
     html = html.replace(/^## (.*$)/gim, '<h2 class="text-lg font-bold mt-5 mb-2 text-[#60a5fa]">$1</h2>');
     html = html.replace(/^# (.*$)/gim, '<h1 class="text-xl font-bold mt-6 mb-3 text-[#c084fc]">$1</h1>');
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-stone-950">$1</strong>');
-    html = html.replace(/^\- (.*$)/gim, '<li class="ml-4 list-disc text-stone-800 my-1 font-mono font-bold">$1</li>');
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-black text-[#F8C537]">$1</strong>');
+    html = html.replace(/^\- (.*$)/gim, '<li class="ml-4 list-disc text-stone-300 my-1 font-mono">$1</li>');
     
     html = html.split('\n').map(line => {
       if (line.trim().startsWith('<h') || line.trim().startsWith('<li') || line.trim() === '') {
         return line;
       }
-      return `<p class="text-stone-700 my-2 leading-relaxed text-sm font-sans font-semibold">${line}</p>`;
+      return `<p class="text-stone-300 my-2 leading-relaxed text-sm font-sans font-semibold">${line}</p>`;
     }).join('\n');
 
     return html;
