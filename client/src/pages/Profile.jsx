@@ -396,7 +396,7 @@ function Profile() {
   );
 
   return (
-    <div className="min-h-screen bg-[#050408] text-stone-200 pt-24 pb-12 px-6 relative overflow-x-hidden select-none font-sans">
+    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-app)] pt-24 pb-12 px-6 relative overflow-x-hidden select-none font-sans transition-colors duration-300">
       
       {/* Background Glowing Blobs */}
       <div className="absolute top-[-10%] left-[-10%] w-[300px] h-[300px] bg-blue-500/10 rounded-full blur-[90px] pointer-events-none" />

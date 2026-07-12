@@ -294,7 +294,7 @@ export default function Notes() {
   const activeChat = chatHistory[selectedNote?._id] || [];
 
   return (
-    <div className="flex h-screen pt-0 bg-[#050408] text-[#FAF9F6] overflow-hidden font-sans relative select-none">
+    <div className="flex h-screen pt-0 bg-[var(--bg-app)] text-[var(--text-app)] overflow-hidden font-sans relative select-none transition-colors duration-300">
       
       {/* Background Glowing Blobs */}
       <div className="absolute top-[5%] right-[20%] w-[350px] h-[350px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none" />

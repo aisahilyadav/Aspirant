@@ -38,8 +38,18 @@ const Layout = ({ children }) => {
     { icon: FiSettings, title: "Settings", path: "/settings" },
   ];
 
+  // Sync theme class on mount
+  React.useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
   return (
-    <div className="flex h-screen bg-[#FAF9F6] text-stone-850">
+    <div className="flex h-screen bg-[var(--bg-app)] text-[var(--text-app)] transition-colors duration-300">
       {/* Sidebar - only show when logged in */}
       {isLoggedIn && (
         <Sidebar

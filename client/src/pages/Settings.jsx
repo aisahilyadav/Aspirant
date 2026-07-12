@@ -7,8 +7,7 @@ import {
   FiBell, 
   FiMonitor, 
   FiCpu, 
-  FiLoader, 
-  FiCheck 
+  FiLoader 
 } from 'react-icons/fi';
 import { getSettings, updateSettings, updateProfile } from '../api/settingsApi';
 import { useAuth } from '../store/auth';
@@ -43,6 +42,15 @@ export default function Settings() {
     fetchSettings();
   }, []);
 
+  // Theme Live Preview sync
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
   const fetchSettings = async () => {
     try {
       const res = await getSettings();
@@ -55,7 +63,9 @@ export default function Settings() {
         setStudyMode(res.studySettings.studyMode || 'pomodoro');
         setDefaultQuizQuestions(res.studySettings.defaultQuizQuestions || 10);
         setEmailNotifications(res.studySettings.emailNotifications !== undefined ? res.studySettings.emailNotifications : true);
-        setTheme(res.studySettings.theme || 'light');
+        const serverTheme = res.studySettings.theme || 'light';
+        setTheme(serverTheme);
+        localStorage.setItem('theme', serverTheme);
       }
     } catch (err) {
       console.error('Fetch settings error:', err);
@@ -90,10 +100,11 @@ export default function Settings() {
       
       // Update local states
       setCurrentPassword('');
+      setUsername(username);
       setNewPassword('');
       setConfirmPassword('');
       
-      setProfileMessage({ type: 'success', text: res.message || 'Profile updated successfully!' });
+      setProfileMessage({ type: 'success', text: res.message || 'Profile credentials updated!' });
       
       if (res.username && user) {
         user.username = res.username;
@@ -119,6 +130,7 @@ export default function Settings() {
         emailNotifications,
         theme
       });
+      localStorage.setItem('theme', theme);
       setPrefMessage({ type: 'success', text: res.message || 'Study preferences saved!' });
     } catch (err) {
       console.error(err);
@@ -129,7 +141,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050408] text-stone-200 pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none">
+    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-app)] pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none transition-colors duration-300">
       
       {/* Background Glowing Blobs */}
       <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-[#F26430]/5 rounded-full blur-[90px] pointer-events-none" />
@@ -145,8 +157,8 @@ export default function Settings() {
           <span className="text-[10px] font-mono font-black tracking-widest text-[#D9866B] uppercase bg-stone-900 border-2 border-stone-800 px-3.5 py-1.5 rounded-lg inline-block">
             [ System Configurations ]
           </span>
-          <h1 className="text-4xl font-sans font-black text-white tracking-tight leading-none uppercase flex items-center">
-            <FiSettings className="mr-3 w-8 h-8 text-[#FAF9F6] stroke-[2.5]" />
+          <h1 className="text-4xl font-sans font-black text-[var(--text-app)] tracking-tight leading-none uppercase flex items-center">
+            <FiSettings className="mr-3 w-8 h-8 text-[var(--text-app)] stroke-[2.5]" />
             Study <span className="text-[#F26430] pl-2">Preferences</span>
           </h1>
           <p className="text-xs sm:text-sm text-stone-400 font-bold leading-relaxed max-w-xl">
@@ -170,7 +182,7 @@ export default function Settings() {
                 <div className={`p-4 rounded-xl text-xs font-mono font-black uppercase border-2 border-stone-900 ${
                   profileMessage.type === 'success' 
                     ? 'bg-[#d3ffd0] text-stone-950' 
-                    : 'bg-[#FFD2D2] text-red-950'
+                    : 'bg-[#FFD2D2] text-red-955'
                 }`}>
                   {profileMessage.text}
                 </div>
@@ -178,7 +190,7 @@ export default function Settings() {
 
               {/* Username Input */}
               <div className="space-y-1">
-                <label className="text-[9px] font-black text-stone-600 uppercase tracking-widest block font-mono">
+                <label className="text-[9px] font-black text-stone-605 uppercase tracking-widest block font-mono">
                   Username
                 </label>
                 <input
@@ -192,7 +204,7 @@ export default function Settings() {
 
               {/* Email Address (Read-only) */}
               <div className="space-y-1">
-                <label className="text-[9px] font-black text-stone-600 uppercase tracking-widest block font-mono">
+                <label className="text-[9px] font-black text-stone-605 uppercase tracking-widest block font-mono">
                   Email Address
                 </label>
                 <input
@@ -209,14 +221,14 @@ export default function Settings() {
               {/* Password Section (Only if local user) */}
               {authProvider === 'local' && (
                 <div className="space-y-4 pt-4 border-t-2 border-stone-200">
-                  <div className="flex items-center space-x-2 text-stone-950 mb-2 font-mono">
-                    <FiLock className="w-4 h-4 text-stone-950 stroke-[2.5]" />
+                  <div className="flex items-center space-x-2 text-stone-955 mb-2 font-mono">
+                    <FiLock className="w-4 h-4 text-stone-955 stroke-[2.5]" />
                     <h4 className="text-[9px] font-black uppercase tracking-widest">Change Password</h4>
                   </div>
 
                   {/* Current Password */}
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-stone-650 block font-mono uppercase tracking-wider">
+                    <label className="text-[9px] font-black text-stone-600 block font-mono uppercase tracking-wider">
                       Current Password
                     </label>
                     <input
@@ -231,7 +243,7 @@ export default function Settings() {
 
                   {/* New Password */}
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-stone-650 block font-mono uppercase tracking-wider">
+                    <label className="text-[9px] font-black text-stone-600 block font-mono uppercase tracking-wider">
                       New Password
                     </label>
                     <input
@@ -245,7 +257,7 @@ export default function Settings() {
 
                   {/* Confirm New Password */}
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-stone-655 block font-mono uppercase tracking-wider">
+                    <label className="text-[9px] font-black text-stone-600 block font-mono uppercase tracking-wider">
                       Confirm New Password
                     </label>
                     <input
@@ -348,7 +360,7 @@ export default function Settings() {
                 <div className="flex items-center space-x-3">
                   <FiBell className="text-stone-950 w-4 h-4 stroke-[3]" />
                   <div>
-                    <label className="text-xs font-black text-stone-950 block uppercase tracking-wider font-mono">
+                    <label className="text-xs font-black text-stone-955 block uppercase tracking-wider font-mono">
                       Email Notifications
                     </label>
                     <span className="text-[8px] text-stone-600 block font-mono font-black uppercase tracking-wider mt-0.5">

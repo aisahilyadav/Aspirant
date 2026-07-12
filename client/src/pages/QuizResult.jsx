@@ -68,7 +68,7 @@ export default function QuizResult() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050408] text-stone-200 font-sans relative overflow-x-hidden select-none pb-12">
+    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-app)] font-sans relative overflow-x-hidden select-none pb-12 transition-colors duration-300">
       
       {/* Background Glowing Blobs */}
       <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-purple-500/10 rounded-full blur-[90px] pointer-events-none" />

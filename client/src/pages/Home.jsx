@@ -52,7 +52,7 @@ export default function Home() {
   const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   return (
-    <div className="min-h-screen bg-[#050408] text-[#FAF9F6] pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none">
+    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-app)] pt-24 pb-12 px-6 font-sans relative overflow-x-hidden select-none transition-colors duration-300">
       
       {/* Background Subtle Glowing Blobs */}
       <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-purple-500/10 rounded-full blur-[90px] pointer-events-none" />
@@ -64,11 +64,11 @@ export default function Home() {
       <div className="max-w-6xl mx-auto relative z-10 space-y-8">
         
         {/* Bento Grid Header */}
-        <div className="border-b-2 border-stone-850 pb-6 text-left space-y-2">
+        <div className="border-b-2 border-[var(--border-sidebar-line)] pb-6 text-left space-y-2">
           <span className="text-[10px] font-mono font-black tracking-widest text-[#F8C537] uppercase bg-stone-900 border-2 border-stone-800 px-3.5 py-1.5 rounded-lg inline-block">
             [ System Status ]
           </span>
-          <h1 className="text-4xl sm:text-5xl font-sans font-black text-white tracking-tight leading-none uppercase">
+          <h1 className="text-4xl sm:text-5xl font-sans font-black text-[var(--text-app)] tracking-tight leading-none uppercase">
             Learning <span className="text-[#60a5fa]">Progress</span>
           </h1>
         </div>

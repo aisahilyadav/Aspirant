@@ -81,6 +81,11 @@
 }
 
 :root {
+  --bg-app: #FAF9F6;
+  --text-app: #1c1917;
+  --bg-sidebar: #FAF9F6;
+  --border-sidebar: #e5e7eb;
+  --border-sidebar-line: #d6d3d1;
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
   --border: 240 5.9% 90%;
@@ -90,6 +95,14 @@
   --primary-foreground: 0 0% 100%;
   --secondary: 240 4.8% 95.9%;
   --secondary-foreground: 240 5.9% 10%;
+}
+
+:root.dark {
+  --bg-app: #050408;
+  --text-app: #FAF9F6;
+  --bg-sidebar: #121016;
+  --border-sidebar: #1f1d24;
+  --border-sidebar-line: #292524;
 }
 
 /* Stationery Styling */

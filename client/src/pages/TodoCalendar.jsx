@@ -295,7 +295,7 @@ export default function TodoCalendar() {
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
-    <div className="min-h-screen bg-[#050408] text-stone-200 pt-20 pb-8 px-4 sm:px-6 lg:px-8 font-sans relative overflow-x-hidden select-none">
+    <div className="min-h-screen bg-[var(--bg-app)] text-[var(--text-app)] pt-20 pb-8 px-4 sm:px-6 lg:px-8 font-sans relative overflow-x-hidden select-none transition-colors duration-300">
       
       {/* Background Glowing Blobs */}
       <div className="absolute top-[10%] left-[10%] w-[350px] h-[350px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none" />
