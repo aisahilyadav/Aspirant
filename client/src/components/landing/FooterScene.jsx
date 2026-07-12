@@ -34,7 +34,6 @@ export default function FooterScene({ onReset }) {
     if (!isPlayerTurn && !gameResult && !isBotThinking) {
       setIsBotThinking(true);
       
-      // Thinking simulation delay
       const timer = setTimeout(() => {
         makeBotMove();
       }, 500);
@@ -42,7 +41,7 @@ export default function FooterScene({ onReset }) {
     }
   }, [isPlayerTurn, gameResult]);
 
-  // Mini-max score evaluator for Smart Bot
+  // Mini-max score evaluator
   const minimax = (tempBoard, depth, isMax) => {
     const { winner } = checkWinner(tempBoard);
     if (winner === 'O') return 10 - depth;
@@ -83,11 +82,9 @@ export default function FooterScene({ onReset }) {
     let chosenSpot;
 
     if (difficulty === 'easy') {
-      // Pick random available spot
       const randomIdx = Math.floor(Math.random() * availableSpots.length);
       chosenSpot = availableSpots[randomIdx];
     } else {
-      // Minimax choice
       let bestVal = -Infinity;
       chosenSpot = availableSpots[0];
 
@@ -162,140 +159,155 @@ export default function FooterScene({ onReset }) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between pt-24 pb-16 px-6 bg-stone-900 text-stone-300 select-none">
+    <div className="relative min-h-screen flex flex-col justify-between pt-24 pb-16 px-6 bg-stone-900 text-stone-300 select-none overflow-hidden animate-fade-in">
+      
+      {/* POPPY COLOR AMBIENT BACKGROUND BLOBS */}
+      <div className="absolute top-[10%] left-[10%] w-[350px] h-[350px] bg-blue-500/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute top-[20%] right-[10%] w-[350px] h-[350px] bg-green-500/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-[20%] left-[20%] w-[350px] h-[350px] bg-yellow-500/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[20%] w-[350px] h-[350px] bg-orange-500/10 rounded-full blur-[110px] pointer-events-none" />
 
-      {/* Content Block */}
-      <div className="max-w-4xl w-full text-center space-y-12 mx-auto relative z-10 flex-1 flex flex-col justify-center items-center">
-        
-        {/* Header Block */}
-        <div className="space-y-4 max-w-2xl mx-auto">
-          <span className="text-[10px] font-mono font-bold tracking-widest text-stone-400 uppercase inline-block bg-stone-800 border-2 border-stone-600 px-3 py-1 rounded-lg">
-            Study Session Completed
-          </span>
-          <h2 className="text-4xl sm:text-6xl font-sans font-black text-stone-100 tracking-tight leading-tight uppercase">
-            Rest Well.{' '}
-            <span className="relative inline-block">
-              <span className="relative z-10 text-stone-950">Take a Break.</span>
-              <span className="absolute inset-0 bg-[#F8C537] -rotate-1 border-2 border-stone-900 rounded-lg -z-0" />
-            </span>
-          </h2>
-          <p className="text-xs sm:text-sm text-stone-400 max-w-lg mx-auto leading-relaxed font-medium">
-            Close the study tabs. Reset your focus with a quick board game against our study bot before calling it a day.
-          </p>
-        </div>
-
-        {/* Tic Tac Toe Board Game Widget (Warm Neo-Brutalist Layout) */}
-        <div className="w-full max-w-sm mx-auto bg-stone-800 border-2 border-stone-600 rounded-3xl p-5 shadow-[6px_6px_0px_0px_rgba(255,255,255,0.08)] space-y-5">
+      {/* Main Split Grid Layout */}
+      <div className="max-w-5xl w-full mx-auto relative z-10 flex-1 flex flex-col justify-center my-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
-          {/* Game Controls & Score */}
-          <div className="flex justify-between items-center px-1">
-            {/* Difficulty Toggle badge */}
-            <div className="flex border-2 border-stone-900 rounded-lg overflow-hidden text-[9px] font-mono font-bold">
-              <button 
-                onClick={() => setDifficulty('easy')}
-                className={`px-2.5 py-1 transition-colors uppercase ${
-                  difficulty === 'easy' ? 'bg-[#A9C5A0] text-stone-950' : 'bg-stone-700 text-stone-400'
-                }`}
-              >
-                Easy
-              </button>
-              <button 
-                onClick={() => setDifficulty('smart')}
-                className={`px-2.5 py-1 transition-colors uppercase border-l-2 border-stone-900 ${
-                  difficulty === 'smart' ? 'bg-[#F8C537] text-stone-950' : 'bg-stone-700 text-stone-400'
-                }`}
-              >
-                Smart Bot
-              </button>
+          {/* Left Side: Header Text (5 columns) */}
+          <div className="lg:col-span-5 space-y-6 text-left">
+            <div className="inline-block">
+              <span className="text-[10px] font-mono font-bold tracking-widest text-[#FAF9F6] uppercase bg-stone-800 border-2 border-stone-600 px-3.5 py-1.5 rounded-lg">
+                Study Session Completed
+              </span>
             </div>
-
-            {/* Reset widget button */}
-            <button 
-              onClick={resetGame} 
-              className="p-1.5 bg-[#FAF9F6] border-2 border-stone-900 text-stone-900 rounded-lg hover:translate-x-[-1px] hover:translate-y-[-1px] shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all flex items-center gap-1 text-[9px] font-mono font-black uppercase"
-            >
-              <FiRefreshCw className={`w-3.5 h-3.5 ${isBotThinking ? 'animate-spin' : ''}`} />
-              <span>Reset</span>
-            </button>
+            
+            <h2 className="text-4xl sm:text-5xl font-sans font-black text-stone-100 tracking-tight leading-tight uppercase">
+              Rest Well.{' '}
+              <br />
+              <span className="relative inline-block mt-2 px-2.5">
+                <span className="relative z-10 text-stone-950">Take a Break.</span>
+                <span className="absolute inset-0 bg-[#F8C537] -rotate-1 border-2 border-stone-900 rounded-lg -z-0" />
+              </span>
+            </h2>
+            
+            <p className="text-xs sm:text-sm text-stone-400 leading-relaxed font-semibold max-w-md">
+              Close the study tabs. Reset your focus with a quick board game against our study bot before calling it a day.
+            </p>
           </div>
 
-          {/* 3x3 Tic Tac Toe Grid */}
-          <div className="grid grid-cols-3 gap-2.5 max-w-[280px] mx-auto relative">
-            {board.map((cell, idx) => {
-              const isWinning = winningLine.includes(idx);
-              return (
-                <button
-                  key={idx}
-                  onClick={() => handleCellClick(idx)}
-                  className={`aspect-square rounded-2xl border-2 border-stone-900 transition-all duration-100 flex items-center justify-center text-3xl font-black font-sans shadow-[2.5px_2.5px_0px_0px_rgba(28,25,23,1)] ${
-                    cell ? 'cursor-default' : 'hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3.5px_3.5px_0px_0px_rgba(28,25,23,1)] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-none'
-                  } ${
-                    isWinning 
-                      ? 'bg-[#A9C5A0]' 
-                      : cell === 'X' 
-                        ? 'bg-white text-[#F26430]' 
-                        : cell === 'O' 
-                          ? 'bg-[#FAF9F6] text-[#F8C537]' 
-                          : 'bg-[#FAF9F6]'
-                  }`}
-                >
-                  {cell}
-                </button>
-              );
-            })}
+          {/* Right Side: Interactive Tic-Tac-Toe Game Widget (7 columns) */}
+          <div className="lg:col-span-7 flex justify-center lg:justify-end">
+            <div className="w-full max-w-sm bg-[#FAF9F6] border-2 border-stone-900 rounded-3xl p-5 shadow-[6px_6px_0px_0px_#F8C537] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_#F8C537] transition-all duration-300 space-y-5 text-stone-950">
+              
+              {/* Game Controls */}
+              <div className="flex justify-between items-center px-1">
+                {/* Difficulty Toggles */}
+                <div className="flex border-2 border-stone-900 rounded-lg overflow-hidden text-[9px] font-mono font-bold">
+                  <button 
+                    onClick={() => setDifficulty('easy')}
+                    className={`px-2.5 py-1.5 transition-colors uppercase ${
+                      difficulty === 'easy' ? 'bg-[#A9C5A0] text-stone-950 border-r-2 border-stone-900' : 'bg-stone-100 text-stone-500 border-r-2 border-stone-900'
+                    }`}
+                  >
+                    Easy
+                  </button>
+                  <button 
+                    onClick={() => setDifficulty('smart')}
+                    className={`px-2.5 py-1.5 transition-colors uppercase ${
+                      difficulty === 'smart' ? 'bg-[#F8C537] text-stone-950' : 'bg-stone-100 text-stone-500'
+                    }`}
+                  >
+                    Smart Bot
+                  </button>
+                </div>
 
-            {/* Overlay win banner */}
-            {gameResult && (
-              <div className="absolute inset-0 bg-stone-950/85 backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center border-2 border-stone-600 p-4 animate-fade-in z-20">
-                <span className="text-[10px] font-mono font-bold tracking-widest text-[#FAF9F6] uppercase mb-1">Result</span>
-                <h3 className="text-xl font-sans font-black text-white uppercase tracking-wider mb-4">
-                  {gameResult === 'win' && 'You Won! 🎉'}
-                  {gameResult === 'loss' && 'Bot Won 🤖'}
-                  {gameResult === 'draw' && 'Draw Game 🤝'}
-                </h3>
-                <button
-                  onClick={resetGame}
-                  className="px-4 py-2 bg-[#F8C537] text-stone-950 font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-stone-900 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-none transition-all"
+                {/* Reset button */}
+                <button 
+                  onClick={resetGame} 
+                  className="p-1.5 bg-stone-900 border-2 border-stone-950 text-white rounded-lg hover:translate-x-[-1px] hover:translate-y-[-1px] shadow-[2px_2px_0px_0px_#F26430] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all flex items-center gap-1.5 text-[9px] font-mono font-black uppercase"
                 >
-                  Play Again
+                  <FiRefreshCw className={`w-3.5 h-3.5 ${isBotThinking ? 'animate-spin' : ''}`} />
+                  <span>Reset</span>
                 </button>
               </div>
-            )}
-          </div>
 
-          {/* Scoreboard stats */}
-          <div className="pt-2 border-t border-stone-750 flex justify-between items-center text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 px-2">
-            <div className="flex flex-col items-center">
-              <span>Player (X)</span>
-              <span className="text-sm font-black text-[#F26430]">{scores.player}</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span>Draws</span>
-              <span className="text-sm font-black text-stone-400">{scores.draws}</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span>Study Bot</span>
-              <span className="text-sm font-black text-[#F8C537]">{scores.bot}</span>
+              {/* 3x3 Tic Tac Toe Grid */}
+              <div className="grid grid-cols-3 gap-3 max-w-[280px] mx-auto relative">
+                {board.map((cell, idx) => {
+                  const isWinning = winningLine.includes(idx);
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => handleCellClick(idx)}
+                      className={`aspect-square rounded-2xl border-2 border-stone-900 transition-all duration-100 flex items-center justify-center text-3xl font-black font-sans shadow-[2.5px_2.5px_0px_0px_rgba(28,25,23,1)] ${
+                        cell ? 'cursor-default' : 'hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3.5px_3.5px_0px_0px_rgba(28,25,23,1)] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-none'
+                      } ${
+                        isWinning 
+                          ? 'bg-[#A9C5A0]' 
+                          : cell === 'X' 
+                            ? 'bg-[#dbe4ff] text-[#F26430]' 
+                            : cell === 'O' 
+                              ? 'bg-[#FFE066] text-[#F8C537]' 
+                              : 'bg-white'
+                      }`}
+                    >
+                      {cell}
+                    </button>
+                  );
+                })}
+
+                {/* Overlay win banner */}
+                {gameResult && (
+                  <div className="absolute inset-0 bg-stone-950/85 backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center border-2 border-stone-900 p-4 animate-fade-in z-20">
+                    <span className="text-[10px] font-mono font-bold tracking-widest text-[#FAF9F6] uppercase mb-1">Result</span>
+                    <h3 className="text-xl font-sans font-black text-white uppercase tracking-wider mb-4">
+                      {gameResult === 'win' && 'You Won! 🎉'}
+                      {gameResult === 'loss' && 'Bot Won 🤖'}
+                      {gameResult === 'draw' && 'Draw Game 🤝'}
+                    </h3>
+                    <button
+                      onClick={resetGame}
+                      className="px-4 py-2 bg-[#F8C537] text-stone-950 font-extrabold text-xs uppercase tracking-wider rounded-xl border-2 border-stone-900 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-none transition-all"
+                    >
+                      Play Again
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Scoreboard stats */}
+              <div className="pt-3 border-t border-stone-200 flex justify-between items-center text-[10px] font-mono font-black uppercase tracking-wider text-stone-500 px-2">
+                <div className="flex flex-col items-center">
+                  <span>Player (X)</span>
+                  <span className="text-sm font-black text-[#F26430]">{scores.player}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span>Draws</span>
+                  <span className="text-sm font-black text-stone-700">{scores.draws}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span>Study Bot</span>
+                  <span className="text-sm font-black text-[#F8C537]">{scores.bot}</span>
+                </div>
+              </div>
+
             </div>
           </div>
 
         </div>
+      </div>
 
-        {/* Scroll back to top */}
-        <div className="pt-4">
-          <button
-            onClick={onReset}
-            className="px-7 py-3.5 bg-white text-stone-900 font-extrabold text-xs uppercase tracking-widest rounded-xl border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.3)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center gap-2 mx-auto"
-          >
-            <span>Back to Morning</span>
-            <FiArrowUp className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
+      {/* Scroll back to top */}
+      <div className="pt-8 pb-4 relative z-10">
+        <button
+          onClick={onReset}
+          className="px-7 py-3.5 bg-white text-stone-900 font-extrabold text-xs uppercase tracking-widest rounded-xl border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.3)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center gap-2 mx-auto"
+        >
+          <span>Back to Morning</span>
+          <FiArrowUp className="w-3.5 h-3.5" />
+        </button>
       </div>
 
       {/* Footer Block */}
-      <footer className="w-full max-w-5xl mx-auto border-t border-stone-800 pt-10 mt-12 text-stone-500 font-sans">
+      <footer className="w-full max-w-5xl mx-auto border-t border-stone-800 pt-10 mt-12 text-stone-500 font-sans relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
           
           {/* Brand Info */}
