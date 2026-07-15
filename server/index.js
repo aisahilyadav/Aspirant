@@ -17,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 8001;
 
 //lets tackle cors
-const allowedOrigins = (process.env.CLIENT_ORIGINS || 'http://localhost:3000')
+const allowedOrigins = (process.env.CLIENT_ORIGINS || 'http://localhost:3000,http://localhost:5173')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
