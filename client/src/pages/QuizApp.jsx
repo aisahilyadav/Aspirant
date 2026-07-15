@@ -19,7 +19,7 @@ function QuizApp() {
 
     try {
       setUploadResult('Uploading...');
-      const res = await fetch('http://localhost:8001/api/upload', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
         method: 'POST',
         body: formData
       });
@@ -49,7 +49,7 @@ function QuizApp() {
     setLoading(true);
     setQuiz(null);
     try {
-      const res = await fetch('http://localhost:8001/api/quiz/generateQuiz', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/quiz/generateQuiz`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8001/api';
+const API_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 export async function uploadPdf(file) {
   const formData = new FormData();

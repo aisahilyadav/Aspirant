@@ -17,7 +17,7 @@ function ChatWithPdf() {
 
     try {
       setUploadResult('Uploading...');
-      const res = await fetch('http://localhost:8001/api/upload', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
         method: 'POST',
         body: formData
       });
@@ -47,7 +47,7 @@ function ChatWithPdf() {
     setAnswer('');
 
     try {
-      const res = await fetch('http://localhost:8001/api/chat', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

@@ -27,7 +27,7 @@ useEffect(() => {
     //jwt authentication - to get the currently loggedIn user data
     const userAuthentication = async() => {
         try {
-            const response = await fetch("http://localhost:8001/api/auth/user",{
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/user`,{
                 method:"GET",
                 headers:{
                     Authorization: `Bearer ${token}`,

@@ -15,7 +15,7 @@ function UploadPdf() {
     formData.append('pdf', file);
 
     try {
-      const res = await fetch('http://localhost:8001/api/quiz/upload', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/quiz/upload`, {
         method: 'POST',
         body: formData,
       });

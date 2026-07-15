@@ -19,7 +19,7 @@ const GoogleLoginComponent = () => {
         const userInfo = await userInfoResponse.json();
 
         // Send to your backend
-        const response = await fetch('http://localhost:8001/api/auth/google', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/google`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

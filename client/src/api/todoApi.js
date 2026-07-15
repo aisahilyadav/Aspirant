@@ -1,6 +1,6 @@
 import { useAuth } from '../store/auth';
 
-const API_BASE_URL = 'http://localhost:8001/api/todos';
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/todos`;
 
 // Get auth token helper
 const getAuthToken = () => {
