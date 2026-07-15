@@ -1,12 +1,13 @@
 import express from 'express';
 import { uploadPdf, generateQuiz, submitQuiz } from '../controller/quiz.controller.js';
-import upload from '../middleware/multer.middleware.js';
+import authMiddleware from '../middleware/auth.middleware.js';
 
 
 
 const router = express.Router();
 
-router.post('/upload', upload.single('pdf'), uploadPdf);
+router.use(authMiddleware);
+router.post('/upload', uploadPdf);
 router.post('/generateQuiz', generateQuiz);
 router.post('/submitQuiz', submitQuiz);
 

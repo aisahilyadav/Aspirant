@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Quiz } from '../../../server/src/model/quiz.model';
+import { uploadPdfDirectly } from '../api/directUpload';
 
 function QuizApp() {
   const [file, setFile] = useState(null);
@@ -14,27 +14,14 @@ function QuizApp() {
   const handleUpload = async () => {
     if (!file) return alert('Select a PDF first!');
 
-    const formData = new FormData();
-    formData.append('pdf', file);
-
     try {
       setUploadResult('Uploading...');
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setUploadResult(' PDF uploaded & processed successfully!');
-        setPdfData(data);
-        console.log('Upload successful:', data);
-      } else {
-        setUploadResult(` Upload failed: ${data.message}`);
-        console.error('Upload failed:', data);
-      }
+      const data = await uploadPdfDirectly(file, '/upload');
+      setUploadResult(' PDF uploaded & processed successfully!');
+      setPdfData(data);
     } catch (err) {
       console.error(err);
-      setUploadResult(' Upload failed (network error)');
+      setUploadResult(` Upload failed: ${err.message}`);
     }
   };
 
@@ -51,7 +38,10 @@ function QuizApp() {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/quiz/generateQuiz`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ 
           pdfId: pdfData.pdfId, // Include pdfId
           topic: topic.trim(),

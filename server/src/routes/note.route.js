@@ -9,7 +9,6 @@ import {
   summarizeNotePdf,
   chatNotePdf,
 } from '../controller/note.controller.js';
-import upload from '../middleware/multer.middleware.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -25,7 +24,7 @@ router.put('/:noteId', updateNote);
 router.delete('/:noteId', deleteNote);
 
 // PDF & AI actions
-router.post('/:noteId/upload-pdf', upload.single('pdf'), uploadNotePdf);
+router.post('/:noteId/upload-pdf', uploadNotePdf);
 router.post('/:noteId/summarize', summarizeNotePdf);
 router.post('/:noteId/chat', chatNotePdf);
 

@@ -1,32 +1,16 @@
-import path from "path";
-import { promises as fs } from "fs";
-import { fileURLToPath } from "url";
 import fetch from "node-fetch";
-import crypto from "crypto";
-import cloudinary from "../utils/cloudinary.js";
 import { Pdf } from "../model/pdf.model.js";
 import { Quiz } from "../model/quiz.model.js";
 import { generateSignedPdfUrl } from '../utils/signedUrl.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { verifyDirectPdfUpload } from '../services/directUpload.service.js';
 
 const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || "http://localhost:8000";
 
 // 🟩 Upload PDF (same as before, but keep it for quiz use)
 export async function uploadPdf(req, res) {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded!" });
-  }
-
   try {
-    console.log("[Quiz] Received upload, filename =", req.file.originalname);
-    console.log("[Quiz] File size =", req.file.size, "bytes");
-
-    // Work directly with the file buffer (no local file created)
-    const fileBuffer = req.file.buffer;
-    const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
-    console.log("[Quiz] Computed hash:", fileHash);
+    const upload = verifyDirectPdfUpload(req.body);
+    const { filename, fileHash, publicId, cloudinaryUrl } = upload;
 
     // Check if PDF already exists
     const existingPdf = await Pdf.findOne({ fileHash });
@@ -55,37 +39,19 @@ export async function uploadPdf(req, res) {
 
       return res.json({
         message: body.message,
-        filename: req.file.originalname,
+        filename,
         pdfId: existingPdf._id,
         fileHash: existingPdf.fileHash,
         cloudinaryUrl: existingPdf.cloudinaryUrl
       });
     }
 
-    // Upload directly to Cloudinary from buffer
-    await cloudinary.uploader.destroy(`pdfs/pdf_${fileHash}`, { resource_type: 'raw' });
-
-    // Convert buffer to base64 for Cloudinary upload
-    const base64Data = fileBuffer.toString('base64');
-    const dataUri = `data:application/pdf;base64,${base64Data}`;
-
-    const cloudRes = await cloudinary.uploader.upload(dataUri, {
-      resource_type: 'raw',
-      folder: 'pdfs',
-      public_id: `pdf_${fileHash}`,
-      type: 'authenticated'
-    });
-    console.log('[Quiz] Uploaded to Cloudinary:', cloudRes.secure_url);
-
-    // Generate signed URL
-    const publicId = cloudRes.public_id;
     const signedUrl = generateSignedPdfUrl(publicId);
-    console.log('[Quiz] Generated signed URL:', signedUrl);
 
     // Save PDF metadata
     const pdfDoc = await Pdf.create({
-      filename: req.file.originalname, // Use original filename
-      cloudinaryUrl: cloudRes.secure_url,
+      filename,
+      cloudinaryUrl,
       fileHash,
       publicId,
     });
@@ -110,15 +76,15 @@ export async function uploadPdf(req, res) {
 
     return res.json({
       message: body.message,
-      filename: req.file.originalname,
+      filename,
       pdfId: pdfDoc._id,
       fileHash,
-      cloudinaryUrl: cloudRes.secure_url
+      cloudinaryUrl,
     });
 
   } catch (err) {
     console.error('[Quiz] Upload error:', err);
-    return res.status(500).json({ message: 'Upload failed', error: err.message });
+    return res.status(err.status || 500).json({ message: 'Upload failed', error: err.message });
   }
 }
 

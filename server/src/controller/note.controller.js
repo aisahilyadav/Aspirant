@@ -1,9 +1,8 @@
 import { Note } from '../model/note.model.js';
 import { Pdf } from '../model/pdf.model.js';
 import fetch from 'node-fetch';
-import crypto from 'crypto';
-import cloudinary from '../utils/cloudinary.js';
 import { generateSignedPdfUrl } from '../utils/signedUrl.js';
+import { verifyDirectPdfUpload } from '../services/directUpload.service.js';
 
 const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || "http://localhost:8000";
 
@@ -114,43 +113,22 @@ export const uploadNotePdf = async (req, res) => {
   const { noteId } = req.params;
   const userId = req.userID;
 
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded!' });
-  }
-
   try {
     const note = await Note.findOne({ _id: noteId, userId });
     if (!note) {
       return res.status(404).json({ message: 'Note not found' });
     }
 
-    console.log("[Note PDF] Uploading file for note:", noteId);
-    const fileBuffer = req.file.buffer;
-    const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
-
-    // Convert buffer to base64 for Cloudinary upload
-    const base64Data = fileBuffer.toString('base64');
-    const dataUri = `data:application/pdf;base64,${base64Data}`;
-
-    // Upload directly to Cloudinary
-    await cloudinary.uploader.destroy(`pdfs/pdf_${fileHash}`, { resource_type: 'raw' });
-
-    const cloudRes = await cloudinary.uploader.upload(dataUri, {
-      resource_type: 'raw',
-      folder: 'pdfs',
-      public_id: `pdf_${fileHash}`,
-      type: 'authenticated'
-    });
-
-    const publicId = cloudRes.public_id;
+    const upload = verifyDirectPdfUpload(req.body);
+    const { filename, fileHash, publicId, cloudinaryUrl } = upload;
     const signedUrl = generateSignedPdfUrl(publicId);
 
     // Save PDF metadata or find existing
     let pdfDoc = await Pdf.findOne({ fileHash });
     if (!pdfDoc) {
       pdfDoc = await Pdf.create({
-        filename: req.file.originalname,
-        cloudinaryUrl: cloudRes.secure_url,
+        filename,
+        cloudinaryUrl,
         fileHash,
         publicId,
       });
@@ -182,7 +160,7 @@ export const uploadNotePdf = async (req, res) => {
     });
   } catch (error) {
     console.error('Upload note PDF error:', error);
-    res.status(500).json({ message: 'Failed to upload note PDF', error: error.message });
+    res.status(error.status || 500).json({ message: 'Failed to upload note PDF', error: error.message });
   }
 };
 

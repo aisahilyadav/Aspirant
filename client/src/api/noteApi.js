@@ -1,16 +1,16 @@
+import { uploadPdfDirectly } from './directUpload';
+
 const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/notes`;
 
 const getAuthToken = () => {
   return localStorage.getItem('token');
 };
 
-const getHeaders = (isMultipart = false) => {
+const getHeaders = () => {
   const headers = {
     'Authorization': `Bearer ${getAuthToken()}`,
   };
-  if (!isMultipart) {
-    headers['Content-Type'] = 'application/json';
-  }
+  headers['Content-Type'] = 'application/json';
   return headers;
 };
 
@@ -94,19 +94,7 @@ export const deleteNote = async (noteId) => {
 // Upload note PDF
 export const uploadNotePdf = async (noteId, file) => {
   try {
-    const formData = new FormData();
-    formData.append('pdf', file);
-
-    const response = await fetch(`${API_BASE_URL}/${noteId}/upload-pdf`, {
-      method: 'POST',
-      headers: getHeaders(true),
-      body: formData,
-    });
-    if (!response.ok) {
-      const errBody = await response.json();
-      throw new Error(errBody.message || 'Failed to upload PDF');
-    }
-    return await response.json();
+    return await uploadPdfDirectly(file, `/notes/${noteId}/upload-pdf`);
   } catch (error) {
     console.error('uploadNotePdf error:', error);
     throw error;

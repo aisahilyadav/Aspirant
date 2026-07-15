@@ -8,7 +8,6 @@ const authMiddleware = async (req, res, next) => {
         return res.status(401).json({message: "Unauthorized HTTP, Token not provided"});
     }
     const jwtToken = token.replace("Bearer", "").trim();
-    console.log("token from auth middleware ", token);
 
     try {
  
@@ -18,14 +17,17 @@ const authMiddleware = async (req, res, next) => {
         select({password: 0,
 
         });
-        console.log(userData);
+
+        if (!userData) {
+            return res.status(401).json({message:"Unauthorized, User not found."});
+        }
 
         req.user = userData;
         req.token = token;
         req.userID = userData._id;
         
         next();
-    } catch (error) {
+    } catch {
        return res.status(401).json({message:"Unauthorized, Invalid token."}) ;
     }
 };

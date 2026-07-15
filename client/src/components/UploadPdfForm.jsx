@@ -26,6 +26,7 @@ export default function UploadPdfForm({ onUpload, loading }) {
     accept: {
       'application/pdf': ['.pdf']
     },
+    maxSize: 50 * 1024 * 1024,
     maxFiles: 1,
     disabled: loading
   });
@@ -60,7 +61,7 @@ export default function UploadPdfForm({ onUpload, loading }) {
               Drag and drop your PDF study material here, or click to browse files
             </p>
             <p className="text-[9px] text-stone-900 font-mono mt-2.5 uppercase tracking-widest font-extrabold bg-stone-100 border border-stone-300 rounded px-2.5 py-1 inline-block">
-              Supports files up to 10MB
+              Supports files up to 50MB
             </p>
           </div>
           

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { uploadPdf } from '../api/quizApi';
 
 function UploadPdf() {
   const [file, setFile] = useState(null);
@@ -11,25 +12,12 @@ function UploadPdf() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('pdf', file);
-
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/quiz/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await res.json();
-      console.log(data);
-      if (res.ok) {
-        setResult(`Upload successful: ${data.message}`);
-      } else {
-        setResult(`Upload failed: ${data.message}`);
-      }
+      const data = await uploadPdf(file);
+      setResult(`Upload successful: ${data.message}`);
     } catch (error) {
       console.error(error);
-      setResult('Upload failed!');
+      setResult(`Upload failed: ${error.message}`);
     }
   };
 
