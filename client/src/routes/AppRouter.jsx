@@ -5,7 +5,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import PublicRoute from '../components/PublicRoute';
 
 // Import existing pages
-import LandingPage from '../pages/LandingPage';
+import LandingPage from '../pages/Landingpage';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Home from '../pages/Home';
@@ -121,7 +121,7 @@ function AppRouter() {
             </ProtectedRoute>
           }
         />
-        
+
         {/* New Todo Routes */}
         <Route
           path="/todos"
