@@ -16,15 +16,23 @@ import errorMiddleware from './src/middleware/error.middleware.js';
 const app = express();
 const PORT = process.env.PORT || 8001;
 
-//lets tackle cors
-const allowedOrigins = (process.env.CLIENT_ORIGINS || 'http://localhost:3000,http://localhost:5173')
+const defaultAllowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://aspirants.app',
+    'https://www.aspirants.app',
+];
+
+const configuredOrigins = (process.env.CLIENT_ORIGINS || '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
 
+const allowedOrigins = new Set([...defaultAllowedOrigins, ...configuredOrigins]);
+
 const corsOptions = {
     origin(origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.has(origin)) {
             return callback(null, true);
         }
         return callback(new Error('Origin is not allowed by CORS'));
